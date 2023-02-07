@@ -50,9 +50,9 @@ with the most correct type system, and the best tools imaginable - to make our e
 > Perfection is Achieved Not When There Is Nothing More to Add, But When There Is Nothing Left to Take Away \
 > ~ Antoine de Saint-Exupery
 
-We follow the [Unix Philosophy][unix-philosophy], the [Zen of Python][zen-python], the [Go Proverbs][go-proverbs], the [Prettier Rationale][prettier-rationale], the [Zen of Zig] and the [Axioms of AJ].
+We follow the [Unix Philosophy][unix-philosophy], the [Zen of Python][zen-python], the [Go Proverbs][go-proverbs], the [Prettier Rationale][prettier-rationale], the [Zen of Zig][zen-zig] and the [Axioms of AJ][axioms-aj].
 
-In summary:
+**In summary**:
 
 Write Correct, Safe Programs that span across Time and Developers
 
