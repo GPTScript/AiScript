@@ -66,6 +66,8 @@ Write Correct, Safe Programs that span across Time and Developers
 - Tooling Ecosystem > Popular Opinions
 - Engineering > Development
 - Just-in-Time Re-learning > A Human's Working Memory
+- JIT > Never
+- Top to Bottom > Left to Right
 
 [unix-philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy#Origin
 [zen-python]: https://github.com/ewjoachim/zen-of-python
