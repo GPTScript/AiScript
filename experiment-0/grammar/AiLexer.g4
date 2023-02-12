@@ -299,11 +299,11 @@ NULL_LITERAL:
 // moved to AssemblyLexer until import sequence is fixed
 
 PASCAL_CASE_IDENTIFIER:
-	'A-Z' LetterOrDigit*
+	[A-Z] LetterOrDigit*
 	;
 
 CAMEL_CASE_IDENTIFIER:
-    'a-z' LetterOrDigit*
+    [a-z] LetterOrDigit*
     ;
 
 ANY_IDENTIFIER:
@@ -319,3 +319,8 @@ fragment
 LetterOrDigit:
 	[a-zA-Z0-9$_] // these are the "letters or digits" below 0x7F
 	;
+
+WS:
+	[ \t\r\n\u000C]+ -> skip
+    ;
+

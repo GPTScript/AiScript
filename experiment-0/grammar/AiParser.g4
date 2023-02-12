@@ -9,10 +9,10 @@ statement:
     ;
 
 assign_statement:
-    lhs_expression ASSIGN expression
+    assignable ASSIGN expression
     ;
 
-lhs_expression:
+assignable:
     type_declaration
     ;
 
@@ -25,14 +25,18 @@ type_id:
     ;
 
 expression:
-    object_expression
+    literal_expression
     ;
 
-object_expression:
-    LCURL ( object_item ( COMMA object_item )* )? RCURL
+literal_expression:
+    object_literal
     ;
 
-object_item:
+object_literal:
+    LCURL ( object_entry ( COMMA object_entry )* )? RCURL
+    ;
+
+object_entry:
     variable_id COLON expression
     ;
 

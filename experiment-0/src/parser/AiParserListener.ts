@@ -5,12 +5,13 @@ import {ParseTreeListener} from "antlr4";
 
 import { StatementContext } from "./AiParser";
 import { Assign_statementContext } from "./AiParser";
-import { Lhs_expressionContext } from "./AiParser";
+import { AssignableContext } from "./AiParser";
 import { Type_declarationContext } from "./AiParser";
 import { Type_idContext } from "./AiParser";
 import { ExpressionContext } from "./AiParser";
-import { Object_expressionContext } from "./AiParser";
-import { Object_itemContext } from "./AiParser";
+import { Literal_expressionContext } from "./AiParser";
+import { Object_literalContext } from "./AiParser";
+import { Object_entryContext } from "./AiParser";
 import { Variable_idContext } from "./AiParser";
 
 
@@ -40,15 +41,15 @@ export default class AiParserListener extends ParseTreeListener {
 	 */
 	exitAssign_statement?: (ctx: Assign_statementContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiParser.lhs_expression`.
+	 * Enter a parse tree produced by `AiParser.assignable`.
 	 * @param ctx the parse tree
 	 */
-	enterLhs_expression?: (ctx: Lhs_expressionContext) => void;
+	enterAssignable?: (ctx: AssignableContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiParser.lhs_expression`.
+	 * Exit a parse tree produced by `AiParser.assignable`.
 	 * @param ctx the parse tree
 	 */
-	exitLhs_expression?: (ctx: Lhs_expressionContext) => void;
+	exitAssignable?: (ctx: AssignableContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiParser.type_declaration`.
 	 * @param ctx the parse tree
@@ -80,25 +81,35 @@ export default class AiParserListener extends ParseTreeListener {
 	 */
 	exitExpression?: (ctx: ExpressionContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiParser.object_expression`.
+	 * Enter a parse tree produced by `AiParser.literal_expression`.
 	 * @param ctx the parse tree
 	 */
-	enterObject_expression?: (ctx: Object_expressionContext) => void;
+	enterLiteral_expression?: (ctx: Literal_expressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiParser.object_expression`.
+	 * Exit a parse tree produced by `AiParser.literal_expression`.
 	 * @param ctx the parse tree
 	 */
-	exitObject_expression?: (ctx: Object_expressionContext) => void;
+	exitLiteral_expression?: (ctx: Literal_expressionContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiParser.object_item`.
+	 * Enter a parse tree produced by `AiParser.object_literal`.
 	 * @param ctx the parse tree
 	 */
-	enterObject_item?: (ctx: Object_itemContext) => void;
+	enterObject_literal?: (ctx: Object_literalContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiParser.object_item`.
+	 * Exit a parse tree produced by `AiParser.object_literal`.
 	 * @param ctx the parse tree
 	 */
-	exitObject_item?: (ctx: Object_itemContext) => void;
+	exitObject_literal?: (ctx: Object_literalContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.object_entry`.
+	 * @param ctx the parse tree
+	 */
+	enterObject_entry?: (ctx: Object_entryContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.object_entry`.
+	 * @param ctx the parse tree
+	 */
+	exitObject_entry?: (ctx: Object_entryContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiParser.variable_id`.
 	 * @param ctx the parse tree
