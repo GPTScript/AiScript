@@ -15,6 +15,7 @@ SEMI: ';';
 ASSIGN: '=';
 
 VAR: 'var';
+RETURN: 'return';
 FUNCTION: 'function';
 
 INTEGER_LITERAL:
@@ -296,7 +297,6 @@ NULL_LITERAL:
 	;
 
 // §3.8 Identifiers (must appear after all keywords in the grammar)
-// moved to AssemblyLexer until import sequence is fixed
 
 PASCAL_CASE_IDENTIFIER:
 	[A-Z] LetterOrDigit*
@@ -319,6 +319,8 @@ fragment
 LetterOrDigit:
 	[a-zA-Z0-9$_] // these are the "letters or digits" below 0x7F
 	;
+
+// §3. White space, must appear last
 
 WS:
 	[ \t\r\n\u000C]+ -> skip
