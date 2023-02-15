@@ -1,5 +1,13 @@
 import AiParserListener from "../parser/AiParserListener";
-import {CharStream, CommonTokenStream, FileStream, ParserRuleContext, ParseTree, ParseTreeWalker, Token} from "antlr4";
+import {
+    CharStream,
+    CharStreams,
+    CommonTokenStream,
+    ParserRuleContext,
+    ParseTree,
+    ParseTreeWalker,
+    Token
+} from "antlr4";
 import IStatement from "../statement/IStatement";
 import AiParser, {
     Assign_statementContext,
@@ -54,7 +62,7 @@ export default class AiBuilder extends AiParserListener {
         try {
             const isFile = data && fileExists(data);
             const path = isFile ? data : "";
-            stream = stream || isFile ? new FileStream(data) : new CharStream(data);
+            stream = stream || isFile ? CharStreams.fromPathSync(data, "utf-8") : CharStreams.fromString(data);
             const lexer = new AiLexer(stream);
             const tokenStream = new CommonTokenStream(lexer);
             const parser = new AiParser(tokenStream);
