@@ -68,7 +68,7 @@ member_expression:
     ;
 
 function_expression:
-    FUNCTION LPAR variable_id* RPAR LCURL statement[true]* RCURL
+    FUNCTION LPAR ( variable_id ( COMMA variable_id )* )? RPAR LCURL statement[true]* RCURL
     ;
 
 object_literal:
