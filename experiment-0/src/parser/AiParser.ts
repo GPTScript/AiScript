@@ -1,4 +1,4 @@
-// Generated from AiParser.g4 by ANTLR 4.11.2-SNAPSHOT
+// Generated from AiParser.g4 by ANTLR 4.12.0
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 
 import {
