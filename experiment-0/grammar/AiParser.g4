@@ -52,11 +52,17 @@ expression:
     literal_expression
     | instance_expression
     | member_expression
-    | function_expression
+    | function_call_expression
+    | function_definition
     ;
 
 literal_expression:
     object_literal
+    | string_literal
+    ;
+
+string_literal:
+    STRING_LITERAL
     ;
 
 instance_expression:
@@ -67,8 +73,24 @@ member_expression:
     member_selector
     ;
 
-function_expression:
-    FUNCTION LPAR ( variable_id ( COMMA variable_id )* )? RPAR LCURL statement[true]* RCURL
+function_call_expression:
+    function_selector argument_list
+    ;
+
+function_selector:
+    selectable ( DOT variable_id )*
+    ;
+
+argument_list:
+    LPAR ( expression ( COMMA expression )* )? RPAR
+    ;
+
+function_definition:
+    FUNCTION parameter_list LCURL statement[true]* RCURL
+    ;
+
+parameter_list:
+    LPAR ( variable_id ( COMMA variable_id )* )? RPAR
     ;
 
 object_literal:

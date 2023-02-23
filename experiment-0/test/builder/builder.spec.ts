@@ -5,12 +5,13 @@ import ObjectLiteral from "../../src/literal/ObjectLiteral";
 import TypeDeclaration from "../../src/assign/TypeDeclaration";
 import AssignableMember from "../../src/assign/AssignableMember";
 import SelectableType from "../../src/select/SelectableType";
-import FunctionExpression from "../../src/expression/FunctionExpression";
+import FunctionDefinition from "../../src/expression/FunctionDefinition";
 import VariableDeclaration from "../../src/assign/VariableDeclaration";
 import SelectableInstance from "../../src/select/SelectableInstance";
 import MemberExpression from "../../src/expression/MemberExpression";
 import ReturnStatement from "../../src/statement/ReturnStatement";
 import InstanceExpression from "../../src/expression/InstanceExpression";
+import FunctionCallExpression from "../../src/expression/FunctionCallExpression";
 
 it('builds assign_empty_object_to_var_type',  () => {
     const stmt = AiBuilder.parse_statement("samples/assign_empty_object_to_var_type.js");
@@ -29,7 +30,7 @@ it('builds factory_with_1_string_field',  () => {
     assert.ok(selector.parent instanceof SelectableType);
     assert.equal(selector.parent.typeId.value, "Person");
     assert.equal(selector.member.value, "create");
-    assert.ok(stmt.expression instanceof FunctionExpression);
+    assert.ok(stmt.expression instanceof FunctionDefinition);
     assert.equal(stmt.expression.parameters.map(id => id.value).join(","), "opts");
     const stmts = stmt.expression.statements;
     assert.equal(stmts.length, 3);
@@ -52,4 +53,19 @@ it('builds factory_with_1_string_field',  () => {
     assert.ok(stmt instanceof ReturnStatement);
     assert.ok(stmt.expression instanceof InstanceExpression);
     assert.equal(stmt.expression.variableId.value, "p");
+});
+
+
+it('builds factory_call_with_1_string_field',  () => {
+    let stmt = AiBuilder.parse_statement("samples/factory_call_with_1_string_field.js");
+    assert.ok(stmt instanceof AssignStatement);
+    assert.ok(stmt.assignable instanceof VariableDeclaration);
+    assert.equal(stmt.assignable.variableId.value, "p");
+    assert.ok(stmt.expression instanceof FunctionCallExpression);
+    assert.ok(stmt.expression.selector.parent instanceof SelectableType)
+    assert.equal(stmt.expression.selector.parent.typeId.value, "Person");
+    assert.equal(stmt.expression.selector.function_.value, "create");
+    assert.equal(stmt.expression.argumentsList.length, 1);
+    const exp = stmt.expression.argumentsList[0];
+    assert.ok(exp instanceof ObjectLiteral);
 });

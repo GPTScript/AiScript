@@ -54,12 +54,17 @@ export default class AiParser extends Parser {
 	public static readonly RULE_type_id = 9;
 	public static readonly RULE_expression = 10;
 	public static readonly RULE_literal_expression = 11;
-	public static readonly RULE_instance_expression = 12;
-	public static readonly RULE_member_expression = 13;
-	public static readonly RULE_function_expression = 14;
-	public static readonly RULE_object_literal = 15;
-	public static readonly RULE_object_entry = 16;
-	public static readonly RULE_variable_id = 17;
+	public static readonly RULE_string_literal = 12;
+	public static readonly RULE_instance_expression = 13;
+	public static readonly RULE_member_expression = 14;
+	public static readonly RULE_function_call_expression = 15;
+	public static readonly RULE_function_selector = 16;
+	public static readonly RULE_argument_list = 17;
+	public static readonly RULE_function_definition = 18;
+	public static readonly RULE_parameter_list = 19;
+	public static readonly RULE_object_literal = 20;
+	public static readonly RULE_object_entry = 21;
+	public static readonly RULE_variable_id = 22;
 	public static readonly literalNames: (string | null)[] = [ null, "'('", 
                                                             "')'", "'['", 
                                                             "']'", "'{'", 
@@ -93,9 +98,10 @@ export default class AiParser extends Parser {
 	public static readonly ruleNames: string[] = [
 		"top_level_statement", "statement", "assign_statement", "return_statement", 
 		"assignable", "type_declaration", "variable_declaration", "member_selector", 
-		"selectable", "type_id", "expression", "literal_expression", "instance_expression", 
-		"member_expression", "function_expression", "object_literal", "object_entry", 
-		"variable_id",
+		"selectable", "type_id", "expression", "literal_expression", "string_literal", 
+		"instance_expression", "member_expression", "function_call_expression", 
+		"function_selector", "argument_list", "function_definition", "parameter_list", 
+		"object_literal", "object_entry", "variable_id",
 	];
 	public get grammarFileName(): string { return "AiParser.g4"; }
 	public get literalNames(): (string | null)[] { return AiParser.literalNames; }
@@ -118,7 +124,7 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 36;
+			this.state = 46;
 			this.statement(false);
 			}
 		}
@@ -141,24 +147,24 @@ export default class AiParser extends Parser {
 		let localctx: StatementContext = new StatementContext(this, this._ctx, this.state, allow_return);
 		this.enterRule(localctx, 2, AiParser.RULE_statement);
 		try {
-			this.state = 41;
+			this.state = 51;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 0, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 38;
+				this.state = 48;
 				this.assign_statement();
 				}
 				break;
 			case 2:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 39;
+				this.state = 49;
 				if (!( localctx.allow_return )) {
 					throw this.createFailedPredicateException(" $allow_return ");
 				}
-				this.state = 40;
+				this.state = 50;
 				this.return_statement();
 				}
 				break;
@@ -185,11 +191,11 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 43;
+			this.state = 53;
 			this.assignable();
-			this.state = 44;
+			this.state = 54;
 			this.match(AiParser.ASSIGN);
-			this.state = 45;
+			this.state = 55;
 			this.expression();
 			}
 		}
@@ -214,14 +220,14 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 47;
+			this.state = 57;
 			this.match(AiParser.RETURN);
-			this.state = 49;
+			this.state = 59;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 1, this._ctx) ) {
 			case 1:
 				{
-				this.state = 48;
+				this.state = 58;
 				this.expression();
 				}
 				break;
@@ -247,14 +253,14 @@ export default class AiParser extends Parser {
 		let localctx: AssignableContext = new AssignableContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 8, AiParser.RULE_assignable);
 		try {
-			this.state = 54;
+			this.state = 64;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 2, this._ctx) ) {
 			case 1:
 				localctx = new TypeDeclarationContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 51;
+				this.state = 61;
 				this.type_declaration();
 				}
 				break;
@@ -262,7 +268,7 @@ export default class AiParser extends Parser {
 				localctx = new VariableDeclarationContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 52;
+				this.state = 62;
 				this.variable_declaration();
 				}
 				break;
@@ -270,7 +276,7 @@ export default class AiParser extends Parser {
 				localctx = new AssignableMemberContext(this, localctx);
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 53;
+				this.state = 63;
 				this.member_selector();
 				}
 				break;
@@ -297,9 +303,9 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 56;
+			this.state = 66;
 			this.match(AiParser.VAR);
-			this.state = 57;
+			this.state = 67;
 			this.type_id();
 			}
 		}
@@ -324,9 +330,9 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 59;
+			this.state = 69;
 			this.match(AiParser.VAR);
-			this.state = 60;
+			this.state = 70;
 			this.variable_id();
 			}
 		}
@@ -352,9 +358,9 @@ export default class AiParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 62;
+			this.state = 72;
 			this.selectable();
-			this.state = 65;
+			this.state = 75;
 			this._errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -362,9 +368,9 @@ export default class AiParser extends Parser {
 				case 1:
 					{
 					{
-					this.state = 63;
+					this.state = 73;
 					this.match(AiParser.DOT);
-					this.state = 64;
+					this.state = 74;
 					this.variable_id();
 					}
 					}
@@ -372,7 +378,7 @@ export default class AiParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				this.state = 67;
+				this.state = 77;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 3, this._ctx);
 			} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
@@ -397,14 +403,14 @@ export default class AiParser extends Parser {
 		let localctx: SelectableContext = new SelectableContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 16, AiParser.RULE_selectable);
 		try {
-			this.state = 71;
+			this.state = 81;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 21:
 				localctx = new SelectableTypeContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 69;
+				this.state = 79;
 				this.type_id();
 				}
 				break;
@@ -412,7 +418,7 @@ export default class AiParser extends Parser {
 				localctx = new SelectableVariableContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 70;
+				this.state = 80;
 				this.variable_id();
 				}
 				break;
@@ -441,7 +447,7 @@ export default class AiParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 73;
+			this.state = 83;
 			this.match(AiParser.PASCAL_CASE_IDENTIFIER);
 			}
 		}
@@ -464,35 +470,42 @@ export default class AiParser extends Parser {
 		let localctx: ExpressionContext = new ExpressionContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 20, AiParser.RULE_expression);
 		try {
-			this.state = 79;
+			this.state = 90;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 5, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 75;
+				this.state = 85;
 				this.literal_expression();
 				}
 				break;
 			case 2:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 76;
+				this.state = 86;
 				this.instance_expression();
 				}
 				break;
 			case 3:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 77;
+				this.state = 87;
 				this.member_expression();
 				}
 				break;
 			case 4:
 				this.enterOuterAlt(localctx, 4);
 				{
-				this.state = 78;
-				this.function_expression();
+				this.state = 88;
+				this.function_call_expression();
+				}
+				break;
+			case 5:
+				this.enterOuterAlt(localctx, 5);
+				{
+				this.state = 89;
+				this.function_definition();
 				}
 				break;
 			}
@@ -516,10 +529,50 @@ export default class AiParser extends Parser {
 		let localctx: Literal_expressionContext = new Literal_expressionContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 22, AiParser.RULE_literal_expression);
 		try {
+			this.state = 94;
+			this._errHandler.sync(this);
+			switch (this._input.LA(1)) {
+			case 5:
+				this.enterOuterAlt(localctx, 1);
+				{
+				this.state = 92;
+				this.object_literal();
+				}
+				break;
+			case 19:
+				this.enterOuterAlt(localctx, 2);
+				{
+				this.state = 93;
+				this.string_literal();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public string_literal(): String_literalContext {
+		let localctx: String_literalContext = new String_literalContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 24, AiParser.RULE_string_literal);
+		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 81;
-			this.object_literal();
+			this.state = 96;
+			this.match(AiParser.STRING_LITERAL);
 			}
 		}
 		catch (re) {
@@ -539,11 +592,11 @@ export default class AiParser extends Parser {
 	// @RuleVersion(0)
 	public instance_expression(): Instance_expressionContext {
 		let localctx: Instance_expressionContext = new Instance_expressionContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 24, AiParser.RULE_instance_expression);
+		this.enterRule(localctx, 26, AiParser.RULE_instance_expression);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 83;
+			this.state = 98;
 			this.variable_id();
 			}
 		}
@@ -564,11 +617,11 @@ export default class AiParser extends Parser {
 	// @RuleVersion(0)
 	public member_expression(): Member_expressionContext {
 		let localctx: Member_expressionContext = new Member_expressionContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 26, AiParser.RULE_member_expression);
+		this.enterRule(localctx, 28, AiParser.RULE_member_expression);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 85;
+			this.state = 100;
 			this.member_selector();
 			}
 		}
@@ -587,66 +640,214 @@ export default class AiParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public function_expression(): Function_expressionContext {
-		let localctx: Function_expressionContext = new Function_expressionContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 28, AiParser.RULE_function_expression);
-		let _la: number;
+	public function_call_expression(): Function_call_expressionContext {
+		let localctx: Function_call_expressionContext = new Function_call_expressionContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 30, AiParser.RULE_function_call_expression);
 		try {
-			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 87;
-			this.match(AiParser.FUNCTION);
-			this.state = 88;
-			this.match(AiParser.LPAR);
-			this.state = 97;
+			this.state = 102;
+			this.function_selector();
+			this.state = 103;
+			this.argument_list();
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public function_selector(): Function_selectorContext {
+		let localctx: Function_selectorContext = new Function_selectorContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 32, AiParser.RULE_function_selector);
+		let _la: number;
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 105;
+			this.selectable();
+			this.state = 110;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la===22) {
+			while (_la===7) {
 				{
-				this.state = 89;
+				{
+				this.state = 106;
+				this.match(AiParser.DOT);
+				this.state = 107;
 				this.variable_id();
-				this.state = 94;
+				}
+				}
+				this.state = 112;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public argument_list(): Argument_listContext {
+		let localctx: Argument_listContext = new Argument_listContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 34, AiParser.RULE_argument_list);
+		let _la: number;
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 113;
+			this.match(AiParser.LPAR);
+			this.state = 122;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 6832160) !== 0)) {
+				{
+				this.state = 114;
+				this.expression();
+				this.state = 119;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la===8) {
 					{
 					{
-					this.state = 90;
+					this.state = 115;
 					this.match(AiParser.COMMA);
-					this.state = 91;
-					this.variable_id();
+					this.state = 116;
+					this.expression();
 					}
 					}
-					this.state = 96;
+					this.state = 121;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
 				}
 			}
 
-			this.state = 99;
+			this.state = 124;
 			this.match(AiParser.RPAR);
-			this.state = 100;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public function_definition(): Function_definitionContext {
+		let localctx: Function_definitionContext = new Function_definitionContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 36, AiParser.RULE_function_definition);
+		try {
+			let _alt: number;
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 126;
+			this.match(AiParser.FUNCTION);
+			this.state = 127;
+			this.parameter_list();
+			this.state = 128;
 			this.match(AiParser.LCURL);
-			this.state = 104;
+			this.state = 132;
 			this._errHandler.sync(this);
-			_alt = this._interp.adaptivePredict(this._input, 8, this._ctx);
+			_alt = this._interp.adaptivePredict(this._input, 10, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 101;
+					this.state = 129;
 					this.statement(true);
 					}
 					}
 				}
-				this.state = 106;
+				this.state = 134;
 				this._errHandler.sync(this);
-				_alt = this._interp.adaptivePredict(this._input, 8, this._ctx);
+				_alt = this._interp.adaptivePredict(this._input, 10, this._ctx);
 			}
-			this.state = 107;
+			this.state = 135;
 			this.match(AiParser.RCURL);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public parameter_list(): Parameter_listContext {
+		let localctx: Parameter_listContext = new Parameter_listContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 38, AiParser.RULE_parameter_list);
+		let _la: number;
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 137;
+			this.match(AiParser.LPAR);
+			this.state = 146;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===22) {
+				{
+				this.state = 138;
+				this.variable_id();
+				this.state = 143;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				while (_la===8) {
+					{
+					{
+					this.state = 139;
+					this.match(AiParser.COMMA);
+					this.state = 140;
+					this.variable_id();
+					}
+					}
+					this.state = 145;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				}
+			}
+
+			this.state = 148;
+			this.match(AiParser.RPAR);
 			}
 		}
 		catch (re) {
@@ -666,40 +867,40 @@ export default class AiParser extends Parser {
 	// @RuleVersion(0)
 	public object_literal(): Object_literalContext {
 		let localctx: Object_literalContext = new Object_literalContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 30, AiParser.RULE_object_literal);
+		this.enterRule(localctx, 40, AiParser.RULE_object_literal);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 109;
+			this.state = 150;
 			this.match(AiParser.LCURL);
-			this.state = 118;
+			this.state = 159;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===22) {
 				{
-				this.state = 110;
+				this.state = 151;
 				this.object_entry();
-				this.state = 115;
+				this.state = 156;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la===8) {
 					{
 					{
-					this.state = 111;
+					this.state = 152;
 					this.match(AiParser.COMMA);
-					this.state = 112;
+					this.state = 153;
 					this.object_entry();
 					}
 					}
-					this.state = 117;
+					this.state = 158;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
 				}
 			}
 
-			this.state = 120;
+			this.state = 161;
 			this.match(AiParser.RCURL);
 			}
 		}
@@ -720,15 +921,15 @@ export default class AiParser extends Parser {
 	// @RuleVersion(0)
 	public object_entry(): Object_entryContext {
 		let localctx: Object_entryContext = new Object_entryContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 32, AiParser.RULE_object_entry);
+		this.enterRule(localctx, 42, AiParser.RULE_object_entry);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 122;
+			this.state = 163;
 			this.variable_id();
-			this.state = 123;
+			this.state = 164;
 			this.match(AiParser.COLON);
-			this.state = 124;
+			this.state = 165;
 			this.expression();
 			}
 		}
@@ -749,11 +950,11 @@ export default class AiParser extends Parser {
 	// @RuleVersion(0)
 	public variable_id(): Variable_idContext {
 		let localctx: Variable_idContext = new Variable_idContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 34, AiParser.RULE_variable_id);
+		this.enterRule(localctx, 44, AiParser.RULE_variable_id);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 126;
+			this.state = 167;
 			this.match(AiParser.CAMEL_CASE_IDENTIFIER);
 			}
 		}
@@ -787,43 +988,56 @@ export default class AiParser extends Parser {
 		return true;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,24,129,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,24,170,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,
 	10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,2,15,7,15,2,16,7,16,2,17,
-	7,17,1,0,1,0,1,1,1,1,1,1,3,1,42,8,1,1,2,1,2,1,2,1,2,1,3,1,3,3,3,50,8,3,
-	1,4,1,4,1,4,3,4,55,8,4,1,5,1,5,1,5,1,6,1,6,1,6,1,7,1,7,1,7,4,7,66,8,7,11,
-	7,12,7,67,1,8,1,8,3,8,72,8,8,1,9,1,9,1,10,1,10,1,10,1,10,3,10,80,8,10,1,
-	11,1,11,1,12,1,12,1,13,1,13,1,14,1,14,1,14,1,14,1,14,5,14,93,8,14,10,14,
-	12,14,96,9,14,3,14,98,8,14,1,14,1,14,1,14,5,14,103,8,14,10,14,12,14,106,
-	9,14,1,14,1,14,1,15,1,15,1,15,1,15,5,15,114,8,15,10,15,12,15,117,9,15,3,
-	15,119,8,15,1,15,1,15,1,16,1,16,1,16,1,16,1,17,1,17,1,17,0,0,18,0,2,4,6,
-	8,10,12,14,16,18,20,22,24,26,28,30,32,34,0,0,124,0,36,1,0,0,0,2,41,1,0,
-	0,0,4,43,1,0,0,0,6,47,1,0,0,0,8,54,1,0,0,0,10,56,1,0,0,0,12,59,1,0,0,0,
-	14,62,1,0,0,0,16,71,1,0,0,0,18,73,1,0,0,0,20,79,1,0,0,0,22,81,1,0,0,0,24,
-	83,1,0,0,0,26,85,1,0,0,0,28,87,1,0,0,0,30,109,1,0,0,0,32,122,1,0,0,0,34,
-	126,1,0,0,0,36,37,3,2,1,0,37,1,1,0,0,0,38,42,3,4,2,0,39,40,4,1,0,1,40,42,
-	3,6,3,0,41,38,1,0,0,0,41,39,1,0,0,0,42,3,1,0,0,0,43,44,3,8,4,0,44,45,5,
-	11,0,0,45,46,3,20,10,0,46,5,1,0,0,0,47,49,5,13,0,0,48,50,3,20,10,0,49,48,
-	1,0,0,0,49,50,1,0,0,0,50,7,1,0,0,0,51,55,3,10,5,0,52,55,3,12,6,0,53,55,
-	3,14,7,0,54,51,1,0,0,0,54,52,1,0,0,0,54,53,1,0,0,0,55,9,1,0,0,0,56,57,5,
-	12,0,0,57,58,3,18,9,0,58,11,1,0,0,0,59,60,5,12,0,0,60,61,3,34,17,0,61,13,
-	1,0,0,0,62,65,3,16,8,0,63,64,5,7,0,0,64,66,3,34,17,0,65,63,1,0,0,0,66,67,
-	1,0,0,0,67,65,1,0,0,0,67,68,1,0,0,0,68,15,1,0,0,0,69,72,3,18,9,0,70,72,
-	3,34,17,0,71,69,1,0,0,0,71,70,1,0,0,0,72,17,1,0,0,0,73,74,5,21,0,0,74,19,
-	1,0,0,0,75,80,3,22,11,0,76,80,3,24,12,0,77,80,3,26,13,0,78,80,3,28,14,0,
-	79,75,1,0,0,0,79,76,1,0,0,0,79,77,1,0,0,0,79,78,1,0,0,0,80,21,1,0,0,0,81,
-	82,3,30,15,0,82,23,1,0,0,0,83,84,3,34,17,0,84,25,1,0,0,0,85,86,3,14,7,0,
-	86,27,1,0,0,0,87,88,5,14,0,0,88,97,5,1,0,0,89,94,3,34,17,0,90,91,5,8,0,
-	0,91,93,3,34,17,0,92,90,1,0,0,0,93,96,1,0,0,0,94,92,1,0,0,0,94,95,1,0,0,
-	0,95,98,1,0,0,0,96,94,1,0,0,0,97,89,1,0,0,0,97,98,1,0,0,0,98,99,1,0,0,0,
-	99,100,5,2,0,0,100,104,5,5,0,0,101,103,3,2,1,0,102,101,1,0,0,0,103,106,
-	1,0,0,0,104,102,1,0,0,0,104,105,1,0,0,0,105,107,1,0,0,0,106,104,1,0,0,0,
-	107,108,5,6,0,0,108,29,1,0,0,0,109,118,5,5,0,0,110,115,3,32,16,0,111,112,
-	5,8,0,0,112,114,3,32,16,0,113,111,1,0,0,0,114,117,1,0,0,0,115,113,1,0,0,
-	0,115,116,1,0,0,0,116,119,1,0,0,0,117,115,1,0,0,0,118,110,1,0,0,0,118,119,
-	1,0,0,0,119,120,1,0,0,0,120,121,5,6,0,0,121,31,1,0,0,0,122,123,3,34,17,
-	0,123,124,5,9,0,0,124,125,3,20,10,0,125,33,1,0,0,0,126,127,5,22,0,0,127,
-	35,1,0,0,0,11,41,49,54,67,71,79,94,97,104,115,118];
+	7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,2,22,7,22,1,0,1,0,1,1,1,1,
+	1,1,3,1,52,8,1,1,2,1,2,1,2,1,2,1,3,1,3,3,3,60,8,3,1,4,1,4,1,4,3,4,65,8,
+	4,1,5,1,5,1,5,1,6,1,6,1,6,1,7,1,7,1,7,4,7,76,8,7,11,7,12,7,77,1,8,1,8,3,
+	8,82,8,8,1,9,1,9,1,10,1,10,1,10,1,10,1,10,3,10,91,8,10,1,11,1,11,3,11,95,
+	8,11,1,12,1,12,1,13,1,13,1,14,1,14,1,15,1,15,1,15,1,16,1,16,1,16,5,16,109,
+	8,16,10,16,12,16,112,9,16,1,17,1,17,1,17,1,17,5,17,118,8,17,10,17,12,17,
+	121,9,17,3,17,123,8,17,1,17,1,17,1,18,1,18,1,18,1,18,5,18,131,8,18,10,18,
+	12,18,134,9,18,1,18,1,18,1,19,1,19,1,19,1,19,5,19,142,8,19,10,19,12,19,
+	145,9,19,3,19,147,8,19,1,19,1,19,1,20,1,20,1,20,1,20,5,20,155,8,20,10,20,
+	12,20,158,9,20,3,20,160,8,20,1,20,1,20,1,21,1,21,1,21,1,21,1,22,1,22,1,
+	22,0,0,23,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,
+	44,0,0,165,0,46,1,0,0,0,2,51,1,0,0,0,4,53,1,0,0,0,6,57,1,0,0,0,8,64,1,0,
+	0,0,10,66,1,0,0,0,12,69,1,0,0,0,14,72,1,0,0,0,16,81,1,0,0,0,18,83,1,0,0,
+	0,20,90,1,0,0,0,22,94,1,0,0,0,24,96,1,0,0,0,26,98,1,0,0,0,28,100,1,0,0,
+	0,30,102,1,0,0,0,32,105,1,0,0,0,34,113,1,0,0,0,36,126,1,0,0,0,38,137,1,
+	0,0,0,40,150,1,0,0,0,42,163,1,0,0,0,44,167,1,0,0,0,46,47,3,2,1,0,47,1,1,
+	0,0,0,48,52,3,4,2,0,49,50,4,1,0,1,50,52,3,6,3,0,51,48,1,0,0,0,51,49,1,0,
+	0,0,52,3,1,0,0,0,53,54,3,8,4,0,54,55,5,11,0,0,55,56,3,20,10,0,56,5,1,0,
+	0,0,57,59,5,13,0,0,58,60,3,20,10,0,59,58,1,0,0,0,59,60,1,0,0,0,60,7,1,0,
+	0,0,61,65,3,10,5,0,62,65,3,12,6,0,63,65,3,14,7,0,64,61,1,0,0,0,64,62,1,
+	0,0,0,64,63,1,0,0,0,65,9,1,0,0,0,66,67,5,12,0,0,67,68,3,18,9,0,68,11,1,
+	0,0,0,69,70,5,12,0,0,70,71,3,44,22,0,71,13,1,0,0,0,72,75,3,16,8,0,73,74,
+	5,7,0,0,74,76,3,44,22,0,75,73,1,0,0,0,76,77,1,0,0,0,77,75,1,0,0,0,77,78,
+	1,0,0,0,78,15,1,0,0,0,79,82,3,18,9,0,80,82,3,44,22,0,81,79,1,0,0,0,81,80,
+	1,0,0,0,82,17,1,0,0,0,83,84,5,21,0,0,84,19,1,0,0,0,85,91,3,22,11,0,86,91,
+	3,26,13,0,87,91,3,28,14,0,88,91,3,30,15,0,89,91,3,36,18,0,90,85,1,0,0,0,
+	90,86,1,0,0,0,90,87,1,0,0,0,90,88,1,0,0,0,90,89,1,0,0,0,91,21,1,0,0,0,92,
+	95,3,40,20,0,93,95,3,24,12,0,94,92,1,0,0,0,94,93,1,0,0,0,95,23,1,0,0,0,
+	96,97,5,19,0,0,97,25,1,0,0,0,98,99,3,44,22,0,99,27,1,0,0,0,100,101,3,14,
+	7,0,101,29,1,0,0,0,102,103,3,32,16,0,103,104,3,34,17,0,104,31,1,0,0,0,105,
+	110,3,16,8,0,106,107,5,7,0,0,107,109,3,44,22,0,108,106,1,0,0,0,109,112,
+	1,0,0,0,110,108,1,0,0,0,110,111,1,0,0,0,111,33,1,0,0,0,112,110,1,0,0,0,
+	113,122,5,1,0,0,114,119,3,20,10,0,115,116,5,8,0,0,116,118,3,20,10,0,117,
+	115,1,0,0,0,118,121,1,0,0,0,119,117,1,0,0,0,119,120,1,0,0,0,120,123,1,0,
+	0,0,121,119,1,0,0,0,122,114,1,0,0,0,122,123,1,0,0,0,123,124,1,0,0,0,124,
+	125,5,2,0,0,125,35,1,0,0,0,126,127,5,14,0,0,127,128,3,38,19,0,128,132,5,
+	5,0,0,129,131,3,2,1,0,130,129,1,0,0,0,131,134,1,0,0,0,132,130,1,0,0,0,132,
+	133,1,0,0,0,133,135,1,0,0,0,134,132,1,0,0,0,135,136,5,6,0,0,136,37,1,0,
+	0,0,137,146,5,1,0,0,138,143,3,44,22,0,139,140,5,8,0,0,140,142,3,44,22,0,
+	141,139,1,0,0,0,142,145,1,0,0,0,143,141,1,0,0,0,143,144,1,0,0,0,144,147,
+	1,0,0,0,145,143,1,0,0,0,146,138,1,0,0,0,146,147,1,0,0,0,147,148,1,0,0,0,
+	148,149,5,2,0,0,149,39,1,0,0,0,150,159,5,5,0,0,151,156,3,42,21,0,152,153,
+	5,8,0,0,153,155,3,42,21,0,154,152,1,0,0,0,155,158,1,0,0,0,156,154,1,0,0,
+	0,156,157,1,0,0,0,157,160,1,0,0,0,158,156,1,0,0,0,159,151,1,0,0,0,159,160,
+	1,0,0,0,160,161,1,0,0,0,161,162,5,6,0,0,162,41,1,0,0,0,163,164,3,44,22,
+	0,164,165,5,9,0,0,165,166,3,20,10,0,166,43,1,0,0,0,167,168,5,22,0,0,168,
+	45,1,0,0,0,15,51,59,64,77,81,90,94,110,119,122,132,143,146,156,159];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -1200,8 +1414,11 @@ export class ExpressionContext extends ParserRuleContext {
 	public member_expression(): Member_expressionContext {
 		return this.getTypedRuleContext(Member_expressionContext, 0) as Member_expressionContext;
 	}
-	public function_expression(): Function_expressionContext {
-		return this.getTypedRuleContext(Function_expressionContext, 0) as Function_expressionContext;
+	public function_call_expression(): Function_call_expressionContext {
+		return this.getTypedRuleContext(Function_call_expressionContext, 0) as Function_call_expressionContext;
+	}
+	public function_definition(): Function_definitionContext {
+		return this.getTypedRuleContext(Function_definitionContext, 0) as Function_definitionContext;
 	}
     public get ruleIndex(): number {
     	return AiParser.RULE_expression;
@@ -1227,6 +1444,9 @@ export class Literal_expressionContext extends ParserRuleContext {
 	public object_literal(): Object_literalContext {
 		return this.getTypedRuleContext(Object_literalContext, 0) as Object_literalContext;
 	}
+	public string_literal(): String_literalContext {
+		return this.getTypedRuleContext(String_literalContext, 0) as String_literalContext;
+	}
     public get ruleIndex(): number {
     	return AiParser.RULE_literal_expression;
 	}
@@ -1238,6 +1458,30 @@ export class Literal_expressionContext extends ParserRuleContext {
 	public exitRule(listener: AiParserListener): void {
 	    if(listener.exitLiteral_expression) {
 	 		listener.exitLiteral_expression(this);
+		}
+	}
+}
+
+
+export class String_literalContext extends ParserRuleContext {
+	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public STRING_LITERAL(): TerminalNode {
+		return this.getToken(AiParser.STRING_LITERAL, 0);
+	}
+    public get ruleIndex(): number {
+    	return AiParser.RULE_string_literal;
+	}
+	public enterRule(listener: AiParserListener): void {
+	    if(listener.enterString_literal) {
+	 		listener.enterString_literal(this);
+		}
+	}
+	public exitRule(listener: AiParserListener): void {
+	    if(listener.exitString_literal) {
+	 		listener.exitString_literal(this);
 		}
 	}
 }
@@ -1291,25 +1535,46 @@ export class Member_expressionContext extends ParserRuleContext {
 }
 
 
-export class Function_expressionContext extends ParserRuleContext {
+export class Function_call_expressionContext extends ParserRuleContext {
 	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
-	public FUNCTION(): TerminalNode {
-		return this.getToken(AiParser.FUNCTION, 0);
+	public function_selector(): Function_selectorContext {
+		return this.getTypedRuleContext(Function_selectorContext, 0) as Function_selectorContext;
 	}
-	public LPAR(): TerminalNode {
-		return this.getToken(AiParser.LPAR, 0);
+	public argument_list(): Argument_listContext {
+		return this.getTypedRuleContext(Argument_listContext, 0) as Argument_listContext;
 	}
-	public RPAR(): TerminalNode {
-		return this.getToken(AiParser.RPAR, 0);
+    public get ruleIndex(): number {
+    	return AiParser.RULE_function_call_expression;
 	}
-	public LCURL(): TerminalNode {
-		return this.getToken(AiParser.LCURL, 0);
+	public enterRule(listener: AiParserListener): void {
+	    if(listener.enterFunction_call_expression) {
+	 		listener.enterFunction_call_expression(this);
+		}
 	}
-	public RCURL(): TerminalNode {
-		return this.getToken(AiParser.RCURL, 0);
+	public exitRule(listener: AiParserListener): void {
+	    if(listener.exitFunction_call_expression) {
+	 		listener.exitFunction_call_expression(this);
+		}
+	}
+}
+
+
+export class Function_selectorContext extends ParserRuleContext {
+	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public selectable(): SelectableContext {
+		return this.getTypedRuleContext(SelectableContext, 0) as SelectableContext;
+	}
+	public DOT_list(): TerminalNode[] {
+	    	return this.getTokens(AiParser.DOT);
+	}
+	public DOT(i: number): TerminalNode {
+		return this.getToken(AiParser.DOT, i);
 	}
 	public variable_id_list(): Variable_idContext[] {
 		return this.getTypedRuleContexts(Variable_idContext) as Variable_idContext[];
@@ -1317,11 +1582,38 @@ export class Function_expressionContext extends ParserRuleContext {
 	public variable_id(i: number): Variable_idContext {
 		return this.getTypedRuleContext(Variable_idContext, i) as Variable_idContext;
 	}
-	public statement_list(): StatementContext[] {
-		return this.getTypedRuleContexts(StatementContext) as StatementContext[];
+    public get ruleIndex(): number {
+    	return AiParser.RULE_function_selector;
 	}
-	public statement(i: number): StatementContext {
-		return this.getTypedRuleContext(StatementContext, i) as StatementContext;
+	public enterRule(listener: AiParserListener): void {
+	    if(listener.enterFunction_selector) {
+	 		listener.enterFunction_selector(this);
+		}
+	}
+	public exitRule(listener: AiParserListener): void {
+	    if(listener.exitFunction_selector) {
+	 		listener.exitFunction_selector(this);
+		}
+	}
+}
+
+
+export class Argument_listContext extends ParserRuleContext {
+	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public LPAR(): TerminalNode {
+		return this.getToken(AiParser.LPAR, 0);
+	}
+	public RPAR(): TerminalNode {
+		return this.getToken(AiParser.RPAR, 0);
+	}
+	public expression_list(): ExpressionContext[] {
+		return this.getTypedRuleContexts(ExpressionContext) as ExpressionContext[];
+	}
+	public expression(i: number): ExpressionContext {
+		return this.getTypedRuleContext(ExpressionContext, i) as ExpressionContext;
 	}
 	public COMMA_list(): TerminalNode[] {
 	    	return this.getTokens(AiParser.COMMA);
@@ -1330,16 +1622,94 @@ export class Function_expressionContext extends ParserRuleContext {
 		return this.getToken(AiParser.COMMA, i);
 	}
     public get ruleIndex(): number {
-    	return AiParser.RULE_function_expression;
+    	return AiParser.RULE_argument_list;
 	}
 	public enterRule(listener: AiParserListener): void {
-	    if(listener.enterFunction_expression) {
-	 		listener.enterFunction_expression(this);
+	    if(listener.enterArgument_list) {
+	 		listener.enterArgument_list(this);
 		}
 	}
 	public exitRule(listener: AiParserListener): void {
-	    if(listener.exitFunction_expression) {
-	 		listener.exitFunction_expression(this);
+	    if(listener.exitArgument_list) {
+	 		listener.exitArgument_list(this);
+		}
+	}
+}
+
+
+export class Function_definitionContext extends ParserRuleContext {
+	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public FUNCTION(): TerminalNode {
+		return this.getToken(AiParser.FUNCTION, 0);
+	}
+	public parameter_list(): Parameter_listContext {
+		return this.getTypedRuleContext(Parameter_listContext, 0) as Parameter_listContext;
+	}
+	public LCURL(): TerminalNode {
+		return this.getToken(AiParser.LCURL, 0);
+	}
+	public RCURL(): TerminalNode {
+		return this.getToken(AiParser.RCURL, 0);
+	}
+	public statement_list(): StatementContext[] {
+		return this.getTypedRuleContexts(StatementContext) as StatementContext[];
+	}
+	public statement(i: number): StatementContext {
+		return this.getTypedRuleContext(StatementContext, i) as StatementContext;
+	}
+    public get ruleIndex(): number {
+    	return AiParser.RULE_function_definition;
+	}
+	public enterRule(listener: AiParserListener): void {
+	    if(listener.enterFunction_definition) {
+	 		listener.enterFunction_definition(this);
+		}
+	}
+	public exitRule(listener: AiParserListener): void {
+	    if(listener.exitFunction_definition) {
+	 		listener.exitFunction_definition(this);
+		}
+	}
+}
+
+
+export class Parameter_listContext extends ParserRuleContext {
+	constructor(parser?: AiParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public LPAR(): TerminalNode {
+		return this.getToken(AiParser.LPAR, 0);
+	}
+	public RPAR(): TerminalNode {
+		return this.getToken(AiParser.RPAR, 0);
+	}
+	public variable_id_list(): Variable_idContext[] {
+		return this.getTypedRuleContexts(Variable_idContext) as Variable_idContext[];
+	}
+	public variable_id(i: number): Variable_idContext {
+		return this.getTypedRuleContext(Variable_idContext, i) as Variable_idContext;
+	}
+	public COMMA_list(): TerminalNode[] {
+	    	return this.getTokens(AiParser.COMMA);
+	}
+	public COMMA(i: number): TerminalNode {
+		return this.getToken(AiParser.COMMA, i);
+	}
+    public get ruleIndex(): number {
+    	return AiParser.RULE_parameter_list;
+	}
+	public enterRule(listener: AiParserListener): void {
+	    if(listener.enterParameter_list) {
+	 		listener.enterParameter_list(this);
+		}
+	}
+	public exitRule(listener: AiParserListener): void {
+	    if(listener.exitParameter_list) {
+	 		listener.exitParameter_list(this);
 		}
 	}
 }

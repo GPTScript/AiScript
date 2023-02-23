@@ -10,18 +10,29 @@ import {
 } from "antlr4";
 import IStatement from "../statement/IStatement";
 import AiParser, {
+    Argument_listContext,
     Assign_statementContext,
     AssignableMemberContext,
-    ExpressionContext, Function_expressionContext, Instance_expressionContext,
-    Literal_expressionContext, Member_expressionContext,
-    Member_selectorContext,
-    Object_literalContext, Return_statementContext,
-    SelectableTypeContext, SelectableVariableContext,
-    StatementContext,
+    ExpressionContext, Function_call_expressionContext,
+    Function_definitionContext,
+    Function_selectorContext,
+    Instance_expressionContext,
+    Literal_expressionContext,
+    Member_expressionContext,
+    Member_selectorContext, Object_entryContext,
+    Object_literalContext,
+    Parameter_listContext,
+    Return_statementContext,
+    SelectableTypeContext,
+    SelectableVariableContext,
+    StatementContext, String_literalContext,
     Top_level_statementContext,
     Type_declarationContext,
     Type_idContext,
-    TypeDeclarationContext, Variable_declarationContext, Variable_idContext, VariableDeclarationContext
+    TypeDeclarationContext,
+    Variable_declarationContext,
+    Variable_idContext,
+    VariableDeclarationContext
 } from "../parser/AiParser";
 import {fileExists} from "../utils/FileUtils";
 import AiLexer from "../parser/AiLexer";
@@ -45,8 +56,11 @@ import VariableDeclaration from "../assign/VariableDeclaration";
 import ReturnStatement from "../statement/ReturnStatement";
 import MemberExpression from "../expression/MemberExpression";
 import InstanceExpression from "../expression/InstanceExpression";
-import FunctionExpression from "../expression/FunctionExpression";
+import FunctionDefinition from "../expression/FunctionDefinition";
 import SelectableInstance from "../select/SelectableInstance";
+import FunctionSelector from "../expression/FunctionSelector";
+import FunctionCallExpression from "../expression/FunctionCallExpression";
+import StringLiteral from "../literal/StringLiteral";
 
 interface IndexedNode {
     __id?: number;
@@ -184,8 +198,18 @@ export default class AiBuilder extends AiParserListener {
     }
 
     exitObject_literal = (ctx: Object_literalContext) => {
-        const entries = ctx.object_entry_list().map(child => this.getNodeValue<KeyValuePair<Identifier, IExpression>>(child));
+        const entries = ctx.object_entry_list().map(child => this.getNodeValue<KeyValuePair<VariableIdentifier, IExpression>>(child));
         this.setNodeValue(ctx, new ObjectLiteral(ctx.getText(), entries));
+    }
+
+    exitObject_entry = (ctx: Object_entryContext) => {
+        const key = this.getNodeValue<VariableIdentifier>(ctx.variable_id());
+        const value = this.getNodeValue<IExpression>(ctx.expression());
+        this.setNodeValue(ctx, new KeyValuePair(key, value));
+    }
+
+    exitString_literal = (ctx: String_literalContext) => {
+        this.setNodeValue(ctx, new StringLiteral(ctx.getText()));
     }
 
     exitLiteral_expression = (ctx: Literal_expressionContext) => {
@@ -248,10 +272,35 @@ export default class AiBuilder extends AiParserListener {
         this.setNodeValue(ctx, new MemberExpression(selector));
     }
 
-    exitFunction_expression = (ctx: Function_expressionContext) => {
+    exitParameter_list = (ctx: Parameter_listContext) => {
         const parameters = ctx.variable_id_list().map(child => this.getNodeValue<Identifier>(child));
+        this.setNodeValue(ctx, parameters);
+    }
+
+    exitFunction_definition = (ctx: Function_definitionContext) => {
+        const parameters = this.getNodeValue<Identifier[]>(ctx.parameter_list());
         const statements = ctx.statement_list().map(child => this.getNodeValue<IStatement>(child));
-        this.setNodeValue(ctx, new FunctionExpression(parameters, statements));
+        this.setNodeValue(ctx, new FunctionDefinition(parameters, statements));
+    }
+
+    exitFunction_call_expression = (ctx: Function_call_expressionContext) => {
+        const selector = this.getNodeValue<FunctionSelector>(ctx.function_selector());
+        const argumentList = this.getNodeValue<IExpression[]>(ctx.argument_list());
+        this.setNodeValue(ctx, new FunctionCallExpression(selector, argumentList));
+    }
+
+    exitFunction_selector = (ctx: Function_selectorContext) => {
+        let selectable = this.getNodeValue<ISelectable>(ctx.selectable());
+        const selectors = ctx.variable_id_list().map(child => this.getNodeValue<VariableIdentifier>(child));
+        const function_id = selectors.pop();
+        selectors.forEach(id => selectable = new SelectableMember(selectable, id));
+        this.setNodeValue(ctx, new FunctionSelector(selectable, function_id));
+
+    }
+
+    exitArgument_list = (ctx: Argument_listContext) => {
+        const expressions = ctx.expression_list().map(child => this.getNodeValue<IExpression>(child));
+        this.setNodeValue(ctx, expressions);
     }
 
 }

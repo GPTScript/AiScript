@@ -2,7 +2,7 @@ import ExpressionBase from "./ExpressionBase";
 import IStatement from "../statement/IStatement";
 import VariableIdentifier from "../builder/VariableIdentifier";
 
-export default class FunctionExpression  extends ExpressionBase {
+export default class FunctionDefinition extends ExpressionBase {
 
     parameters: VariableIdentifier[];
     statements: IStatement[];

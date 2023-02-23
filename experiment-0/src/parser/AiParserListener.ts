@@ -18,9 +18,14 @@ import { SelectableVariableContext } from "./AiParser";
 import { Type_idContext } from "./AiParser";
 import { ExpressionContext } from "./AiParser";
 import { Literal_expressionContext } from "./AiParser";
+import { String_literalContext } from "./AiParser";
 import { Instance_expressionContext } from "./AiParser";
 import { Member_expressionContext } from "./AiParser";
-import { Function_expressionContext } from "./AiParser";
+import { Function_call_expressionContext } from "./AiParser";
+import { Function_selectorContext } from "./AiParser";
+import { Argument_listContext } from "./AiParser";
+import { Function_definitionContext } from "./AiParser";
+import { Parameter_listContext } from "./AiParser";
 import { Object_literalContext } from "./AiParser";
 import { Object_entryContext } from "./AiParser";
 import { Variable_idContext } from "./AiParser";
@@ -192,6 +197,16 @@ export default class AiParserListener extends ParseTreeListener {
 	 */
 	exitLiteral_expression?: (ctx: Literal_expressionContext) => void;
 	/**
+	 * Enter a parse tree produced by `AiParser.string_literal`.
+	 * @param ctx the parse tree
+	 */
+	enterString_literal?: (ctx: String_literalContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.string_literal`.
+	 * @param ctx the parse tree
+	 */
+	exitString_literal?: (ctx: String_literalContext) => void;
+	/**
 	 * Enter a parse tree produced by `AiParser.instance_expression`.
 	 * @param ctx the parse tree
 	 */
@@ -212,15 +227,55 @@ export default class AiParserListener extends ParseTreeListener {
 	 */
 	exitMember_expression?: (ctx: Member_expressionContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiParser.function_expression`.
+	 * Enter a parse tree produced by `AiParser.function_call_expression`.
 	 * @param ctx the parse tree
 	 */
-	enterFunction_expression?: (ctx: Function_expressionContext) => void;
+	enterFunction_call_expression?: (ctx: Function_call_expressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiParser.function_expression`.
+	 * Exit a parse tree produced by `AiParser.function_call_expression`.
 	 * @param ctx the parse tree
 	 */
-	exitFunction_expression?: (ctx: Function_expressionContext) => void;
+	exitFunction_call_expression?: (ctx: Function_call_expressionContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.function_selector`.
+	 * @param ctx the parse tree
+	 */
+	enterFunction_selector?: (ctx: Function_selectorContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.function_selector`.
+	 * @param ctx the parse tree
+	 */
+	exitFunction_selector?: (ctx: Function_selectorContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.argument_list`.
+	 * @param ctx the parse tree
+	 */
+	enterArgument_list?: (ctx: Argument_listContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.argument_list`.
+	 * @param ctx the parse tree
+	 */
+	exitArgument_list?: (ctx: Argument_listContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.function_definition`.
+	 * @param ctx the parse tree
+	 */
+	enterFunction_definition?: (ctx: Function_definitionContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.function_definition`.
+	 * @param ctx the parse tree
+	 */
+	exitFunction_definition?: (ctx: Function_definitionContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.parameter_list`.
+	 * @param ctx the parse tree
+	 */
+	enterParameter_list?: (ctx: Parameter_listContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.parameter_list`.
+	 * @param ctx the parse tree
+	 */
+	exitParameter_list?: (ctx: Parameter_listContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiParser.object_literal`.
 	 * @param ctx the parse tree
