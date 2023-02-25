@@ -19,7 +19,7 @@ import AiParser, {
     Instance_expressionContext,
     Literal_expressionContext,
     Member_expressionContext,
-    Member_selectorContext, Object_entryContext,
+    Member_selectorContext, ModuleContext, Object_entryContext,
     Object_literalContext,
     Parameter_listContext,
     Return_statementContext,
@@ -61,12 +61,21 @@ import SelectableInstance from "../select/SelectableInstance";
 import FunctionSelector from "../expression/FunctionSelector";
 import FunctionCallExpression from "../expression/FunctionCallExpression";
 import StringLiteral from "../literal/StringLiteral";
+import AiModule from "../module/AiModule";
 
 interface IndexedNode {
     __id?: number;
 }
 
+interface IToken extends Token {
+    channel: number;
+}
+
 export default class AiBuilder extends AiParserListener {
+
+    static parse_module(data: string): AiModule {
+        return AiBuilder.doParse<AiModule>((parser: AiParser) => parser.module_(), data);
+    }
 
     static parse_statement(data: string): IStatement | null {
         return AiBuilder.doParse<IStatement>((parser: AiParser) => parser.top_level_statement(), data);
@@ -84,7 +93,13 @@ export default class AiBuilder extends AiParserListener {
             const builder = new AiBuilder(parser, path);
             const walker = new ParseTreeWalker();
             walker.walk(builder, tree);
-            return builder.getNodeValue<T>(tree);
+            const result = builder.getNodeValue<T>(tree);
+            if(result instanceof AiModule) {
+                const range = Array.from({ length: tokenStream.index + 1 }, (value, index) => index);
+                const comment_channel = lexer.channelNames.indexOf("COMMENT");
+                result.comments = range.map(idx => tokenStream.get(idx)).filter(token => (token as IToken).channel === comment_channel );
+            }
+            return result;
         } catch (e: any) {
             if (e instanceof Error)
                 console.log(e.stack);
@@ -301,6 +316,11 @@ export default class AiBuilder extends AiParserListener {
     exitArgument_list = (ctx: Argument_listContext) => {
         const expressions = ctx.expression_list().map(child => this.getNodeValue<IExpression>(child));
         this.setNodeValue(ctx, expressions);
+    }
+
+    exitModule = (ctx: ModuleContext) => {
+        const statements = ctx.top_level_statement_list().map(child => this.getNodeValue<IStatement>(child));
+        this.setNodeValue(ctx, new AiModule(statements));
     }
 
 }

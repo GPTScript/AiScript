@@ -3,6 +3,7 @@
 import {ParseTreeListener} from "antlr4";
 
 
+import { ModuleContext } from "./AiParser";
 import { Top_level_statementContext } from "./AiParser";
 import { StatementContext } from "./AiParser";
 import { Assign_statementContext } from "./AiParser";
@@ -36,6 +37,16 @@ import { Variable_idContext } from "./AiParser";
  * `AiParser`.
  */
 export default class AiParserListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by `AiParser.module`.
+	 * @param ctx the parse tree
+	 */
+	enterModule?: (ctx: ModuleContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.module`.
+	 * @param ctx the parse tree
+	 */
+	exitModule?: (ctx: ModuleContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiParser.top_level_statement`.
 	 * @param ctx the parse tree

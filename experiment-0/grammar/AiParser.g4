@@ -4,6 +4,10 @@ options {
   tokenVocab = AiLexer;
 }
 
+module:
+    top_level_statement*
+    ;
+
 top_level_statement:
     statement[false]
     ;

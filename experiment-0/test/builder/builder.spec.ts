@@ -69,3 +69,19 @@ it('builds factory_call_with_1_string_field',  () => {
     const exp = stmt.expression.argumentsList[0];
     assert.ok(exp instanceof ObjectLiteral);
 });
+
+it('parses single line comments',  () => {
+    const module = AiBuilder.parse_module("samples/single_line_comments.js");
+    assert.ok(module);
+    assert.equal(module.statements.length, 1);
+    assert.ok(module.statements[0] instanceof AssignStatement);
+    assert.equal(module.comments.length, 0);
+});
+
+it('parses multi line comments',  () => {
+    const module = AiBuilder.parse_module("samples/multi_line_comments.js");
+    assert.ok(module);
+    assert.equal(module.statements.length, 1);
+    assert.ok(module.statements[0] instanceof AssignStatement);
+    assert.equal(module.comments.length, 3);
+});

@@ -1,5 +1,10 @@
 lexer grammar AiLexer;
 
+channels { COMMENT }
+
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> channel(COMMENT);
+SINGLE_LINE_COMMENT: '//' ~[\r\n\u2028\u2029]* -> skip;
+
 LPAR: '(';
 RPAR: ')';
 LBRAK: '[';
@@ -166,8 +171,6 @@ BinaryDigitOrUnderscore:
 	|	'_'
 	;
 
-// §3.10.2 Floating-Point Literals
-
 DECIMAL_LITERAL:
 	DecimalFloatingPointLiteral
 	|	HexadecimalFloatingPointLiteral
@@ -227,14 +230,14 @@ BinaryExponentIndicator:
 	[pP]
 	;
 
-// §3.10.3 Boolean Literals
+NULL_LITERAL:
+	'null'
+	;
 
 BOOLEAN_LITERAL:
 	'true'
 	|	'false'
 	;
-
-// §3.10.4 Character Literals
 
 CHAR_LITERAL:
 	'\'' SingleCharacter '\''
@@ -245,8 +248,6 @@ fragment
 SingleCharacter:
 	~['\\\r\n]
 	;
-
-// §3.10.5 String Literals
 
 STRING_LITERAL:
 	'"' StringCharacters? '"'
@@ -262,8 +263,6 @@ StringCharacter:
 	~["\\\r\n]
 	|	EscapeSequence
 	;
-
-// §3.10.6 Escape Sequences for Character and String Literals
 
 fragment
 EscapeSequence:
@@ -290,14 +289,6 @@ UnicodeEscape:
 	'\\' 'u'+ HexDigit HexDigit HexDigit HexDigit
     ;
 
-// §3.10.7 The Null Literal
-
-NULL_LITERAL:
-	'null'
-	;
-
-// §3.8 Identifiers (must appear after all keywords in the grammar)
-
 PASCAL_CASE_IDENTIFIER:
 	[A-Z] LetterOrDigit*
 	;
@@ -319,8 +310,6 @@ fragment
 LetterOrDigit:
 	[a-zA-Z0-9$_] // these are the "letters or digits" below 0x7F
 	;
-
-// §3. White space, must appear last
 
 WS:
 	[ \t\r\n\u000C]+ -> skip
