@@ -1,5 +1,5 @@
 import assert from "assert";
-import AiBuilder from "../../src/builder/AiBuilder";
+import ModuleBuilder from "../../src/builder/ModuleBuilder";
 import AssignStatement from "../../src/statement/AssignStatement";
 import ObjectLiteral from "../../src/literal/ObjectLiteral";
 import TypeDeclaration from "../../src/assign/TypeDeclaration";
@@ -14,7 +14,7 @@ import InstanceExpression from "../../src/expression/InstanceExpression";
 import FunctionCallExpression from "../../src/expression/FunctionCallExpression";
 
 it('builds assign_empty_object_to_var_type',  () => {
-    const stmt = AiBuilder.parse_statement("samples/assign_empty_object_to_var_type.js");
+    const stmt = ModuleBuilder.parse_statement("samples/assign_empty_object_to_var_type.js");
     assert.ok(stmt instanceof AssignStatement);
     assert.ok(stmt.assignable instanceof TypeDeclaration);
     assert.equal(stmt.assignable.typeId.value, "Person");
@@ -23,7 +23,7 @@ it('builds assign_empty_object_to_var_type',  () => {
 });
 
 it('builds factory_with_1_string_field',  () => {
-    let stmt = AiBuilder.parse_statement("samples/factory_with_1_string_field.js");
+    let stmt = ModuleBuilder.parse_statement("samples/factory_with_1_string_field.js");
     assert.ok(stmt instanceof AssignStatement);
     assert.ok(stmt.assignable instanceof AssignableMember);
     const selector = stmt.assignable.selector;
@@ -57,7 +57,7 @@ it('builds factory_with_1_string_field',  () => {
 
 
 it('builds factory_call_with_1_string_field',  () => {
-    let stmt = AiBuilder.parse_statement("samples/factory_call_with_1_string_field.js");
+    let stmt = ModuleBuilder.parse_statement("samples/factory_call_with_1_string_field.js");
     assert.ok(stmt instanceof AssignStatement);
     assert.ok(stmt.assignable instanceof VariableDeclaration);
     assert.equal(stmt.assignable.variableId.value, "p");
@@ -71,7 +71,7 @@ it('builds factory_call_with_1_string_field',  () => {
 });
 
 it('parses single line comments',  () => {
-    const module = AiBuilder.parse_module("samples/single_line_comments.js");
+    const module = ModuleBuilder.parse_module("samples/single_line_comments.js");
     assert.ok(module);
     assert.equal(module.statements.length, 1);
     assert.ok(module.statements[0] instanceof AssignStatement);
@@ -79,7 +79,7 @@ it('parses single line comments',  () => {
 });
 
 it('parses multi line comments',  () => {
-    const module = AiBuilder.parse_module("samples/multi_line_comments.js");
+    const module = ModuleBuilder.parse_module("samples/multi_line_comments.js");
     assert.ok(module);
     assert.equal(module.statements.length, 1);
     assert.ok(module.statements[0] instanceof AssignStatement);

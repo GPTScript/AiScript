@@ -71,14 +71,14 @@ interface IToken extends Token {
     channel: number;
 }
 
-export default class AiBuilder extends AiParserListener {
+export default class ModuleBuilder extends AiParserListener {
 
     static parse_module(data: string): AiModule {
-        return AiBuilder.doParse<AiModule>((parser: AiParser) => parser.module_(), data);
+        return ModuleBuilder.doParse<AiModule>((parser: AiParser) => parser.module_(), data);
     }
 
     static parse_statement(data: string): IStatement | null {
-        return AiBuilder.doParse<IStatement>((parser: AiParser) => parser.top_level_statement(), data);
+        return ModuleBuilder.doParse<IStatement>((parser: AiParser) => parser.top_level_statement(), data);
     }
 
     static doParse<T>(rule: (parser: AiParser) => ParseTree, data?: string, stream?: CharStream): T | null {
@@ -90,7 +90,7 @@ export default class AiBuilder extends AiParserListener {
             const tokenStream = new CommonTokenStream(lexer);
             const parser = new AiParser(tokenStream);
             const tree = rule(parser);
-            const builder = new AiBuilder(parser, path);
+            const builder = new ModuleBuilder(parser, path);
             const walker = new ParseTreeWalker();
             walker.walk(builder, tree);
             const result = builder.getNodeValue<T>(tree);
