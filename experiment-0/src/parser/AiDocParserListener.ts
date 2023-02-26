@@ -5,8 +5,10 @@ import {ParseTreeListener} from "antlr4";
 
 import { DocumentationContext } from "./AiDocParser";
 import { Bounded_commentContext } from "./AiDocParser";
-import { WhitespaceContext } from "./AiDocParser";
+import { Comment_startContext } from "./AiDocParser";
 import { Comment_lineContext } from "./AiDocParser";
+import { Comment_endContext } from "./AiDocParser";
+import { CommentContext } from "./AiDocParser";
 import { Type_commentContext } from "./AiDocParser";
 import { Property_commentContext } from "./AiDocParser";
 import { Property_typesContext } from "./AiDocParser";
@@ -48,15 +50,15 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 */
 	exitBounded_comment?: (ctx: Bounded_commentContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiDocParser.whitespace`.
+	 * Enter a parse tree produced by `AiDocParser.comment_start`.
 	 * @param ctx the parse tree
 	 */
-	enterWhitespace?: (ctx: WhitespaceContext) => void;
+	enterComment_start?: (ctx: Comment_startContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiDocParser.whitespace`.
+	 * Exit a parse tree produced by `AiDocParser.comment_start`.
 	 * @param ctx the parse tree
 	 */
-	exitWhitespace?: (ctx: WhitespaceContext) => void;
+	exitComment_start?: (ctx: Comment_startContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiDocParser.comment_line`.
 	 * @param ctx the parse tree
@@ -67,6 +69,26 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitComment_line?: (ctx: Comment_lineContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiDocParser.comment_end`.
+	 * @param ctx the parse tree
+	 */
+	enterComment_end?: (ctx: Comment_endContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiDocParser.comment_end`.
+	 * @param ctx the parse tree
+	 */
+	exitComment_end?: (ctx: Comment_endContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiDocParser.comment`.
+	 * @param ctx the parse tree
+	 */
+	enterComment?: (ctx: CommentContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiDocParser.comment`.
+	 * @param ctx the parse tree
+	 */
+	exitComment?: (ctx: CommentContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiDocParser.type_comment`.
 	 * @param ctx the parse tree

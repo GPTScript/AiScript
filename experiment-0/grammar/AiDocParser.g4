@@ -3,7 +3,7 @@ parser grammar AiDocParser;
 options { tokenVocab=AiDocLexer; }
 
 documentation:
-    bounded_comment? EOF
+    NEWLINE* bounded_comment? NEWLINE* EOF
     ;
 
 bounded_comment:
@@ -31,15 +31,15 @@ comment:
     ;
 
 type_comment:
-    ARONDBASE PASCAL_CASE_IDENTIFIER SPACE INTERFACE SPACE TEXT_CONTENT?
+    ARONDBASE PASCAL_CASE_IDENTIFIER SPACE INTERFACE (SPACE text_comment)?
     ;
 
 property_comment:
-    ARONDBASE CAMEL_CASE_IDENTIFIER SPACE property_types
+    ARONDBASE CAMEL_CASE_IDENTIFIER SPACE property_types (SPACE text_comment)?
     ;
 
 property_types:
-    property_type ( SPACE PIPE SPACE property_type )
+    property_type ( SPACE? PIPE SPACE? property_type )*
     ;
 
 property_type:
@@ -48,7 +48,7 @@ property_type:
     ;
 
 version_comment:
-    DOLLAR VERSION SPACE version_value
+    DOLLAR VERSION SPACE version_value (SPACE text_comment)?
     ;
 
 version_value:

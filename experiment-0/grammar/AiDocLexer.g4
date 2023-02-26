@@ -1,5 +1,20 @@
 lexer grammar AiDocLexer;
 
+INTERFACE: 'interface';
+VERSION: 'version';
+RETURN: 'return';
+
+DRAFT: 'draft';
+UNKNOWN: 'UNKNOWN';
+
+HASH_CODE:
+    HexDigit HexDigit HexDigit HexDigit+
+    ;
+
+SEMVER:
+    'v' SemVal ( '.' SemVal ( '.' SemVal )? )?
+    ;
+
 PASCAL_CASE_IDENTIFIER:
 	[A-Z] LetterOrDigit*
 	;
@@ -17,11 +32,6 @@ ARONDBASE: '@';
 DOLLAR: '$';
 OPTIONAL: '?';
 PIPE: '|';
-
-INTERFACE: 'interface';
-VERSION: 'version';
-DRAFT: 'draft';
-UNKNOWN: 'UNKNOWN';
 
 AIDOC_START
 	: '/**' STAR*
@@ -63,19 +73,11 @@ BRACE_CLOSE
 	: '}'
 	;
 
-HASH_CODE:
-    HexDigit HexDigit HexDigit HexDigit+
-    ;
-
 fragment
 HexDigit:
 	[0-9a-fA-F]
 	;
 
-
-SEMVER:
-    'v' SemVal ( '.' SemVal ( '.' SemVal )? )?
-    ;
 
 fragment
 SemVal:
