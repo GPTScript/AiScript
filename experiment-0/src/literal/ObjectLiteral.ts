@@ -2,11 +2,14 @@ import Identifier from "../builder/Identifier";
 import IExpression from "../expression/IExpression";
 import LiteralBase from "./LiteralBase";
 import KeyValuePair from "../utils/KeyValuePair";
+import ObjectType from "../types/ObjectType";
 
 export default class ObjectLiteral extends LiteralBase<Map<Identifier, IExpression>> {
 
+    static EMPTY_OBJECT = new ObjectLiteral("{}", []);
+
     constructor(text: string, entries: KeyValuePair<Identifier, IExpression>[]) {
-        super(text, new Map<Identifier, IExpression>(entries.map(e => e.asArray())));
+        super(text, new Map<Identifier, IExpression>(entries.map(e => e.asArray())), ObjectType.instance);
     }
 
 }

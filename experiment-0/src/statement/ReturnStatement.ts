@@ -1,5 +1,7 @@
 import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
+import Context from "../analyzer/Context";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class ReturnStatement extends StatementBase {
 
@@ -9,4 +11,13 @@ export default class ReturnStatement extends StatementBase {
         super();
         this.expression = expression;
     }
+
+    register(context: Context): void {
+        // nothing to do
+    }
+
+    inferTypes(context: Context): void {
+        throw new NotImplementedError();
+    }
+
 }

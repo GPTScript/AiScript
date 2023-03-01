@@ -1,6 +1,9 @@
 import ExpressionBase from "./ExpressionBase";
 import FunctionSelector from "./FunctionSelector";
 import IExpression from "./IExpression";
+import Context from "../analyzer/Context";
+import IType from "../types/IType";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class FunctionCallExpression extends ExpressionBase {
 
@@ -13,5 +16,8 @@ export default class FunctionCallExpression extends ExpressionBase {
         this.argumentsList = argumentsList;
     }
 
+    check(context: Context): IType {
+        throw new NotImplementedError();
+    }
 
 }

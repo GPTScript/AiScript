@@ -2,7 +2,7 @@ import AiParserListener from "../parser/AiParserListener";
 import {
     CharStream,
     CharStreams,
-    CommonTokenStream,
+    CommonTokenStream, ErrorListener,
     ParserRuleContext,
     ParseTree,
     ParseTreeWalker,
@@ -73,15 +73,15 @@ interface IToken extends Token {
 
 export default class ModuleBuilder extends AiParserListener {
 
-    static parse_module(data: string): AiModule {
-        return ModuleBuilder.doParse<AiModule>((parser: AiParser) => parser.module_(), data);
+    static parse_module(data: string, listener?: ErrorListener<Token>): AiModule {
+        return ModuleBuilder.doParse<AiModule>((parser: AiParser) => parser.module_(), data, null, listener);
     }
 
     static parse_statement(data: string): IStatement | null {
         return ModuleBuilder.doParse<IStatement>((parser: AiParser) => parser.top_level_statement(), data);
     }
 
-    static doParse<T>(rule: (parser: AiParser) => ParseTree, data?: string, stream?: CharStream): T | null {
+    static doParse<T>(rule: (parser: AiParser) => ParseTree, data?: string, stream?: CharStream, listener?: ErrorListener<Token>): T | null {
         try {
             const isFile = data && fileExists(data);
             const path = isFile ? data : "";
@@ -89,6 +89,10 @@ export default class ModuleBuilder extends AiParserListener {
             const lexer = new AiLexer(stream);
             const tokenStream = new CommonTokenStream(lexer);
             const parser = new AiParser(tokenStream);
+            if(listener) {
+                parser.removeErrorListeners();
+                parser.addErrorListener(listener);
+            }
             const tree = rule(parser);
             const builder = new ModuleBuilder(parser, path);
             const walker = new ParseTreeWalker();

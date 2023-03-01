@@ -1,6 +1,8 @@
 import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
 import IAssignable from "../assign/IAssignable";
+import Context from "../analyzer/Context";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class AssignStatement extends StatementBase {
 
@@ -12,4 +14,13 @@ export default class AssignStatement extends StatementBase {
         this.assignable = assignable;
         this.expression = expression;
     }
+
+    register(context: Context): void {
+        this.assignable.register(context, this.expression);
+    }
+
+    inferTypes(context: Context): void {
+        throw new NotImplementedError();
+    }
+
 }

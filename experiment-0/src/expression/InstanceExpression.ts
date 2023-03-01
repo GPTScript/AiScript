@@ -1,5 +1,8 @@
 import ExpressionBase from "./ExpressionBase";
 import VariableIdentifier from "../builder/VariableIdentifier";
+import Context from "../analyzer/Context";
+import IType from "../types/IType";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class InstanceExpression extends ExpressionBase {
 
@@ -8,6 +11,10 @@ export default class InstanceExpression extends ExpressionBase {
     constructor(variableId: VariableIdentifier) {
         super();
         this.variableId = variableId;
+    }
+
+    check(context: Context): IType {
+        throw new NotImplementedError();
     }
 
 }
