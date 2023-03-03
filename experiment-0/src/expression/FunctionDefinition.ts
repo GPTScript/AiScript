@@ -11,7 +11,7 @@ export default class FunctionDefinition extends ExpressionBase {
 
     parameters: VariableIdentifier[];
     statements: IStatement[];
-    type: FunctionType;
+    _type: FunctionType;
 
     constructor(parameters: VariableIdentifier[], statements: IStatement[]) {
         super();
@@ -19,11 +19,15 @@ export default class FunctionDefinition extends ExpressionBase {
         this.statements = statements;
     }
 
-    check(context: Context): IType {
-        if(!this.type) {
+    get type(): FunctionType {
+        if(!this._type) {
             const params = this.parameters.map(id => new NamedInstance(id, UnknownType.instance));
-            this.type = new FunctionType(params, UnknownType.instance);
+            this._type = new FunctionType(params, UnknownType.instance);
         }
+        return this._type;
+    }
+
+    check(context: Context): IType {
         return this.type;
     }
 

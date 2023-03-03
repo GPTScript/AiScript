@@ -1,4 +1,3 @@
-import IType from "../types/IType";
 import Context from "../analyzer/Context";
 import IExpression from "../expression/IExpression";
 

@@ -10,6 +10,8 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 import INamed from "./INamed";
 import InterfaceType from "../types/InterfaceType";
 import FunctionDefinition from "../expression/FunctionDefinition";
+import IType from "../types/IType";
+import IExpression from "../expression/IExpression";
 
 export default abstract class Context {
 
@@ -44,7 +46,15 @@ export default abstract class Context {
         return this.globals.getRegisteredInterface(typeId);
     }
 
-    registerFunction(member: VariableIdentifier, body: FunctionDefinition): void {
+    registerMember(member: VariableIdentifier, expression: IExpression) {
+        throw new UnsupportedOperationError();
+    }
+
+    registerField(member: VariableIdentifier, type: IType) {
+        throw new UnsupportedOperationError();
+    }
+
+    registerFunction(member: VariableIdentifier, function_: FunctionDefinition) {
         throw new UnsupportedOperationError();
     }
 
@@ -52,11 +62,24 @@ export default abstract class Context {
         throw new UnsupportedOperationError();
     }
 
+    assignMember(member: VariableIdentifier, expression: IExpression) {
+        throw new UnsupportedOperationError();
+    }
 }
 
 class LocalContext extends Context {
 
     members = new Map<string, INamed>();
+
+    registerMember(member: VariableIdentifier, expression: IExpression) {
+        if (this.members.has(member.value))
+            this.problemListener.reportError(member.fragment, "Duplicate name '" + member.value + "'");
+        if(expression instanceof FunctionDefinition)
+            this.registerFunction(member, expression);
+        else
+            this.registerField(member, expression.check(this));
+    }
+
 }
 
 class ModuleContext extends LocalContext {
@@ -111,19 +134,26 @@ class InterfaceContext extends Context {
         this.type = type;
     }
 
-    registerFunction(member: VariableIdentifier, body: FunctionDefinition): void {
-        if(InterfaceContext.isFactory(member))
-            this.registerFactory(member, body);
-        else
-            this.registerMemberFunction(member, body);
+    assignMember(member: VariableIdentifier, expression: IExpression) {
+        if(expression instanceof FunctionDefinition) {
+            if(InterfaceContext.isFactory(member)) {
+                expression.type.returnType = this.type;
+                this.type.interface_.assignFactory(expression);
+            } else
+                this.type.interface_.assignFunction(member, expression);
+        } else
+            this.type.interface_.assignField(member, expression.check(this));
     }
 
-
-    private registerFactory(member: VariableIdentifier, body: FunctionDefinition) {
-        this.type.interface_.registerFactory(body);
+    registerMember(member: VariableIdentifier, expression: IExpression) {
+        if(expression instanceof FunctionDefinition) {
+            if(InterfaceContext.isFactory(member)) {
+                expression.type.returnType = this.type;
+                this.type.interface_.registerFactory(expression);
+            } else
+                this.type.interface_.registerFunction(member, expression);
+        } else
+            this.type.interface_.registerField(member, expression.check(this));
     }
 
-    private registerMemberFunction(member: VariableIdentifier, body: FunctionDefinition) {
-        this.type.interface_.registerFunction(member, body);
-    }
 }

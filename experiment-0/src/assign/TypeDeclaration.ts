@@ -31,8 +31,4 @@ export default class TypeDeclaration extends AssignableBase {
             throw new NotImplementedError();
     }
 
-    check(context: Context): IType {
-        throw new NotImplementedError();
-    }
-
 }
