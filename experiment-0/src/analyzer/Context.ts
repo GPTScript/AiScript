@@ -12,6 +12,9 @@ import InterfaceType from "../types/InterfaceType";
 import FunctionDefinition from "../expression/FunctionDefinition";
 import IType from "../types/IType";
 import IExpression from "../expression/IExpression";
+import Field from "../module/Field";
+import NamedFunction from "./NamedFunction";
+import NamedInstance from "./NamedInstance";
 
 export default abstract class Context {
 
@@ -39,31 +42,35 @@ export default abstract class Context {
     problemListener: ProblemListener;
 
     registerInterface(typeId: TypeIdentifier, interface_: IInterface): void {
-        throw new UnsupportedOperationError();
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    getRegisteredInterface(typeId: TypeIdentifier): IInterface | null {
-        return this.globals.getRegisteredInterface(typeId);
+    getRegisteredInterface(typeId: TypeIdentifier): IInterface | null  {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerMember(member: VariableIdentifier, expression: IExpression) {
-        throw new UnsupportedOperationError();
+    registerMember(member: VariableIdentifier, expression: IExpression): void  {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerField(member: VariableIdentifier, type: IType) {
-        throw new UnsupportedOperationError();
+    assignMember(member: VariableIdentifier, expression: IExpression): void  {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerFunction(member: VariableIdentifier, function_: FunctionDefinition) {
-        throw new UnsupportedOperationError();
+    getMemberContext(member: VariableIdentifier): Context  {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    getMemberContext(member: VariableIdentifier): Context {
-        throw new UnsupportedOperationError();
+    registerFunction(member: VariableIdentifier, definition: FunctionDefinition): void  {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 
-    assignMember(member: VariableIdentifier, expression: IExpression) {
-        throw new UnsupportedOperationError();
+    registerField(member: VariableIdentifier, type: IType): void  {
+        throw new UnsupportedOperationError("Should never get there!");
+    }
+
+    getMember(member: VariableIdentifier): INamed {
+        throw new UnsupportedOperationError("Should never get there!");
     }
 }
 
@@ -78,6 +85,14 @@ class LocalContext extends Context {
             this.registerFunction(member, expression);
         else
             this.registerField(member, expression.check(this));
+    }
+
+    getMember(member: VariableIdentifier): INamed {
+        return this.members.get(member.value) || null;
+    }
+
+    registerField(member: VariableIdentifier, type: IType) {
+        this.members.set(member.value, new NamedInstance(member, type));
     }
 
 }
@@ -134,26 +149,35 @@ class InterfaceContext extends Context {
         this.type = type;
     }
 
-    assignMember(member: VariableIdentifier, expression: IExpression) {
-        if(expression instanceof FunctionDefinition) {
-            if(InterfaceContext.isFactory(member)) {
-                expression.type.returnType = this.type;
-                this.type.interface_.assignFactory(expression);
-            } else
-                this.type.interface_.assignFunction(member, expression);
-        } else
-            this.type.interface_.assignField(member, expression.check(this));
-    }
-
     registerMember(member: VariableIdentifier, expression: IExpression) {
         if(expression instanceof FunctionDefinition) {
             if(InterfaceContext.isFactory(member)) {
                 expression.type.returnType = this.type;
                 this.type.interface_.registerFactory(expression);
             } else
-                this.type.interface_.registerFunction(member, expression);
+                this.type.interface_.registerStaticFunction(member, expression);
         } else
-            this.type.interface_.registerField(member, expression.check(this));
+            this.type.interface_.registerStaticField(member, expression.check(this));
     }
+
+    assignMember(member: VariableIdentifier, expression: IExpression) {
+        if(expression instanceof FunctionDefinition) {
+            if(InterfaceContext.isFactory(member)) {
+                expression.type.returnType = this.type;
+                this.type.interface_.assignFactory(expression);
+            } else
+                this.type.interface_.assignStaticFunction(member, expression);
+        } else
+            this.type.interface_.assignStaticField(member, expression.check(this));
+    }
+
+    getMember(member: VariableIdentifier): INamed {
+        if(InterfaceContext.isFactory(member))
+            return new NamedFunction(member, this.type.interface_.factory.type);
+       else
+           return this.type.interface_.getStaticMember(member);
+    }
+
+
 
 }

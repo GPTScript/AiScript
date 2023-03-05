@@ -4,17 +4,23 @@ import NamedFunction from "../analyzer/NamedFunction";
 import VariableIdentifier from "../builder/VariableIdentifier";
 import FunctionDefinition from "../expression/FunctionDefinition";
 import IType from "../types/IType";
+import INamed from "../analyzer/INamed";
 
 export default interface IInterface {
 
     name: TypeIdentifier;
-    get fields(): Field[];
-    get functions(): NamedFunction[];
-    get factory(): FunctionDefinition;
+
     registerFactory(body: FunctionDefinition): void;
-    registerFunction(name: VariableIdentifier, body: FunctionDefinition): void;
-    registerField(name: VariableIdentifier, type: IType): void;
     assignFactory(body: FunctionDefinition): void;
-    assignFunction(name: VariableIdentifier, body: FunctionDefinition): void;
-    assignField(name: VariableIdentifier, type: IType): void;
+    get factory(): FunctionDefinition;
+
+    registerStaticFunction(name: VariableIdentifier, body: FunctionDefinition): void;
+    assignStaticFunction(name: VariableIdentifier, body: FunctionDefinition): void;
+    get staticFunctions(): NamedFunction[];
+
+    registerStaticField(name: VariableIdentifier, type: IType): void;
+    assignStaticField(name: VariableIdentifier, type: IType): void;
+    get staticFields(): Field[];
+
+    getStaticMember(id: VariableIdentifier): INamed;
 }

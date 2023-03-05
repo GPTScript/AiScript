@@ -3,7 +3,6 @@ import FunctionSelector from "./FunctionSelector";
 import IExpression from "./IExpression";
 import Context from "../analyzer/Context";
 import IType from "../types/IType";
-import NotImplementedError from "../error/NotImplementedError";
 
 export default class FunctionCallExpression extends ExpressionBase {
 
@@ -17,7 +16,9 @@ export default class FunctionCallExpression extends ExpressionBase {
     }
 
     check(context: Context): IType {
-        throw new NotImplementedError();
+        const type = this.selector.check(context);
+        type.checkArguments(context, this.argumentsList);
+        return type.returnType;
     }
 
 }

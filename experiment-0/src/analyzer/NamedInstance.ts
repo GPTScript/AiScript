@@ -4,11 +4,11 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 
 export default class NamedInstance implements INamed {
 
-    name: string;
+    name: VariableIdentifier;
     type: IType;
 
     constructor(id: VariableIdentifier, type: IType) {
-        this.name = id.value;
+        this.name = id;
         this.type = type;
     }
 

@@ -1,6 +1,8 @@
 import ISelectable from "./ISelectable";
 import VariableIdentifier from "../builder/VariableIdentifier";
 import CodeFragment from "../builder/CodeFragment";
+import IExpression from "../expression/IExpression";
+import Context from "../analyzer/Context";
 
 export default class MemberSelector extends CodeFragment {
 
@@ -12,4 +14,16 @@ export default class MemberSelector extends CodeFragment {
         this.parent = parent;
         this.member = member;
     }
+
+    assignMember(context: Context, expression: IExpression) {
+        const parent = this.parent.loadContext(context);
+        parent.assignMember(this.member, expression);
+    }
+
+    loadContext(context: Context) {
+        const parent = this.parent.loadContext(context);
+        return parent.getMemberContext(this.member);
+    }
+
+
 }

@@ -15,8 +15,8 @@ it('infers Parent member types',  () => {
     assert.equal(analyser.interfaces.size, 1);
     const person: IInterface = analyser.interfaces.values().next().value;
     assert.equal(person.name, "Person");
-    assert.equal(person.fields.length, 1);
-    const name = person.fields[0];
+    assert.equal(person.staticFields.length, 1);
+    const name = person.staticFields[0];
     assert.equal(name.name, "name");
     assert.equal(name.type, TypeSet.singleton(StringType.instance));
 });

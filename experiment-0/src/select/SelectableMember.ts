@@ -1,6 +1,7 @@
 import ISelectable from "./ISelectable";
 import SelectableChild from "./SelectableChild";
 import VariableIdentifier from "../builder/VariableIdentifier";
+import Context from "../analyzer/Context";
 
 export default class SelectableMember extends SelectableChild {
 
@@ -10,4 +11,10 @@ export default class SelectableMember extends SelectableChild {
         super(parent);
         this.memberId = memberId;
     }
+
+    loadContext(context: Context): Context {
+        const parent = this.parent.loadContext(context);
+        return parent.getMemberContext(this.memberId);
+    }
+
 }
