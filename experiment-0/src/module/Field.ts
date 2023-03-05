@@ -4,11 +4,11 @@ import INamed from "../analyzer/INamed";
 
 export default class Field implements INamed {
 
-    name: VariableIdentifier;
+    id: VariableIdentifier;
     type: IType;
 
-    constructor(name: VariableIdentifier, type: IType) {
-        this.name = name;
+    constructor(id: VariableIdentifier, type: IType) {
+        this.id = id;
         this.type = type;
     }
 

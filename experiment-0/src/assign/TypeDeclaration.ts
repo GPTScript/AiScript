@@ -31,4 +31,13 @@ export default class TypeDeclaration extends AssignableBase {
             throw new NotImplementedError();
     }
 
+    inferTypes(context: Context, expression: IExpression): void {
+        const type = expression.inferTypes(context);
+        if(type == ObjectType.instance) {
+            if(ObjectLiteral.EMPTY_OBJECT.equals(expression))
+                return
+        }
+        throw new NotImplementedError();
+    }
+
 }

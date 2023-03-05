@@ -5,10 +5,15 @@ import Context from "../analyzer/Context";
 import IAssignable from "./IAssignable";
 import UnsupportedOperationError from "../error/UnsupportedOperationError";
 
-export default abstract class AssignableBase extends CodeFragment implements IExpression, IAssignable {
+export default abstract class AssignableBase extends CodeFragment implements IAssignable {
 
     abstract register(context: Context, expression: IExpression): void;
+
     check(context: Context): IType {
+        throw new UnsupportedOperationError();
+    }
+
+    inferTypes(context: Context, expression: IExpression): void {
         throw new UnsupportedOperationError();
     }
 

@@ -5,16 +5,15 @@ import IInterface from "../module/IInterface";
 import ProblemListener from "../problem/ProblemListener";
 import FinalInterface from "../module/FinalInterface";
 import NotImplementedError from "../error/NotImplementedError";
-import FunctionType from "../types/FunctionType";
 import VariableIdentifier from "../builder/VariableIdentifier";
 import INamed from "./INamed";
 import InterfaceType from "../types/InterfaceType";
 import FunctionDefinition from "../expression/FunctionDefinition";
 import IType from "../types/IType";
 import IExpression from "../expression/IExpression";
-import Field from "../module/Field";
 import NamedFunction from "./NamedFunction";
 import NamedInstance from "./NamedInstance";
+import UnknownType from "../types/UnknownType";
 
 export default abstract class Context {
 
@@ -27,19 +26,34 @@ export default abstract class Context {
         return context;
     }
 
-    static newInterfaceContext(calling: Context, parent: Context, type: InterfaceType) {
-        const context = new InterfaceContext(type);
-        context.globals = parent.globals;
-        context.calling = calling;
-        context.parent = parent;
-        context.problemListener = parent.problemListener;
-        return context;
-    }
-
     globals: ModuleContext;
     calling: Context | null;
     parent: Context | null;
     problemListener: ProblemListener;
+
+    newInterfaceContext(type: InterfaceType): InterfaceContext {
+        return this.makeChildContext(new InterfaceContext(type));
+    }
+
+    newObjectContext(): ObjectContext {
+        return this.makeChildContext(new ObjectContext());
+    }
+
+    newUnknownTypeContext(): UnknownTypeContext {
+        return this.makeChildContext(new UnknownTypeContext());
+    }
+
+    newChildContext(): LocalContext {
+        return this.makeChildContext(new LocalContext());
+    }
+
+    makeChildContext<T extends Context>(child: T): T {
+        child.globals = this.globals;
+        child.calling = this.calling;
+        child.parent = this;
+        child.problemListener = this.problemListener;
+        return child;
+    }
 
     registerInterface(typeId: TypeIdentifier, interface_: IInterface): void {
         throw new UnsupportedOperationError("Should never get there!");
@@ -72,9 +86,14 @@ export default abstract class Context {
     getMember(member: VariableIdentifier): INamed {
         throw new UnsupportedOperationError("Should never get there!");
     }
+
+    inferMemberType(member: VariableIdentifier, expression: IExpression): IType {
+        throw new UnsupportedOperationError("Should never get there!");
+    }
+
 }
 
-class LocalContext extends Context {
+class ObjectContext extends Context {
 
     members = new Map<string, INamed>();
 
@@ -87,6 +106,19 @@ class LocalContext extends Context {
             this.registerField(member, expression.check(this));
     }
 
+    getMemberContext(member: VariableIdentifier): Context  {
+        if(this.members.has(member.value)) {
+            const type = this.members.get(member.value).type;
+            return type.newContext(this);
+        } else if(this.parent)
+            return this.parent.getMemberContext(member);
+        else if(this.globals)
+            return this.globals.getMemberContext(member);
+        else
+            return null;
+    }
+
+
     getMember(member: VariableIdentifier): INamed {
         return this.members.get(member.value) || null;
     }
@@ -95,6 +127,29 @@ class LocalContext extends Context {
         this.members.set(member.value, new NamedInstance(member, type));
     }
 
+    inferMemberType(member: VariableIdentifier, expression: IExpression): IType {
+        const type = expression.inferTypes(this);
+        this.members.set(member.value, new NamedInstance(member, type)); // TODO check compatible types
+        return type;
+    }
+
+}
+
+class UnknownTypeContext extends ObjectContext {
+
+    getMember(member: VariableIdentifier): INamed {
+        let named = super.getMember(member);
+        if(named == null) {
+            this.registerField(member, UnknownType.instance);
+            named = super.getMember(member);
+        }
+        return named;
+    }
+
+}
+
+class LocalContext extends ObjectContext {
+    // simply treat members as locals
 }
 
 class ModuleContext extends LocalContext {
@@ -114,7 +169,7 @@ class ModuleContext extends LocalContext {
             if(existing instanceof FinalInterface)
                 this.problemListener.reportError(typeId.fragment, "Type '" + typeId.value + "' is already declared", existing.fragment);
             else
-                throw new NotImplementedError("Checking compatible draft interface is not implemented");
+                throw new NotImplementedError("Checking compatible draft interface is not implemented yet!");
         }
     }
 
@@ -125,18 +180,17 @@ class ModuleContext extends LocalContext {
     getMemberContext(member: VariableIdentifier): Context {
         if(this.members.has(member.value)) {
             const type = this.members.get(member.value).type;
-            if(type instanceof InterfaceType)
-                return Context.newInterfaceContext(this.calling, this, type);
+            return type.newContext(this);
             /* else if(type instanceof FunctionType)
                 return Context.newFunctionContext(this, type);
             else if(type instanceof NativeType)
                 return Context.newNativeContext(this, type); */
-        }
-        throw new NotImplementedError("Checking compatible draft interface is not implemented");
+        } else
+            return super.getMemberContext(member);
     }
 }
 
-class InterfaceContext extends Context {
+class InterfaceContext extends ObjectContext {
 
     private static isFactory(member: VariableIdentifier) {
         return "create" == member.value;
@@ -178,6 +232,19 @@ class InterfaceContext extends Context {
            return this.type.interface_.getStaticMember(member);
     }
 
+    inferMemberType(member: VariableIdentifier, expression: IExpression) {
+        if(expression instanceof FunctionDefinition) {
+            if (InterfaceContext.isFactory(member)) {
+                this.inferFactoryType(expression);
+                return this.type;
+            }
+        }
+        return super.inferMemberType(member, expression); // TODO
+    }
 
-
+    private inferFactoryType(body: FunctionDefinition) {
+        const local = this.newChildContext();
+        body.registerParameters(local);
+        body.statements.forEach(stmt => stmt.inferTypes(local))
+    }
 }

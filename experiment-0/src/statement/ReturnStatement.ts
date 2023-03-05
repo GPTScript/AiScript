@@ -2,6 +2,7 @@ import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
 import Context from "../analyzer/Context";
 import NotImplementedError from "../error/NotImplementedError";
+import IType from "../types/IType";
 
 export default class ReturnStatement extends StatementBase {
 
@@ -16,7 +17,7 @@ export default class ReturnStatement extends StatementBase {
         // nothing to do
     }
 
-    inferTypes(context: Context): void {
+    inferTypes(context: Context): IType {
         throw new NotImplementedError();
     }
 

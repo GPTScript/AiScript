@@ -64,7 +64,4 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
         return null;
     }
 
-
-
-
-}
+ }

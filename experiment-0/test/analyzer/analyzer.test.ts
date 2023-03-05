@@ -17,6 +17,6 @@ it('infers Parent member types',  () => {
     assert.equal(person.name, "Person");
     assert.equal(person.staticFields.length, 1);
     const name = person.staticFields[0];
-    assert.equal(name.name, "name");
+    assert.equal(name.id.value, "name");
     assert.equal(name.type, TypeSet.singleton(StringType.instance));
 });

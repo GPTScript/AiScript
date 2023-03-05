@@ -1,6 +1,5 @@
 import ExpressionBase from "./ExpressionBase";
 import MemberSelector from "../select/MemberSelector";
-import NotImplementedError from "../error/NotImplementedError";
 import IType from "../types/IType";
 import Context from "../analyzer/Context";
 
@@ -14,7 +13,11 @@ export default class MemberExpression extends ExpressionBase {
     }
 
     check(context: Context): IType {
-        throw new NotImplementedError();
+        return this.selector.checkExpression(context);
+    }
+
+    inferTypes(context: Context): IType {
+        return this.selector.inferExpressionType(context);
     }
 
 }

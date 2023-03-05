@@ -1,6 +1,5 @@
 import SelectableBase from "./SelectableBase";
 import VariableIdentifier from "../builder/VariableIdentifier";
-import NotImplementedError from "../error/NotImplementedError";
 import Context from "../analyzer/Context";
 
 export default class SelectableInstance extends SelectableBase {
@@ -13,6 +12,6 @@ export default class SelectableInstance extends SelectableBase {
     }
 
     loadContext(context: Context): Context {
-        throw new NotImplementedError();
+        return context.getMemberContext(this.variableId);
     }
 }

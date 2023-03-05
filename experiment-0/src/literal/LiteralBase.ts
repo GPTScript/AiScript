@@ -16,12 +16,15 @@ export default abstract class LiteralBase<T> extends ExpressionBase implements I
         this.type = type;
     }
 
-    check(context: Context): IType {
-        return this.type;
-    }
-
     equals(other: any) {
         return other instanceof LiteralBase && other.text == this.text;
     }
 
+    check(context: Context): IType {
+        return this.type;
+    }
+
+    inferTypes(context: Context): IType {
+        return this.type;
+    }
 }

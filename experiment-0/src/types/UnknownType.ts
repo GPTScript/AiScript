@@ -1,4 +1,5 @@
 import TypeBase from "./TypeBase";
+import Context from "../analyzer/Context";
 
 export default class UnknownType extends TypeBase {
 
@@ -6,6 +7,10 @@ export default class UnknownType extends TypeBase {
 
     private constructor() {
         super();
+    }
+
+    newContext(parent: Context): Context {
+        return parent.newUnknownTypeContext();
     }
 
 }

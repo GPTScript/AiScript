@@ -23,4 +23,5 @@ export default interface IInterface {
     get staticFields(): Field[];
 
     getStaticMember(id: VariableIdentifier): INamed;
+
 }

@@ -1,4 +1,5 @@
 import NativeType from "./NativeType";
+import Context from "../analyzer/Context";
 
 export default class ObjectType extends NativeType {
 
@@ -6,6 +7,10 @@ export default class ObjectType extends NativeType {
 
     private constructor() {
         super();
+    }
+
+    newContext(parent: Context): Context {
+        return parent.newObjectContext();
     }
 
 }

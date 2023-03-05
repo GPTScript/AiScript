@@ -16,5 +16,9 @@ export default class VariableDeclaration extends AssignableBase {
         context.registerMember(this.variableId, expression);
     }
 
+    inferTypes(context: Context, expression: IExpression): void {
+        context.registerMember(this.variableId, expression);
+    }
+
 
 }

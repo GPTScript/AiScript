@@ -4,11 +4,11 @@ import FunctionType from "../types/FunctionType";
 
 export default class NamedFunction implements INamed {
 
-    name: VariableIdentifier;
+    id: VariableIdentifier;
     type: FunctionType;
 
     constructor(id: VariableIdentifier, type: FunctionType) {
-        this.name = id;
+        this.id = id;
         this.type = type;
     }
 

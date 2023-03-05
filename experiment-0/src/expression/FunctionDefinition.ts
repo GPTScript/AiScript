@@ -6,6 +6,7 @@ import IType from "../types/IType";
 import FunctionType from "../types/FunctionType";
 import UnknownType from "../types/UnknownType";
 import NamedInstance from "../analyzer/NamedInstance";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class FunctionDefinition extends ExpressionBase {
 
@@ -31,4 +32,11 @@ export default class FunctionDefinition extends ExpressionBase {
         return this.type;
     }
 
+    inferTypes(context: Context): IType {
+        throw new NotImplementedError();
+    }
+
+    registerParameters(context: Context): void {
+        this.type.parameters.forEach(param => context.registerField(param.id, param.type));
+    }
 }

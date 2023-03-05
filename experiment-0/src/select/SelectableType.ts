@@ -23,6 +23,6 @@ export default class SelectableType extends SelectableBase {
 
     loadContext(context: Context): Context {
         const type = this.check(context);
-        return Context.newInterfaceContext(context.calling, context, type);
+        return type.newContext(context);
     }
 }

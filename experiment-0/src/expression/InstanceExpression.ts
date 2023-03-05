@@ -17,4 +17,8 @@ export default class InstanceExpression extends ExpressionBase {
         throw new NotImplementedError();
     }
 
+    inferTypes(context: Context): IType {
+        throw new NotImplementedError();
+    }
+
 }

@@ -1,5 +1,6 @@
 import TypeBase from "./TypeBase";
 import IInterface from "../module/IInterface";
+import Context from "../analyzer/Context";
 
 export default class InterfaceType extends TypeBase {
 
@@ -10,5 +11,8 @@ export default class InterfaceType extends TypeBase {
         this.interface_ = interface_;
     }
 
+    newContext(parent: Context): Context {
+        return parent.newInterfaceContext(this)
+    }
 
 }

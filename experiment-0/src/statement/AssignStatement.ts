@@ -2,7 +2,7 @@ import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
 import IAssignable from "../assign/IAssignable";
 import Context from "../analyzer/Context";
-import NotImplementedError from "../error/NotImplementedError";
+import IType from "../types/IType";
 
 export default class AssignStatement extends StatementBase {
 
@@ -19,8 +19,9 @@ export default class AssignStatement extends StatementBase {
         this.assignable.register(context, this.expression);
     }
 
-    inferTypes(context: Context): void {
-        throw new NotImplementedError();
+    inferTypes(context: Context): IType {
+        this.assignable.inferTypes(context, this.expression);
+        return null;
     }
 
 }

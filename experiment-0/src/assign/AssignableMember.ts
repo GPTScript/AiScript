@@ -14,6 +14,10 @@ export default class AssignableMember extends AssignableBase {
 
     register(context: Context, expression: IExpression): void {
         this.selector.assignMember(context, expression);
-   }
+    }
+
+    inferTypes(context: Context, expression: IExpression) {
+        this.selector.inferAssignedType(context, expression);
+    }
 
 }
