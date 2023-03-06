@@ -4,9 +4,12 @@ import CodeFragment from "../builder/CodeFragment";
 import IExpression from "../expression/IExpression";
 import Context from "../analyzer/Context";
 import IType from "../types/IType";
+import ITypeListenerProvider from "../graph/ITypeListenerProvider";
+import ITypeListener from "../graph/ITypeListener";
 import NotImplementedError from "../error/NotImplementedError";
+import ITypeProducer from "../graph/ITypeProducer";
 
-export default class MemberSelector extends CodeFragment {
+export default class MemberSelector extends CodeFragment implements ITypeListenerProvider {
 
     parent: ISelectable;
     memberId: VariableIdentifier;
@@ -17,6 +20,11 @@ export default class MemberSelector extends CodeFragment {
         this.memberId = member;
     }
 
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        // TODO this.parent.wireDependencies(context);
+
+    }
+
     loadContext(context: Context) {
         const parent = this.parent.loadContext(context);
         return parent.getMemberContext(this.memberId);
@@ -25,11 +33,6 @@ export default class MemberSelector extends CodeFragment {
     assignMember(context: Context, expression: IExpression) {
         const parent = this.parent.loadContext(context);
         parent.assignMember(this.memberId, expression);
-    }
-
-    inferAssignedType(context: Context, expression: IExpression) {
-        const parent = this.parent.loadContext(context);
-        parent.inferMemberType(this.memberId, expression);
     }
 
     checkExpression(context: Context): IType {
@@ -44,4 +47,9 @@ export default class MemberSelector extends CodeFragment {
     inferExpressionType(context: Context): IType {
         return this.checkExpression(context);
     }
+
+    getListener(context: Context): ITypeListener {
+        return (type: IType) => { throw new NotImplementedError(); };
+    }
+
 }

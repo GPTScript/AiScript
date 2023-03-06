@@ -8,6 +8,9 @@ import ObjectType from "../types/ObjectType";
 import ObjectLiteral from "../literal/ObjectLiteral";
 import InferredInterface from "../module/InferredInterface";
 import IInterface from "../module/IInterface";
+import InterfaceType from "../types/InterfaceType";
+import ITypeListener from "../graph/ITypeListener";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class TypeDeclaration extends AssignableBase {
 
@@ -21,23 +24,26 @@ export default class TypeDeclaration extends AssignableBase {
     register(context: Context, expression: IExpression): void {
         let interface_: IInterface = null;
         const type = expression.check(context);
-        if(type == ObjectType.instance) {
-            if(ObjectLiteral.EMPTY_OBJECT.equals(expression))
-                interface_ = new InferredInterface(this.typeId);
-        }
+        if(type instanceof ObjectType && type.fields.length == 0)
+            interface_ = new InferredInterface(this.typeId);
         if(interface_)
             context.registerInterface(this.typeId, interface_);
         else
             throw new NotImplementedError();
     }
 
-    inferTypes(context: Context, expression: IExpression): void {
-        const type = expression.inferTypes(context);
-        if(type == ObjectType.instance) {
-            if(ObjectLiteral.EMPTY_OBJECT.equals(expression))
-                return
+    wireDependencies(context: Context, producers: ITypeProducer[]) {
+        // nothing to do
+    }
+
+    getListener(context: Context): ITypeListener {
+        return (type: IType) => {
+            if(type instanceof InterfaceType) {
+                context.registerInterface(this.typeId, type.interface_);
+                return true; // TODO only return true if type has changed
+            }
+            return false;
         }
-        throw new NotImplementedError();
     }
 
 }

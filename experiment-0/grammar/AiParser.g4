@@ -12,9 +12,9 @@ top_level_statement:
     statement[false]
     ;
 
-statement[boolean allow_return]:
+statement[boolean allow_local]:
     assign_statement
-    | { $allow_return }? return_statement
+    | { $allow_local }? return_statement
     ;
 
 assign_statement:

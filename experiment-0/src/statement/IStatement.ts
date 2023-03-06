@@ -1,8 +1,8 @@
 import Context from "../analyzer/Context";
-import IType from "../types/IType";
+import ITypeProducer from "../graph/IProducer";
 
 export default interface IStatement {
 
     register(context: Context): void;
-    inferTypes(context: Context): IType;
+    wireDependencies(context: Context, producers: ITypeProducer[]): void;
 }

@@ -3,6 +3,7 @@ import NamedInstance from "../analyzer/NamedInstance";
 import IType from "./IType";
 import IExpression from "../expression/IExpression";
 import Context from "../analyzer/Context";
+import NotImplementedError from "../error/NotImplementedError";
 
 export default class FunctionType extends TypeBase {
 
@@ -15,7 +16,11 @@ export default class FunctionType extends TypeBase {
         this.returnType = returnType;
     }
 
-    checkArguments(context: Context, argumentsList: IExpression[]) {
+    equals(other: IType): boolean {
+        throw new NotImplementedError();
+    }
+
+    checkValidArguments(context: Context, argumentsList: IExpression[]) {
         // TODO
     }
 }

@@ -3,7 +3,7 @@ import FunctionSelector from "./FunctionSelector";
 import IExpression from "./IExpression";
 import Context from "../analyzer/Context";
 import IType from "../types/IType";
-import NotImplementedError from "../error/NotImplementedError";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class FunctionCallExpression extends ExpressionBase {
 
@@ -17,13 +17,28 @@ export default class FunctionCallExpression extends ExpressionBase {
     }
 
     check(context: Context): IType {
+        this.checkArgumentTypes(context);
         const type = this.selector.check(context);
-        type.checkArguments(context, this.argumentsList);
+        type.checkValidArguments(context, this.argumentsList);
         return type.returnType;
     }
 
-    inferTypes(context: Context): IType {
-        throw new NotImplementedError();
+    private checkArgumentTypes(context: Context) {
+        this.argumentsList.forEach(arg => arg.check(context));
+    }
+
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        const type = this.selector.check(context);
+        this.argumentsList.forEach((arg, idx) => {
+            arg.wireDependencies(context, producers);
+            const param = type.parameters[idx];
+            arg.addListener(param.getListener(context));
+        })
+    }
+
+    notifyListeners(): boolean {
+        // TODO
+        return false;
     }
 
 }

@@ -17,8 +17,13 @@ export default class InstanceExpression extends ExpressionBase {
         throw new NotImplementedError();
     }
 
-    inferTypes(context: Context): IType {
-        throw new NotImplementedError();
+    wireDependencies(context: Context) {
+        // TODO
+    }
+
+    notifyListeners(): boolean {
+        // TODO
+        return false;
     }
 
 }

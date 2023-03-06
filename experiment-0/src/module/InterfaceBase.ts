@@ -10,10 +10,19 @@ import INamed from "../analyzer/INamed";
 
 export default abstract class InterfaceBase extends CodeFragment implements IInterface {
 
-    name: TypeIdentifier;
+    id: TypeIdentifier;
     factory: FunctionDefinition;
     _staticFields = new Map<string, Field>();
     _staticFunctions = new Map<string, FunctionDefinition>();
+
+    constructor(id: TypeIdentifier) {
+        super();
+        this.id = id;
+    }
+
+    get name(): string {
+        return this.id.value;
+    }
 
     registerFactory(body: FunctionDefinition): void {
         // TODO check consistency

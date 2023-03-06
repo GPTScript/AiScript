@@ -6,7 +6,6 @@ import IType from "../types/IType";
 import FunctionType from "../types/FunctionType";
 import UnknownType from "../types/UnknownType";
 import NamedInstance from "../analyzer/NamedInstance";
-import NotImplementedError from "../error/NotImplementedError";
 
 export default class FunctionDefinition extends ExpressionBase {
 
@@ -32,8 +31,18 @@ export default class FunctionDefinition extends ExpressionBase {
         return this.type;
     }
 
-    inferTypes(context: Context): IType {
-        throw new NotImplementedError();
+    checkReturnType(context: Context): boolean {
+        return false; // TODO
+    }
+
+    wireDependencies(context: Context) {
+        const params = this.type.parameters;
+        params.forEach(param => param.addListener( (type: IType) => this.checkReturnType(context)));
+    }
+
+    notifyListeners(): boolean {
+        // TODO
+        return false;
     }
 
     registerParameters(context: Context): void {

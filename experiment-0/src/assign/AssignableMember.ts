@@ -2,6 +2,8 @@ import AssignableBase from "./AssignableBase";
 import MemberSelector from "../select/MemberSelector";
 import Context from "../analyzer/Context";
 import IExpression from "../expression/IExpression";
+import ITypeListener from "../graph/ITypeListener";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class AssignableMember extends AssignableBase {
 
@@ -16,8 +18,13 @@ export default class AssignableMember extends AssignableBase {
         this.selector.assignMember(context, expression);
     }
 
-    inferTypes(context: Context, expression: IExpression) {
-        this.selector.inferAssignedType(context, expression);
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        this.selector.wireDependencies(context, producers);
     }
+
+    getListener(context: Context): ITypeListener {
+        return this.selector.getListener(context);
+    }
+
 
 }

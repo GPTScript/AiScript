@@ -87,9 +87,6 @@ export default abstract class Context {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-    inferMemberType(member: VariableIdentifier, expression: IExpression): IType {
-        throw new UnsupportedOperationError("Should never get there!");
-    }
 
 }
 
@@ -118,19 +115,12 @@ class ObjectContext extends Context {
             return null;
     }
 
-
     getMember(member: VariableIdentifier): INamed {
         return this.members.get(member.value) || null;
     }
 
     registerField(member: VariableIdentifier, type: IType) {
         this.members.set(member.value, new NamedInstance(member, type));
-    }
-
-    inferMemberType(member: VariableIdentifier, expression: IExpression): IType {
-        const type = expression.inferTypes(this);
-        this.members.set(member.value, new NamedInstance(member, type)); // TODO check compatible types
-        return type;
     }
 
 }
@@ -232,19 +222,4 @@ class InterfaceContext extends ObjectContext {
            return this.type.interface_.getStaticMember(member);
     }
 
-    inferMemberType(member: VariableIdentifier, expression: IExpression) {
-        if(expression instanceof FunctionDefinition) {
-            if (InterfaceContext.isFactory(member)) {
-                this.inferFactoryType(expression);
-                return this.type;
-            }
-        }
-        return super.inferMemberType(member, expression); // TODO
-    }
-
-    private inferFactoryType(body: FunctionDefinition) {
-        const local = this.newChildContext();
-        body.registerParameters(local);
-        body.statements.forEach(stmt => stmt.inferTypes(local))
-    }
 }

@@ -1,8 +1,7 @@
 import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
 import Context from "../analyzer/Context";
-import NotImplementedError from "../error/NotImplementedError";
-import IType from "../types/IType";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class ReturnStatement extends StatementBase {
 
@@ -17,8 +16,8 @@ export default class ReturnStatement extends StatementBase {
         // nothing to do
     }
 
-    inferTypes(context: Context): IType {
-        throw new NotImplementedError();
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        this.expression.wireDependencies(context, producers);
     }
 
 }

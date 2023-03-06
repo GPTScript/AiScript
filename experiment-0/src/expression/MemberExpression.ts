@@ -16,8 +16,14 @@ export default class MemberExpression extends ExpressionBase {
         return this.selector.checkExpression(context);
     }
 
-    inferTypes(context: Context): IType {
-        return this.selector.inferExpressionType(context);
+    wireDependencies(context: Context) {
+        // TODO
     }
+
+    notifyListeners(): boolean {
+        // TODO
+        return false;
+    }
+
 
 }

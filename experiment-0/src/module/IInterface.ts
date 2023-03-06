@@ -8,7 +8,8 @@ import INamed from "../analyzer/INamed";
 
 export default interface IInterface {
 
-    name: TypeIdentifier;
+    id: TypeIdentifier;
+    get name(): string;
 
     registerFactory(body: FunctionDefinition): void;
     assignFactory(body: FunctionDefinition): void;

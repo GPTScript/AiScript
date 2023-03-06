@@ -1,6 +1,7 @@
 import AiModule from "../module/AiModule";
 import Context from "./Context";
 import ProblemListener from "../problem/ProblemListener";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class Analyzer {
 
@@ -17,7 +18,15 @@ export default class Analyzer {
     }
 
     analyze() {
+        const producers: ITypeProducer[] = [] ;
         this.module.statements.forEach(stmt => stmt.register(this.context));
-        this.module.statements.forEach(stmt => stmt.inferTypes(this.context));
+        this.module.statements.forEach(stmt => stmt.wireDependencies(this.context, producers));
+        // repeatedly apply changes until stable state is reached
+        for(;;) {
+            const changed = producers.map(prod => prod.notifyListeners()).reduce((prev, current) => prev || current, false);
+            if(!changed)
+                break;
+        }
+
     }
 }

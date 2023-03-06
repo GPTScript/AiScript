@@ -2,7 +2,7 @@ import StatementBase from "./StatementBase";
 import IExpression from "../expression/IExpression";
 import IAssignable from "../assign/IAssignable";
 import Context from "../analyzer/Context";
-import IType from "../types/IType";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class AssignStatement extends StatementBase {
 
@@ -19,9 +19,10 @@ export default class AssignStatement extends StatementBase {
         this.assignable.register(context, this.expression);
     }
 
-    inferTypes(context: Context): IType {
-        this.assignable.inferTypes(context, this.expression);
-        return null;
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        this.assignable.wireDependencies(context, producers);
+        this.expression.wireDependencies(context, producers);
+        this.expression.addListener(this.assignable.getListener(context));
     }
 
 }
