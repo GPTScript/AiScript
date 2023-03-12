@@ -3,6 +3,7 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 import Context from "../analyzer/Context";
 import IType from "../types/IType";
 import NotImplementedError from "../error/NotImplementedError";
+import NamedBase from "../analyzer/NamedBase";
 
 export default class InstanceExpression extends ExpressionBase {
 
@@ -18,12 +19,13 @@ export default class InstanceExpression extends ExpressionBase {
     }
 
     wireDependencies(context: Context) {
-        // TODO
+        const named = context.getMember(this.variableId);
+        if(named instanceof NamedBase)
+            named.addListener((type: IType) => this.notifyListeners(type));
     }
 
-    notifyListeners(): boolean {
-        // TODO
-        return false;
+    notifyListeners(type?: IType): boolean {
+        return type ? this.listeners.notify(type) : false;
     }
 
 }

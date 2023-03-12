@@ -4,7 +4,6 @@ import Context from "../analyzer/Context";
 import IExpression from "../expression/IExpression";
 import ITypeListener from "../graph/ITypeListener";
 import IType from "../types/IType";
-import NotImplementedError from "../error/NotImplementedError";
 import ITypeProducer from "../graph/ITypeProducer";
 
 export default class VariableDeclaration extends AssignableBase {
@@ -17,7 +16,7 @@ export default class VariableDeclaration extends AssignableBase {
     }
 
     register(context: Context, expression: IExpression): void {
-        context.registerMember(this.variableId, expression);
+        context.registerMemberExpression(this.variableId, expression);
     }
 
     wireDependencies(context: Context, producers: ITypeProducer[]) {
@@ -25,7 +24,14 @@ export default class VariableDeclaration extends AssignableBase {
     }
 
     getListener(context: Context): ITypeListener {
-        return (type: IType) => { throw new NotImplementedError(); };
+        return (type: IType) => {
+            const local = context.getMember(this.variableId);
+            if(!local.type.equals(type)) {
+                local.type = type;
+                return true;
+            } else
+                return false;
+        };
     }
 
 

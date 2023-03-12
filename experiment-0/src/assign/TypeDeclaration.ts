@@ -39,8 +39,11 @@ export default class TypeDeclaration extends AssignableBase {
     getListener(context: Context): ITypeListener {
         return (type: IType) => {
             if(type instanceof InterfaceType) {
-                context.registerInterface(this.typeId, type.interface_);
-                return true; // TODO only return true if type has changed
+                const current = context.getRegisteredInterface(this.typeId);
+                // TODO if(!type.interface_.equals(current)) {
+                    context.registerInterface(this.typeId, type.interface_);
+                    return true;
+                // }
             }
             return false;
         }

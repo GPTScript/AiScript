@@ -1,13 +1,15 @@
 import NativeType from "./NativeType";
 import Context from "../analyzer/Context";
 import IType from "./IType";
-import Field from "../module/Field";
+import ObjectField from "../module/ObjectField";
+import VariableIdentifier from "../builder/VariableIdentifier";
+import UnknownType from "./UnknownType";
 
 export default class ObjectType extends NativeType {
 
-    fields: Field[];
+    fields: ObjectField[];
 
-    constructor(fields: Field[]) {
+    constructor(fields: ObjectField[]) {
         super();
         this.fields = fields;
     }
@@ -25,4 +27,17 @@ export default class ObjectType extends NativeType {
         return parent.newObjectContext();
     }
 
+    getFieldType(id: VariableIdentifier) {
+        const field = this.fields.find(f => f.id.value == id.value);
+        return field ? field.type : UnknownType.instance;
+    }
+
+    withFieldType(id: VariableIdentifier, type: IType): ObjectType {
+        const field = this.fields.find(f => f.id.value == id.value);
+        if(field && field.type.equals(type))
+            return this;
+        const fields = [].concat(this.fields.filter(f => f == field));
+        fields.push(new ObjectField(id, type));
+        return new ObjectType(fields);
+    }
 }

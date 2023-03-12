@@ -9,7 +9,6 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 import INamed from "./INamed";
 import InterfaceType from "../types/InterfaceType";
 import FunctionDefinition from "../expression/FunctionDefinition";
-import IType from "../types/IType";
 import IExpression from "../expression/IExpression";
 import NamedFunction from "./NamedFunction";
 import NamedInstance from "./NamedInstance";
@@ -31,6 +30,20 @@ export default abstract class Context {
     parent: Context | null;
     problemListener: ProblemListener;
 
+    newLocalContext(): LocalContext {
+        const local = new LocalContext();
+        local.globals = this.globals;
+        local.calling = this;
+        local.parent = null;
+        local.problemListener = this.problemListener;
+        return local;
+
+    }
+
+    newChildContext(): LocalContext {
+        return this.makeChildContext(new LocalContext());
+    }
+
     newInterfaceContext(type: InterfaceType): InterfaceContext {
         return this.makeChildContext(new InterfaceContext(type));
     }
@@ -41,10 +54,6 @@ export default abstract class Context {
 
     newUnknownTypeContext(): UnknownTypeContext {
         return this.makeChildContext(new UnknownTypeContext());
-    }
-
-    newChildContext(): LocalContext {
-        return this.makeChildContext(new LocalContext());
     }
 
     makeChildContext<T extends Context>(child: T): T {
@@ -63,11 +72,11 @@ export default abstract class Context {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerMember(member: VariableIdentifier, expression: IExpression): void  {
+    registerMemberExpression(member: VariableIdentifier, expression: IExpression): void  {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-    assignMember(member: VariableIdentifier, expression: IExpression): void  {
+    assignMemberExpression(member: VariableIdentifier, expression: IExpression): void  {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
@@ -75,11 +84,11 @@ export default abstract class Context {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerFunction(member: VariableIdentifier, definition: FunctionDefinition): void  {
+    registerMemberFunction(member: VariableIdentifier, definition: FunctionDefinition): void  {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-    registerField(member: VariableIdentifier, type: IType): void  {
+    registerMemberField(named: INamed): void  {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
@@ -87,20 +96,26 @@ export default abstract class Context {
         throw new UnsupportedOperationError("Should never get there!");
     }
 
-
 }
 
 class ObjectContext extends Context {
 
     members = new Map<string, INamed>();
 
-    registerMember(member: VariableIdentifier, expression: IExpression) {
+    registerMemberExpression(member: VariableIdentifier, expression: IExpression) {
         if (this.members.has(member.value))
             this.problemListener.reportError(member.fragment, "Duplicate name '" + member.value + "'");
         if(expression instanceof FunctionDefinition)
-            this.registerFunction(member, expression);
+            this.registerMemberFunction(member, expression);
         else
-            this.registerField(member, expression.check(this));
+            this.registerMemberField(new NamedInstance(member, expression.check(this)));
+    }
+
+    assignMemberExpression(member: VariableIdentifier, expression: IExpression) {
+        if(expression instanceof FunctionDefinition)
+            this.registerMemberFunction(member, expression);
+        else
+            this.registerMemberField(new NamedInstance(member, expression.check(this)));
     }
 
     getMemberContext(member: VariableIdentifier): Context  {
@@ -119,8 +134,8 @@ class ObjectContext extends Context {
         return this.members.get(member.value) || null;
     }
 
-    registerField(member: VariableIdentifier, type: IType) {
-        this.members.set(member.value, new NamedInstance(member, type));
+    registerMemberField(named: INamed) {
+        this.members.set(named.id.value, named);
     }
 
 }
@@ -130,7 +145,7 @@ class UnknownTypeContext extends ObjectContext {
     getMember(member: VariableIdentifier): INamed {
         let named = super.getMember(member);
         if(named == null) {
-            this.registerField(member, UnknownType.instance);
+            this.registerMemberField(new NamedInstance(member, UnknownType.instance));
             named = super.getMember(member);
         }
         return named;
@@ -140,6 +155,7 @@ class UnknownTypeContext extends ObjectContext {
 
 class LocalContext extends ObjectContext {
     // simply treat members as locals
+
 }
 
 class ModuleContext extends LocalContext {
@@ -193,7 +209,7 @@ class InterfaceContext extends ObjectContext {
         this.type = type;
     }
 
-    registerMember(member: VariableIdentifier, expression: IExpression) {
+    registerMemberExpression(member: VariableIdentifier, expression: IExpression) {
         if(expression instanceof FunctionDefinition) {
             if(InterfaceContext.isFactory(member)) {
                 expression.type.returnType = this.type;
@@ -204,7 +220,7 @@ class InterfaceContext extends ObjectContext {
             this.type.interface_.registerStaticField(member, expression.check(this));
     }
 
-    assignMember(member: VariableIdentifier, expression: IExpression) {
+    assignMemberExpression(member: VariableIdentifier, expression: IExpression) {
         if(expression instanceof FunctionDefinition) {
             if(InterfaceContext.isFactory(member)) {
                 expression.type.returnType = this.type;

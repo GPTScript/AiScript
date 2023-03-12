@@ -1,6 +1,6 @@
 import IInterface from "./IInterface";
 import TypeIdentifier from "../builder/TypeIdentifier";
-import Field from "./Field";
+import ObjectField from "./ObjectField";
 import FunctionDefinition from "../expression/FunctionDefinition";
 import NamedFunction from "../analyzer/NamedFunction";
 import VariableIdentifier from "../builder/VariableIdentifier";
@@ -12,7 +12,7 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
 
     id: TypeIdentifier;
     factory: FunctionDefinition;
-    _staticFields = new Map<string, Field>();
+    _staticFields = new Map<string, ObjectField>();
     _staticFunctions = new Map<string, FunctionDefinition>();
 
     constructor(id: TypeIdentifier) {
@@ -51,15 +51,15 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
 
     registerStaticField(name: VariableIdentifier, type: IType): void {
         // TODO check consistency
-        this._staticFields.set(name.value, new Field(name, type));
+        this._staticFields.set(name.value, new ObjectField(name, type));
     }
 
     assignStaticField(name: VariableIdentifier, type: IType): void {
         // TODO check consistency
-        this._staticFields.set(name.value, new Field(name, type));
+        this._staticFields.set(name.value, new ObjectField(name, type));
     }
 
-    get staticFields(): Field[] {
+    get staticFields(): ObjectField[] {
         return Array.from(this._staticFields.values());
     }
 

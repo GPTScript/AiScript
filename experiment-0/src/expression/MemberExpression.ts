@@ -2,6 +2,7 @@ import ExpressionBase from "./ExpressionBase";
 import MemberSelector from "../select/MemberSelector";
 import IType from "../types/IType";
 import Context from "../analyzer/Context";
+import ITypeProducer from "../graph/ITypeProducer";
 
 export default class MemberExpression extends ExpressionBase {
 
@@ -16,13 +17,12 @@ export default class MemberExpression extends ExpressionBase {
         return this.selector.checkExpression(context);
     }
 
-    wireDependencies(context: Context) {
-        // TODO
+    wireDependencies(context: Context, producers: ITypeProducer[]): void {
+        this.selector.addListener(context, (type: IType) => this.notifyListeners(type));
     }
 
-    notifyListeners(): boolean {
-        // TODO
-        return false;
+    notifyListeners(type?: IType): boolean {
+        return type ? this.listeners.notify(type) : false;
     }
 
 
