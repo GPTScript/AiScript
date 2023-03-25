@@ -7,6 +7,7 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 import IType from "../types/IType";
 import CodeFragment from "../builder/CodeFragment";
 import INamed from "../analyzer/INamed";
+import ObjectType from "../types/ObjectType";
 
 export default abstract class InterfaceBase extends CodeFragment implements IInterface {
 
@@ -73,4 +74,12 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
         return null;
     }
 
- }
+    get instanceFields(): ObjectField[] {
+        const type = this.factory ? this.factory.type.returnType : null;
+        if(type instanceof ObjectType)
+            return type.fields;
+        else
+            return [];
+    }
+
+}

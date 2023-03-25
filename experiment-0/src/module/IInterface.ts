@@ -1,5 +1,5 @@
 import TypeIdentifier from "../builder/TypeIdentifier";
-import ObjectField from "./Field";
+import ObjectField from "./ObjectField";
 import NamedFunction from "../analyzer/NamedFunction";
 import VariableIdentifier from "../builder/VariableIdentifier";
 import FunctionDefinition from "../expression/FunctionDefinition";
@@ -25,4 +25,5 @@ export default interface IInterface {
 
     getStaticMember(id: VariableIdentifier): INamed;
 
+    get instanceFields(): ObjectField[];
 }

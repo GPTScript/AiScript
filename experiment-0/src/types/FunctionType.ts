@@ -1,9 +1,9 @@
 import TypeBase from "./TypeBase";
-import NamedInstance from "../analyzer/NamedInstance";
 import IType from "./IType";
 import IExpression from "../expression/IExpression";
 import Context from "../analyzer/Context";
-import NotImplementedError from "../error/NotImplementedError";
+import {equalObjects} from "../utils/ObjectUtils";
+import NamedInstance from "../analyzer/NamedInstance";
 
 export default class FunctionType extends TypeBase {
 
@@ -17,7 +17,9 @@ export default class FunctionType extends TypeBase {
     }
 
     equals(other: IType): boolean {
-        throw new NotImplementedError();
+        return other instanceof FunctionType
+            && this.returnType.equals(other.returnType)
+            && equalObjects(this.parameters, other.parameters);
     }
 
     checkValidArguments(context: Context, argumentsList: IExpression[]) {
