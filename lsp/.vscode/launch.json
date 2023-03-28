@@ -15,13 +15,13 @@
 			}
 		},
         {
-            "name": "Attach",
-            "port": 6009,
             "request": "attach",
+            "name": "Attach Server",
+            "type": "node",
+            "port": 6009,
             "skipFiles": [
                 "<node_internals>/**"
-            ],
-            "type": "node"
+            ]
         }
 	]
 }
