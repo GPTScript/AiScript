@@ -14,6 +14,7 @@
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
+	"type": "module",
 	"main": "./client/out/extension",
 	"contributes": {
 		"languages": [

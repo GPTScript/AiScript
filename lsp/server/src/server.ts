@@ -1,12 +1,11 @@
 /* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
+ * Fractions of this file are Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See https://github.com/microsoft/vscode-extension-samples/blob/main/LICENSE.
  * ------------------------------------------------------------------------------------------ */
 import {
 	createConnection,
 	TextDocuments,
 	Diagnostic,
-	DiagnosticSeverity,
 	ProposedFeatures,
 	InitializeParams,
 	DidChangeConfigurationNotification,
@@ -21,6 +20,9 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 
+import { Analyzer, ModuleBuilder, ProblemCollector } from "aiscript";
+import { convertAnalysisToDiagnostics, convertProblemToDiagnostic } from './converter';
+
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
@@ -33,7 +35,7 @@ let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
-	console.log("initializing...");
+	console.log("LSP server initializing...");
 	const capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
@@ -66,7 +68,7 @@ connection.onInitialize((params: InitializeParams) => {
 			}
 		};
 	}
-	console.log("initialized!");
+	console.log("LSP server initialized!");
 	return result;
 });
 
@@ -136,49 +138,25 @@ documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
 
+let count = 0;
+
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	// In this simple example we get the settings for every validate run.
-	const settings = await getDocumentSettings(textDocument.uri);
-
-	// The validator creates diagnostics for all uppercase words length 2 and more
-	const text = textDocument.getText();
-	const pattern = /\b[A-Z]{2,}\b/g;
-	let m: RegExpExecArray | null;
-
-	let problems = 0;
 	const diagnostics: Diagnostic[] = [];
-	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
-		problems++;
-		const diagnostic: Diagnostic = {
-			severity: DiagnosticSeverity.Warning,
-			range: {
-				start: textDocument.positionAt(m.index),
-				end: textDocument.positionAt(m.index + m[0].length)
-			},
-			message: `${m[0]} is all uppercase.`,
-			source: 'ex'
-		};
-		if (hasDiagnosticRelatedInformationCapability) {
-			diagnostic.relatedInformation = [
-				{
-					location: {
-						uri: textDocument.uri,
-						range: Object.assign({}, diagnostic.range)
-					},
-					message: 'Spelling matters'
-				},
-				{
-					location: {
-						uri: textDocument.uri,
-						range: Object.assign({}, diagnostic.range)
-					},
-					message: 'Particularly for names'
-				}
-			];
-		}
-		diagnostics.push(diagnostic);
+	if(++count > 3) {
+		const listener = new ProblemCollector();
 	}
 
+	/*
+	const module = ModuleBuilder.parse_module(textDocument.getText(),listener);
+	if(listener.problems.length) {
+		// don't analyze bogus code, simply report syntax errors
+		diagnostics = listener.problems.map(problem => convertProblemToDiagnostic(problem)).filter(d => d!=null) as Diagnostic[]; // filtering until it's implemented
+	} else {
+		const analyzer = new Analyzer(module, listener);
+		analyzer.analyze();
+		diagnostics = convertAnalysisToDiagnostics(analyzer);
+	}
+	*/
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
