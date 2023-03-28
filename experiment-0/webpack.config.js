@@ -34,7 +34,8 @@ const config = {
     },
     devtool: "source-map",
     experiments: {
-        outputModule: true
+        outputModule: true,
+        topLevelAwait: true
     },
     performance: {
         maxAssetSize: 512000,

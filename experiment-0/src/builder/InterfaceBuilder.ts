@@ -5,8 +5,8 @@ import CodeFragment from "./CodeFragment";
 import Fragment from "./Fragment";
 import AiDocLexer from "../parser/AiDocLexer";
 import AiDocParser from "../parser/AiDocParser";
-import Interface from "../module/Interface";
 import Documentation from "../documentation/Documentation";
+import IInterface from "../module/IInterface";
 
 interface IndexedNode {
     __id?: number;
@@ -15,9 +15,9 @@ interface IndexedNode {
 
 export default class InterfaceBuilder extends AiDocParserListener {
 
-    static parse_interface(data: string): Interface | null {
+    static parse_interface(data: string): IInterface | null {
         const doc = InterfaceBuilder.doParse<Documentation>((parser: AiDocParser) => parser.documentation(), data);
-        return Interface.from(doc);
+        return null; // Interface.from(doc);
     }
 
     static doParse<T>(rule: (parser: AiDocParser) => ParseTree, data?: string, stream?: CharStream): T | null {

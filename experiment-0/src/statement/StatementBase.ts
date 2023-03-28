@@ -3,7 +3,6 @@ import IStatement from "./IStatement";
 import Context from "../analyzer/Context";
 import ITypeProducer from "../graph/ITypeProducer";
 import ITypeListener from "../graph/ITypeListener";
-import * as assert from "assert";
 
 export default abstract class StatementBase extends CodeFragment implements IStatement {
 
@@ -13,7 +12,8 @@ export default abstract class StatementBase extends CodeFragment implements ISta
     abstract register(context: Context): void;
     abstract wireDependencies(context: Context, producers: ITypeProducer[]): void;
     addReturnTypeListener(listener: ITypeListener): void {
-        assert.ok(!this.canReturn());
+        if(!this.canReturn())
+            throw new Error("Can't add return type listener because this statement cannot return a typed value!");
     }
 
 }
