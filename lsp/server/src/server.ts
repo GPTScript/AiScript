@@ -1,12 +1,11 @@
 /* --------------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
+ * Fractions of this file are Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See https://github.com/microsoft/vscode-extension-samples/blob/main/LICENSE.
  * ------------------------------------------------------------------------------------------ */
 import {
 	createConnection,
 	TextDocuments,
 	Diagnostic,
-	DiagnosticSeverity,
 	ProposedFeatures,
 	InitializeParams,
 	DidChangeConfigurationNotification,
@@ -22,7 +21,8 @@ import {
 } from 'vscode-languageserver-textdocument';
 
 // dynamic import required due to top-level await
-const { ProblemCollector, ModuleBuilder } = await import('aiscript');
+const { Analyzer, ModuleBuilder, ProblemCollector } = await import('aiscript');
+import { convertAnalysisToDiagnostics, convertProblemToDiagnostic } from './converter';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -36,7 +36,7 @@ let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
-	console.log("initializing...");
+	console.log("LSP server initializing...");
 	const capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
@@ -71,7 +71,7 @@ connection.onInitialize((params: InitializeParams) => {
 			}
 		};
 	}
-	console.log("initialized!");
+	console.log("LSP server initialized!");
 	return result;
 });
 
@@ -142,12 +142,25 @@ documents.onDidChangeContent(change => {
 });
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+	let diagnostics: Diagnostic[] = [];
+	console.log("Creating ProblemCollector");
 	const listener = new ProblemCollector();
-	const module = ModuleBuilder.parse_module(textDocument.getText(), listener);
-
-
-	const diagnostics: Diagnostic[] = [];
-
+	console.log("Parsing document");
+	const module = ModuleBuilder.parse_module(textDocument.getText(),listener);
+	console.log("Checking problems");
+	if(listener.problems.length) {
+		console.log("Found " +  listener.problems.length + " problem(s)");
+		// don't analyze bogus code, simply report syntax errors
+		// diagnostics = listener.problems.map(problem => convertProblemToDiagnostic(problem)).filter(d => d!=null) as Diagnostic[]; // filtering until it's implemented
+	} else {
+		console.log("Analyzing code");
+		const analyzer = new Analyzer(module, listener);
+		analyzer.analyze();
+		if(analyzer.interfaces.size > 0) {
+			Array.from(analyzer.interfaces.values()).forEach( i => console.log("Inferred interface " + i.name));
+		}
+		// diagnostics = convertAnalysisToDiagnostics(analyzer); 
+	}
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }

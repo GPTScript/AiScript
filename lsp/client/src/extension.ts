@@ -34,7 +34,7 @@ export function activate(context: ExtensionContext) {
 
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
-		// Register the server for plain text documents
+		// Register the server for aiscript documents
 		documentSelector: [{ scheme: 'file', language: 'aiscript' }],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
