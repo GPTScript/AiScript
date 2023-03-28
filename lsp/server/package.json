@@ -1,0 +1,15 @@
+{
+	"name": "lsp-aiscript-server",
+	"description": "LSP server for AiScript in node.",
+	"version": "1.0.0",
+	"author": "MicEric Vergnaud",
+	"license": "MIT",
+	"engines": {
+		"node": "*"
+	},
+	"dependencies": {
+		"vscode-languageserver": "^8.1.0",
+		"vscode-languageserver-textdocument": "^1.0.8"
+	},
+	"scripts": {}
+}
