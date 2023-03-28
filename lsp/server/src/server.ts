@@ -151,7 +151,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	if(listener.problems.length) {
 		console.log("Found " +  listener.problems.length + " problem(s)");
 		// don't analyze bogus code, simply report syntax errors
-		// diagnostics = listener.problems.map(problem => convertProblemToDiagnostic(problem)).filter(d => d!=null) as Diagnostic[]; // filtering until it's implemented
+		diagnostics = listener.problems.map(problem => convertProblemToDiagnostic(problem)).filter(d => d!=null) as Diagnostic[]; // filtering until it's implemented
 	} else {
 		console.log("Analyzing code");
 		const analyzer = new Analyzer(module, listener);
@@ -159,7 +159,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		if(analyzer.interfaces.size > 0) {
 			Array.from(analyzer.interfaces.values()).forEach( i => console.log("Inferred interface " + i.name));
 		}
-		// diagnostics = convertAnalysisToDiagnostics(analyzer); 
+		diagnostics = convertAnalysisToDiagnostics(analyzer); 
 	}
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
