@@ -12,6 +12,7 @@ import MemberExpression from "../../src/expression/MemberExpression";
 import ReturnStatement from "../../src/statement/ReturnStatement";
 import InstanceExpression from "../../src/expression/InstanceExpression";
 import FunctionCallExpression from "../../src/expression/FunctionCallExpression";
+import {ProblemCollector} from "../../src";
 
 it('builds assign_empty_object_to_var_type',  () => {
     const stmt = ModuleBuilder.parse_statement("samples/assign_empty_object_to_var_type.js");
@@ -29,7 +30,7 @@ it('builds factory_with_1_string_field',  () => {
     const selector = stmt.assignable.selector;
     assert.ok(selector.parent instanceof SelectableType);
     assert.equal(selector.parent.typeId.value, "Person");
-    assert.equal(selector.member.value, "create");
+    assert.equal(selector.memberId.value, "create");
     assert.ok(stmt.expression instanceof FunctionDefinition);
     assert.equal(stmt.expression.parameters.map(id => id.value).join(","), "opts");
     const stmts = stmt.expression.statements;
@@ -44,11 +45,11 @@ it('builds factory_with_1_string_field',  () => {
     assert.ok(stmt.assignable instanceof AssignableMember);
     assert.ok(stmt.assignable.selector.parent instanceof SelectableInstance);
     assert.equal(stmt.assignable.selector.parent.variableId.value, "p");
-    assert.equal(stmt.assignable.selector.member.value, "name");
+    assert.equal(stmt.assignable.selector.memberId.value, "name");
     assert.ok(stmt.expression instanceof MemberExpression);
     assert.ok(stmt.expression.selector.parent instanceof SelectableInstance);
     assert.equal(stmt.expression.selector.parent.variableId.value, "opts");
-    assert.equal(stmt.expression.selector.member.value, "name");
+    assert.equal(stmt.expression.selector.memberId.value, "name");
     stmt = stmts[2];
     assert.ok(stmt instanceof ReturnStatement);
     assert.ok(stmt.expression instanceof InstanceExpression);
@@ -84,4 +85,10 @@ it('parses multi line comments',  () => {
     assert.equal(module.statements.length, 1);
     assert.ok(module.statements[0] instanceof AssignStatement);
     assert.equal(module.comments.length, 3);
+});
+
+it('collects parse errors', () => {
+    const listener = new ProblemCollector();
+    const module = ModuleBuilder.parse_module("samples/invalid_code.txt", listener);
+    assert.equal(listener.problems.length, 1);
 });
