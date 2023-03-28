@@ -4,6 +4,7 @@
 	"version": "1.0.0",
 	"author": "MicEric Vergnaud",
 	"license": "MIT",
+	"type": "module",
 	"engines": {
 		"node": "*"
 	},
