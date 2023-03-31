@@ -22,7 +22,7 @@ import {
 
 // dynamic import required due to top-level await
 const { Analyzer, ModuleBuilder, ProblemCollector } = await import('aiscript');
-import { convertAnalysisToDiagnostics, convertProblemToDiagnostic } from './converter';
+import { convertAnalysisToDiagnostics, convertProblemToDiagnostic } from './converter.js';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
