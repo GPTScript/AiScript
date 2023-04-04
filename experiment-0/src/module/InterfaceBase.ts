@@ -82,4 +82,10 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
             return [];
     }
 
+    isEmpty(): boolean {
+        return (this.staticFunctions.length +
+            this.staticFields.length +
+            this.instanceFields.length) == 0;
+    }
+
 }

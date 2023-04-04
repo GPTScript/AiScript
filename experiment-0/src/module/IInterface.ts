@@ -26,4 +26,6 @@ export default interface IInterface {
     getStaticMember(id: VariableIdentifier): INamed;
 
     get instanceFields(): ObjectField[];
+
+    isEmpty(): boolean;
 }
