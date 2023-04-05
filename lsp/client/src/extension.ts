@@ -42,13 +42,14 @@ export function activate(context: ExtensionContext) {
 		}
 	};
 
-	// Create the language client and start the client.
+	// Create the language client 
 	client = new LanguageClient(
 		'languageServerExample',
 		'Language Server Example',
 		serverOptions,
 		clientOptions
 	);
+	client.registerProposedFeatures();
 
 	// Start the client. This will also launch the server
 	client.start();

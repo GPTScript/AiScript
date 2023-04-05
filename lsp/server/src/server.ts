@@ -13,7 +13,12 @@ import {
 	CompletionItemKind,
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
-	InitializeResult
+	InitializeResult,
+	CodeAction,
+	CodeActionKind,
+	Command,
+	Range,
+	Position
 } from 'vscode-languageserver/node.js';
 
 import {
@@ -22,7 +27,8 @@ import {
 
 // dynamic import required due to top-level await
 const { Analyzer, ModuleBuilder, ProblemCollector } = await import('aiscript');
-import { convertAnalysisToDiagnostics, convertProblemToDiagnostic } from './converter.js';
+import { convertAnalysisToDiagnosticHints, convertProblemToDiagnostic } from './converter.js';
+import { Hint } from './diagnosticHint.js';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -30,6 +36,13 @@ const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+
+class Hints {
+	hints = new Map<string, Hint>();
+}
+
+const ALL_HINTS = new Map<string, Hints>();
+
 
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
@@ -55,7 +68,11 @@ connection.onInitialize((params: InitializeParams) => {
 
 	const result: InitializeResult = {
 		capabilities: {
+			codeActionProvider: true,
 			textDocumentSync: TextDocumentSyncKind.Incremental,
+			executeCommandProvider: {
+				commands: [ "InsertInterface" ]					
+			},
 			/*
 			// Tell the client that this server supports code completion.
 			completionProvider: {
@@ -73,6 +90,32 @@ connection.onInitialize((params: InitializeParams) => {
 	}
 	console.log("LSP server initialized!");
 	return result;
+});
+
+connection.onCodeAction(params => {
+	const hints = ALL_HINTS.get(params.textDocument.uri);
+	if(!hints)
+		return [];
+	const hint = hints.hints.get(keyFromRange(params.range));
+	if(!hint)
+		return [];
+	else
+		return hint.createCommands(params.textDocument.uri, params.range);
+});
+
+connection.onExecuteCommand(async params => {
+	const uri = params.arguments[0] as string;
+	const hints = ALL_HINTS.get(uri);
+	if(!hints)
+		return [];
+	const range = params.arguments[1] as Range;
+	const hint = hints.hints.get(keyFromRange(range));
+	if(!hint)
+		return [];
+	else {
+		const document = documents.get(uri);
+		hint.executeCommand(connection, params.command, document, range);
+	}
 });
 
 connection.onInitialized(() => {
@@ -141,7 +184,16 @@ documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
 
+function keyFromPosition(position: Position): string {
+	return "/" + position.line + "/" + position.character
+}
+
+function keyFromRange(range: Range): string {
+	return keyFromPosition(range.start) + keyFromPosition(range.end);
+}
+
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+	ALL_HINTS.delete(textDocument.uri);
 	let diagnostics: Diagnostic[] = [];
 	console.log("Creating ProblemCollector");
 	const listener = new ProblemCollector();
@@ -159,7 +211,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		if(analyzer.interfaces.size > 0) {
 			Array.from(analyzer.interfaces.values()).forEach( i => console.log("Inferred interface " + i.name));
 		}
-		diagnostics = convertAnalysisToDiagnostics(analyzer); 
+		const diagnosed = convertAnalysisToDiagnosticHints(analyzer); 
+		if(diagnosed.length > 0) {
+			const hints = new Hints();
+			ALL_HINTS.set(textDocument.uri, hints);
+			diagnosed.forEach(d => hints.hints.set(keyFromRange(d.diagnostic.range), d.hint));
+			diagnostics = diagnosed.map(d => d.diagnostic);
+		}
 	}
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
