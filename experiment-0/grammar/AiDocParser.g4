@@ -31,11 +31,19 @@ comment:
     ;
 
 type_comment:
-    ARONDBASE PASCAL_CASE_IDENTIFIER SPACE INTERFACE (SPACE text_comment)?
+    ARONDBASE type_name SPACE INTERFACE (SPACE text_comment)?
+    ;
+
+type_name:
+    PASCAL_CASE_IDENTIFIER
     ;
 
 property_comment:
-    ARONDBASE CAMEL_CASE_IDENTIFIER SPACE property_types (SPACE text_comment)?
+    ARONDBASE property_name SPACE property_types (SPACE text_comment)?
+    ;
+
+property_name:
+    CAMEL_CASE_IDENTIFIER
     ;
 
 property_types:
@@ -43,8 +51,8 @@ property_types:
     ;
 
 property_type:
-    PASCAL_CASE_IDENTIFIER OPTIONAL?
-    | UNKNOWN
+    PASCAL_CASE_IDENTIFIER OPTIONAL? # KnownPropertyType
+    | UNKNOWN                        # UnknownPropertyType
     ;
 
 version_comment:
@@ -52,8 +60,8 @@ version_comment:
     ;
 
 version_value:
-    DRAFT SPACE HASH_CODE
-    | SEMVER
+    DRAFT SPACE HASH_CODE   # DraftVersion
+    | SEMVER                # FinalVersion
     ;
 
 text_comment:

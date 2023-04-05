@@ -8,4 +8,8 @@ export default class StringType extends NativeType {
         super();
     }
 
+    get typename(): string {
+        return "string";
+    }
+
 }

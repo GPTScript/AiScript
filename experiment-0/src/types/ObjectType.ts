@@ -14,6 +14,10 @@ export default class ObjectType extends NativeType {
         this.fields = fields;
     }
 
+    get typename(): string {
+        return "object";
+    }
+
     equals(other: IType): boolean {
         if (!(other instanceof ObjectType))
             return false;

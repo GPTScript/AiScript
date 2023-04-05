@@ -15,6 +15,14 @@ export default class TypeSet extends Set<IType> implements IType {
         super(values);
     }
 
+    get typename(): string {
+        throw new UnsupportedOperationError("Should never get there!");
+    }
+
+    toString(): string {
+        return Array.from(this).map(t => t.typename).join(" | ");
+    }
+
     equals(other: IType): boolean {
         throw new NotImplementedError();
     }
@@ -22,4 +30,5 @@ export default class TypeSet extends Set<IType> implements IType {
     newContext(parent: Context): Context {
         throw new UnsupportedOperationError();
     }
+
 }

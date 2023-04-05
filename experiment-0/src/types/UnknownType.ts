@@ -9,8 +9,13 @@ export default class UnknownType extends TypeBase {
         super();
     }
 
+    get typename(): string {
+        return "UNKNOWN";
+    }
+
     newContext(parent: Context): Context {
         return parent.newUnknownTypeContext();
     }
+
 
 }

@@ -48,18 +48,20 @@ export default class AiDocParser extends Parser {
 	public static readonly RULE_comment_end = 4;
 	public static readonly RULE_comment = 5;
 	public static readonly RULE_type_comment = 6;
-	public static readonly RULE_property_comment = 7;
-	public static readonly RULE_property_types = 8;
-	public static readonly RULE_property_type = 9;
-	public static readonly RULE_version_comment = 10;
-	public static readonly RULE_version_value = 11;
-	public static readonly RULE_text_comment = 12;
-	public static readonly RULE_text_start = 13;
-	public static readonly RULE_keyword = 14;
-	public static readonly RULE_text_element = 15;
-	public static readonly RULE_inline_tag = 16;
-	public static readonly RULE_tag_content = 17;
-	public static readonly RULE_tag_text = 18;
+	public static readonly RULE_type_name = 7;
+	public static readonly RULE_property_comment = 8;
+	public static readonly RULE_property_name = 9;
+	public static readonly RULE_property_types = 10;
+	public static readonly RULE_property_type = 11;
+	public static readonly RULE_version_comment = 12;
+	public static readonly RULE_version_value = 13;
+	public static readonly RULE_text_comment = 14;
+	public static readonly RULE_text_start = 15;
+	public static readonly RULE_keyword = 16;
+	public static readonly RULE_text_element = 17;
+	public static readonly RULE_inline_tag = 18;
+	public static readonly RULE_tag_content = 19;
+	public static readonly RULE_tag_text = 20;
 	public static readonly literalNames: (string | null)[] = [ null, "'interface'", 
                                                             "'version'", 
                                                             "'return'", 
@@ -93,9 +95,10 @@ export default class AiDocParser extends Parser {
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"documentation", "bounded_comment", "comment_start", "comment_line", "comment_end", 
-		"comment", "type_comment", "property_comment", "property_types", "property_type", 
-		"version_comment", "version_value", "text_comment", "text_start", "keyword", 
-		"text_element", "inline_tag", "tag_content", "tag_text",
+		"comment", "type_comment", "type_name", "property_comment", "property_name", 
+		"property_types", "property_type", "version_comment", "version_value", 
+		"text_comment", "text_start", "keyword", "text_element", "inline_tag", 
+		"tag_content", "tag_text",
 	];
 	public get grammarFileName(): string { return "AiDocParser.g4"; }
 	public get literalNames(): (string | null)[] { return AiDocParser.literalNames; }
@@ -120,47 +123,47 @@ export default class AiDocParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 41;
+			this.state = 45;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 0, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 38;
+					this.state = 42;
 					this.match(AiDocParser.NEWLINE);
 					}
 					}
 				}
-				this.state = 43;
+				this.state = 47;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 0, this._ctx);
 			}
-			this.state = 45;
+			this.state = 49;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===14) {
 				{
-				this.state = 44;
+				this.state = 48;
 				this.bounded_comment();
 				}
 			}
 
-			this.state = 50;
+			this.state = 54;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la===16) {
 				{
 				{
-				this.state = 47;
+				this.state = 51;
 				this.match(AiDocParser.NEWLINE);
 				}
 				}
-				this.state = 52;
+				this.state = 56;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 53;
+			this.state = 57;
 			this.match(AiDocParser.EOF);
 			}
 		}
@@ -184,42 +187,42 @@ export default class AiDocParser extends Parser {
 		this.enterRule(localctx, 2, AiDocParser.RULE_bounded_comment);
 		try {
 			let _alt: number;
-			this.state = 68;
+			this.state = 72;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 4, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 55;
+				this.state = 59;
 				this.comment_start();
-				this.state = 56;
-				this.match(AiDocParser.NEWLINE);
 				this.state = 60;
+				this.match(AiDocParser.NEWLINE);
+				this.state = 64;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 3, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 						{
-						this.state = 57;
+						this.state = 61;
 						this.comment_line();
 						}
 						}
 					}
-					this.state = 62;
+					this.state = 66;
 					this._errHandler.sync(this);
 					_alt = this._interp.adaptivePredict(this._input, 3, this._ctx);
 				}
-				this.state = 63;
+				this.state = 67;
 				this.comment_end();
 				}
 				break;
 			case 2:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 65;
+				this.state = 69;
 				this.comment_start();
-				this.state = 66;
+				this.state = 70;
 				this.comment_end();
 				}
 				break;
@@ -246,24 +249,24 @@ export default class AiDocParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 70;
+			this.state = 74;
 			this.match(AiDocParser.AIDOC_START);
-			this.state = 72;
+			this.state = 76;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 5, this._ctx) ) {
 			case 1:
 				{
-				this.state = 71;
+				this.state = 75;
 				this.match(AiDocParser.SPACE);
 				}
 				break;
 			}
-			this.state = 75;
+			this.state = 79;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 6, this._ctx) ) {
 			case 1:
 				{
-				this.state = 74;
+				this.state = 78;
 				this.comment();
 				}
 				break;
@@ -293,17 +296,17 @@ export default class AiDocParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 78;
+			this.state = 82;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===17) {
 				{
-				this.state = 77;
+				this.state = 81;
 				this.match(AiDocParser.SPACE);
 				}
 			}
 
-			this.state = 81;
+			this.state = 85;
 			this._errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -311,7 +314,7 @@ export default class AiDocParser extends Parser {
 				case 1:
 					{
 					{
-					this.state = 80;
+					this.state = 84;
 					this.match(AiDocParser.STAR);
 					}
 					}
@@ -319,41 +322,41 @@ export default class AiDocParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				this.state = 83;
+				this.state = 87;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 8, this._ctx);
 			} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
-			this.state = 86;
+			this.state = 90;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 9, this._ctx) ) {
 			case 1:
 				{
-				this.state = 85;
+				this.state = 89;
 				this.match(AiDocParser.SPACE);
 				}
 				break;
 			}
-			this.state = 89;
+			this.state = 93;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 14421878) !== 0)) {
 				{
-				this.state = 88;
+				this.state = 92;
 				this.comment();
 				}
 			}
 
-			this.state = 92;
+			this.state = 96;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===17) {
 				{
-				this.state = 91;
+				this.state = 95;
 				this.match(AiDocParser.SPACE);
 				}
 			}
 
-			this.state = 94;
+			this.state = 98;
 			this.match(AiDocParser.NEWLINE);
 			}
 		}
@@ -380,22 +383,22 @@ export default class AiDocParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 110;
+			this.state = 114;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 16, this._ctx) ) {
 			case 1:
 				{
-				this.state = 97;
+				this.state = 101;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===17) {
 					{
-					this.state = 96;
+					this.state = 100;
 					this.match(AiDocParser.SPACE);
 					}
 				}
 
-				this.state = 100;
+				this.state = 104;
 				this._errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -403,7 +406,7 @@ export default class AiDocParser extends Parser {
 					case 1:
 						{
 						{
-						this.state = 99;
+						this.state = 103;
 						this.match(AiDocParser.STAR);
 						}
 						}
@@ -411,26 +414,26 @@ export default class AiDocParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					this.state = 102;
+					this.state = 106;
 					this._errHandler.sync(this);
 					_alt = this._interp.adaptivePredict(this._input, 13, this._ctx);
 				} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
-				this.state = 105;
+				this.state = 109;
 				this._errHandler.sync(this);
 				switch ( this._interp.adaptivePredict(this._input, 14, this._ctx) ) {
 				case 1:
 					{
-					this.state = 104;
+					this.state = 108;
 					this.match(AiDocParser.SPACE);
 					}
 					break;
 				}
-				this.state = 108;
+				this.state = 112;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 14421878) !== 0)) {
 					{
-					this.state = 107;
+					this.state = 111;
 					this.comment();
 					}
 				}
@@ -438,17 +441,17 @@ export default class AiDocParser extends Parser {
 				}
 				break;
 			}
-			this.state = 113;
+			this.state = 117;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===17) {
 				{
-				this.state = 112;
+				this.state = 116;
 				this.match(AiDocParser.SPACE);
 				}
 			}
 
-			this.state = 115;
+			this.state = 119;
 			this.match(AiDocParser.AIDOC_END);
 			}
 		}
@@ -471,34 +474,34 @@ export default class AiDocParser extends Parser {
 		let localctx: CommentContext = new CommentContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 10, AiDocParser.RULE_comment);
 		try {
-			this.state = 121;
+			this.state = 125;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 18, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 117;
+				this.state = 121;
 				this.type_comment();
 				}
 				break;
 			case 2:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 118;
+				this.state = 122;
 				this.property_comment();
 				}
 				break;
 			case 3:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 119;
+				this.state = 123;
 				this.version_comment();
 				}
 				break;
 			case 4:
 				this.enterOuterAlt(localctx, 4);
 				{
-				this.state = 120;
+				this.state = 124;
 				this.text_comment();
 				}
 				break;
@@ -525,26 +528,51 @@ export default class AiDocParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 123;
+			this.state = 127;
 			this.match(AiDocParser.ARONDBASE);
-			this.state = 124;
-			this.match(AiDocParser.PASCAL_CASE_IDENTIFIER);
-			this.state = 125;
-			this.match(AiDocParser.SPACE);
-			this.state = 126;
-			this.match(AiDocParser.INTERFACE);
+			this.state = 128;
+			this.type_name();
 			this.state = 129;
+			this.match(AiDocParser.SPACE);
+			this.state = 130;
+			this.match(AiDocParser.INTERFACE);
+			this.state = 133;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 19, this._ctx) ) {
 			case 1:
 				{
-				this.state = 127;
+				this.state = 131;
 				this.match(AiDocParser.SPACE);
-				this.state = 128;
+				this.state = 132;
 				this.text_comment();
 				}
 				break;
 			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public type_name(): Type_nameContext {
+		let localctx: Type_nameContext = new Type_nameContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 14, AiDocParser.RULE_type_name);
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 135;
+			this.match(AiDocParser.PASCAL_CASE_IDENTIFIER);
 			}
 		}
 		catch (re) {
@@ -564,26 +592,26 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public property_comment(): Property_commentContext {
 		let localctx: Property_commentContext = new Property_commentContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 14, AiDocParser.RULE_property_comment);
+		this.enterRule(localctx, 16, AiDocParser.RULE_property_comment);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 131;
-			this.match(AiDocParser.ARONDBASE);
-			this.state = 132;
-			this.match(AiDocParser.CAMEL_CASE_IDENTIFIER);
-			this.state = 133;
-			this.match(AiDocParser.SPACE);
-			this.state = 134;
-			this.property_types();
 			this.state = 137;
+			this.match(AiDocParser.ARONDBASE);
+			this.state = 138;
+			this.property_name();
+			this.state = 139;
+			this.match(AiDocParser.SPACE);
+			this.state = 140;
+			this.property_types();
+			this.state = 143;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 20, this._ctx) ) {
 			case 1:
 				{
-				this.state = 135;
+				this.state = 141;
 				this.match(AiDocParser.SPACE);
-				this.state = 136;
+				this.state = 142;
 				this.text_comment();
 				}
 				break;
@@ -605,51 +633,76 @@ export default class AiDocParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
+	public property_name(): Property_nameContext {
+		let localctx: Property_nameContext = new Property_nameContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 18, AiDocParser.RULE_property_name);
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 145;
+			this.match(AiDocParser.CAMEL_CASE_IDENTIFIER);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
 	public property_types(): Property_typesContext {
 		let localctx: Property_typesContext = new Property_typesContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 16, AiDocParser.RULE_property_types);
+		this.enterRule(localctx, 20, AiDocParser.RULE_property_types);
 		let _la: number;
 		try {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 139;
+			this.state = 147;
 			this.property_type();
-			this.state = 150;
+			this.state = 158;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 23, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 141;
+					this.state = 149;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					if (_la===17) {
 						{
-						this.state = 140;
+						this.state = 148;
 						this.match(AiDocParser.SPACE);
 						}
 					}
 
-					this.state = 143;
+					this.state = 151;
 					this.match(AiDocParser.PIPE);
-					this.state = 145;
+					this.state = 153;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					if (_la===17) {
 						{
-						this.state = 144;
+						this.state = 152;
 						this.match(AiDocParser.SPACE);
 						}
 					}
 
-					this.state = 147;
+					this.state = 155;
 					this.property_type();
 					}
 					}
 				}
-				this.state = 152;
+				this.state = 160;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 23, this._ctx);
 			}
@@ -672,23 +725,24 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public property_type(): Property_typeContext {
 		let localctx: Property_typeContext = new Property_typeContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 18, AiDocParser.RULE_property_type);
+		this.enterRule(localctx, 22, AiDocParser.RULE_property_type);
 		let _la: number;
 		try {
-			this.state = 158;
+			this.state = 166;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 8:
+				localctx = new KnownPropertyTypeContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 153;
+				this.state = 161;
 				this.match(AiDocParser.PASCAL_CASE_IDENTIFIER);
-				this.state = 155;
+				this.state = 163;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===12) {
 					{
-					this.state = 154;
+					this.state = 162;
 					this.match(AiDocParser.OPTIONAL);
 					}
 				}
@@ -696,9 +750,10 @@ export default class AiDocParser extends Parser {
 				}
 				break;
 			case 5:
+				localctx = new UnknownPropertyTypeContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 157;
+				this.state = 165;
 				this.match(AiDocParser.UNKNOWN);
 				}
 				break;
@@ -723,26 +778,26 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public version_comment(): Version_commentContext {
 		let localctx: Version_commentContext = new Version_commentContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 20, AiDocParser.RULE_version_comment);
+		this.enterRule(localctx, 24, AiDocParser.RULE_version_comment);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 160;
+			this.state = 168;
 			this.match(AiDocParser.DOLLAR);
-			this.state = 161;
+			this.state = 169;
 			this.match(AiDocParser.VERSION);
-			this.state = 162;
+			this.state = 170;
 			this.match(AiDocParser.SPACE);
-			this.state = 163;
+			this.state = 171;
 			this.version_value();
-			this.state = 166;
+			this.state = 174;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 26, this._ctx) ) {
 			case 1:
 				{
-				this.state = 164;
+				this.state = 172;
 				this.match(AiDocParser.SPACE);
-				this.state = 165;
+				this.state = 173;
 				this.text_comment();
 				}
 				break;
@@ -766,26 +821,28 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public version_value(): Version_valueContext {
 		let localctx: Version_valueContext = new Version_valueContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 22, AiDocParser.RULE_version_value);
+		this.enterRule(localctx, 26, AiDocParser.RULE_version_value);
 		try {
-			this.state = 172;
+			this.state = 180;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 4:
+				localctx = new DraftVersionContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 168;
+				this.state = 176;
 				this.match(AiDocParser.DRAFT);
-				this.state = 169;
+				this.state = 177;
 				this.match(AiDocParser.SPACE);
-				this.state = 170;
+				this.state = 178;
 				this.match(AiDocParser.HASH_CODE);
 				}
 				break;
 			case 7:
+				localctx = new FinalVersionContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 171;
+				this.state = 179;
 				this.match(AiDocParser.SEMVER);
 				}
 				break;
@@ -810,32 +867,32 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public text_comment(): Text_commentContext {
 		let localctx: Text_commentContext = new Text_commentContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 24, AiDocParser.RULE_text_comment);
+		this.enterRule(localctx, 28, AiDocParser.RULE_text_comment);
 		let _la: number;
 		try {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 174;
+			this.state = 182;
 			this.text_start();
-			this.state = 184;
+			this.state = 192;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 30, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 176;
+					this.state = 184;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					if (_la===17) {
 						{
-						this.state = 175;
+						this.state = 183;
 						this.match(AiDocParser.SPACE);
 						}
 					}
 
-					this.state = 180;
+					this.state = 188;
 					this._errHandler.sync(this);
 					switch (this._input.LA(1)) {
 					case 1:
@@ -853,13 +910,13 @@ export default class AiDocParser extends Parser {
 					case 22:
 					case 23:
 						{
-						this.state = 178;
+						this.state = 186;
 						this.text_element();
 						}
 						break;
 					case 21:
 						{
-						this.state = 179;
+						this.state = 187;
 						this.inline_tag();
 						}
 						break;
@@ -869,7 +926,7 @@ export default class AiDocParser extends Parser {
 					}
 					}
 				}
-				this.state = 186;
+				this.state = 194;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 30, this._ctx);
 			}
@@ -892,64 +949,64 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public text_start(): Text_startContext {
 		let localctx: Text_startContext = new Text_startContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 26, AiDocParser.RULE_text_start);
+		this.enterRule(localctx, 30, AiDocParser.RULE_text_start);
 		try {
-			this.state = 196;
+			this.state = 204;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 18:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 187;
+				this.state = 195;
 				this.match(AiDocParser.TEXT_CONTENT);
 				}
 				break;
 			case 8:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 188;
+				this.state = 196;
 				this.match(AiDocParser.PASCAL_CASE_IDENTIFIER);
 				}
 				break;
 			case 9:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 189;
+				this.state = 197;
 				this.match(AiDocParser.CAMEL_CASE_IDENTIFIER);
 				}
 				break;
 			case 19:
 				this.enterOuterAlt(localctx, 4);
 				{
-				this.state = 190;
+				this.state = 198;
 				this.match(AiDocParser.STAR);
 				}
 				break;
 			case 20:
 				this.enterOuterAlt(localctx, 5);
 				{
-				this.state = 191;
+				this.state = 199;
 				this.match(AiDocParser.SLASH);
 				}
 				break;
 			case 6:
 				this.enterOuterAlt(localctx, 6);
 				{
-				this.state = 192;
+				this.state = 200;
 				this.match(AiDocParser.HASH_CODE);
 				}
 				break;
 			case 22:
 				this.enterOuterAlt(localctx, 7);
 				{
-				this.state = 193;
+				this.state = 201;
 				this.match(AiDocParser.BRACE_OPEN);
 				}
 				break;
 			case 23:
 				this.enterOuterAlt(localctx, 8);
 				{
-				this.state = 194;
+				this.state = 202;
 				this.match(AiDocParser.BRACE_CLOSE);
 				}
 				break;
@@ -959,7 +1016,7 @@ export default class AiDocParser extends Parser {
 			case 5:
 				this.enterOuterAlt(localctx, 9);
 				{
-				this.state = 195;
+				this.state = 203;
 				this.keyword();
 				}
 				break;
@@ -984,12 +1041,12 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public keyword(): KeywordContext {
 		let localctx: KeywordContext = new KeywordContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 28, AiDocParser.RULE_keyword);
+		this.enterRule(localctx, 32, AiDocParser.RULE_keyword);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 198;
+			this.state = 206;
 			_la = this._input.LA(1);
 			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 54) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -1017,9 +1074,9 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public text_element(): Text_elementContext {
 		let localctx: Text_elementContext = new Text_elementContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 30, AiDocParser.RULE_text_element);
+		this.enterRule(localctx, 34, AiDocParser.RULE_text_element);
 		try {
-			this.state = 203;
+			this.state = 211;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 1:
@@ -1036,21 +1093,21 @@ export default class AiDocParser extends Parser {
 			case 23:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 200;
+				this.state = 208;
 				this.text_start();
 				}
 				break;
 			case 10:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 201;
+				this.state = 209;
 				this.match(AiDocParser.ARONDBASE);
 				}
 				break;
 			case 11:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 202;
+				this.state = 210;
 				this.match(AiDocParser.DOLLAR);
 				}
 				break;
@@ -1075,14 +1132,14 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public inline_tag(): Inline_tagContext {
 		let localctx: Inline_tagContext = new Inline_tagContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 32, AiDocParser.RULE_inline_tag);
+		this.enterRule(localctx, 36, AiDocParser.RULE_inline_tag);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 205;
+			this.state = 213;
 			this.match(AiDocParser.INLINE_TAG_START);
-			this.state = 206;
+			this.state = 214;
 			_la = this._input.LA(1);
 			if(!(_la===8 || _la===9)) {
 			this._errHandler.recoverInline(this);
@@ -1091,27 +1148,27 @@ export default class AiDocParser extends Parser {
 				this._errHandler.reportMatch(this);
 			    this.consume();
 			}
-			this.state = 208;
+			this.state = 216;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===17) {
 				{
-				this.state = 207;
+				this.state = 215;
 				this.match(AiDocParser.SPACE);
 				}
 			}
 
-			this.state = 211;
+			this.state = 219;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 6095734) !== 0)) {
 				{
-				this.state = 210;
+				this.state = 218;
 				this.tag_content();
 				}
 			}
 
-			this.state = 213;
+			this.state = 221;
 			this.match(AiDocParser.BRACE_CLOSE);
 			}
 		}
@@ -1132,20 +1189,20 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public tag_content(): Tag_contentContext {
 		let localctx: Tag_contentContext = new Tag_contentContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 34, AiDocParser.RULE_tag_content);
+		this.enterRule(localctx, 38, AiDocParser.RULE_tag_content);
 		let _la: number;
 		try {
-			this.state = 224;
+			this.state = 232;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 22:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 215;
+				this.state = 223;
 				this.match(AiDocParser.BRACE_OPEN);
-				this.state = 216;
+				this.state = 224;
 				this.tag_content();
-				this.state = 217;
+				this.state = 225;
 				this.match(AiDocParser.BRACE_CLOSE);
 				}
 				break;
@@ -1162,17 +1219,17 @@ export default class AiDocParser extends Parser {
 			case 20:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 220;
+				this.state = 228;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				do {
 					{
 					{
-					this.state = 219;
+					this.state = 227;
 					this.tag_text();
 					}
 					}
-					this.state = 222;
+					this.state = 230;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 1901430) !== 0));
@@ -1199,57 +1256,57 @@ export default class AiDocParser extends Parser {
 	// @RuleVersion(0)
 	public tag_text(): Tag_textContext {
 		let localctx: Tag_textContext = new Tag_textContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 36, AiDocParser.RULE_tag_text);
+		this.enterRule(localctx, 40, AiDocParser.RULE_tag_text);
 		try {
-			this.state = 234;
+			this.state = 242;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 18:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 226;
+				this.state = 234;
 				this.match(AiDocParser.TEXT_CONTENT);
 				}
 				break;
 			case 8:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 227;
+				this.state = 235;
 				this.match(AiDocParser.PASCAL_CASE_IDENTIFIER);
 				}
 				break;
 			case 9:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 228;
+				this.state = 236;
 				this.match(AiDocParser.CAMEL_CASE_IDENTIFIER);
 				}
 				break;
 			case 19:
 				this.enterOuterAlt(localctx, 4);
 				{
-				this.state = 229;
+				this.state = 237;
 				this.match(AiDocParser.STAR);
 				}
 				break;
 			case 20:
 				this.enterOuterAlt(localctx, 5);
 				{
-				this.state = 230;
+				this.state = 238;
 				this.match(AiDocParser.SLASH);
 				}
 				break;
 			case 6:
 				this.enterOuterAlt(localctx, 6);
 				{
-				this.state = 231;
+				this.state = 239;
 				this.match(AiDocParser.HASH_CODE);
 				}
 				break;
 			case 16:
 				this.enterOuterAlt(localctx, 7);
 				{
-				this.state = 232;
+				this.state = 240;
 				this.match(AiDocParser.NEWLINE);
 				}
 				break;
@@ -1259,7 +1316,7 @@ export default class AiDocParser extends Parser {
 			case 5:
 				this.enterOuterAlt(localctx, 8);
 				{
-				this.state = 233;
+				this.state = 241;
 				this.keyword();
 				}
 				break;
@@ -1282,86 +1339,89 @@ export default class AiDocParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,23,237,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,23,245,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,
 	10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,2,15,7,15,2,16,7,16,2,17,
-	7,17,2,18,7,18,1,0,5,0,40,8,0,10,0,12,0,43,9,0,1,0,3,0,46,8,0,1,0,5,0,49,
-	8,0,10,0,12,0,52,9,0,1,0,1,0,1,1,1,1,1,1,5,1,59,8,1,10,1,12,1,62,9,1,1,
-	1,1,1,1,1,1,1,1,1,3,1,69,8,1,1,2,1,2,3,2,73,8,2,1,2,3,2,76,8,2,1,3,3,3,
-	79,8,3,1,3,4,3,82,8,3,11,3,12,3,83,1,3,3,3,87,8,3,1,3,3,3,90,8,3,1,3,3,
-	3,93,8,3,1,3,1,3,1,4,3,4,98,8,4,1,4,4,4,101,8,4,11,4,12,4,102,1,4,3,4,106,
-	8,4,1,4,3,4,109,8,4,3,4,111,8,4,1,4,3,4,114,8,4,1,4,1,4,1,5,1,5,1,5,1,5,
-	3,5,122,8,5,1,6,1,6,1,6,1,6,1,6,1,6,3,6,130,8,6,1,7,1,7,1,7,1,7,1,7,1,7,
-	3,7,138,8,7,1,8,1,8,3,8,142,8,8,1,8,1,8,3,8,146,8,8,1,8,5,8,149,8,8,10,
-	8,12,8,152,9,8,1,9,1,9,3,9,156,8,9,1,9,3,9,159,8,9,1,10,1,10,1,10,1,10,
-	1,10,1,10,3,10,167,8,10,1,11,1,11,1,11,1,11,3,11,173,8,11,1,12,1,12,3,12,
-	177,8,12,1,12,1,12,3,12,181,8,12,5,12,183,8,12,10,12,12,12,186,9,12,1,13,
-	1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,3,13,197,8,13,1,14,1,14,1,15,1,
-	15,1,15,3,15,204,8,15,1,16,1,16,1,16,3,16,209,8,16,1,16,3,16,212,8,16,1,
-	16,1,16,1,17,1,17,1,17,1,17,1,17,4,17,221,8,17,11,17,12,17,222,3,17,225,
-	8,17,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,3,18,235,8,18,1,18,0,0,19,
-	0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,2,2,0,1,2,4,5,1,0,
-	8,9,271,0,41,1,0,0,0,2,68,1,0,0,0,4,70,1,0,0,0,6,78,1,0,0,0,8,110,1,0,0,
-	0,10,121,1,0,0,0,12,123,1,0,0,0,14,131,1,0,0,0,16,139,1,0,0,0,18,158,1,
-	0,0,0,20,160,1,0,0,0,22,172,1,0,0,0,24,174,1,0,0,0,26,196,1,0,0,0,28,198,
-	1,0,0,0,30,203,1,0,0,0,32,205,1,0,0,0,34,224,1,0,0,0,36,234,1,0,0,0,38,
-	40,5,16,0,0,39,38,1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,
-	45,1,0,0,0,43,41,1,0,0,0,44,46,3,2,1,0,45,44,1,0,0,0,45,46,1,0,0,0,46,50,
-	1,0,0,0,47,49,5,16,0,0,48,47,1,0,0,0,49,52,1,0,0,0,50,48,1,0,0,0,50,51,
-	1,0,0,0,51,53,1,0,0,0,52,50,1,0,0,0,53,54,5,0,0,1,54,1,1,0,0,0,55,56,3,
-	4,2,0,56,60,5,16,0,0,57,59,3,6,3,0,58,57,1,0,0,0,59,62,1,0,0,0,60,58,1,
-	0,0,0,60,61,1,0,0,0,61,63,1,0,0,0,62,60,1,0,0,0,63,64,3,8,4,0,64,69,1,0,
-	0,0,65,66,3,4,2,0,66,67,3,8,4,0,67,69,1,0,0,0,68,55,1,0,0,0,68,65,1,0,0,
-	0,69,3,1,0,0,0,70,72,5,14,0,0,71,73,5,17,0,0,72,71,1,0,0,0,72,73,1,0,0,
-	0,73,75,1,0,0,0,74,76,3,10,5,0,75,74,1,0,0,0,75,76,1,0,0,0,76,5,1,0,0,0,
-	77,79,5,17,0,0,78,77,1,0,0,0,78,79,1,0,0,0,79,81,1,0,0,0,80,82,5,19,0,0,
-	81,80,1,0,0,0,82,83,1,0,0,0,83,81,1,0,0,0,83,84,1,0,0,0,84,86,1,0,0,0,85,
-	87,5,17,0,0,86,85,1,0,0,0,86,87,1,0,0,0,87,89,1,0,0,0,88,90,3,10,5,0,89,
-	88,1,0,0,0,89,90,1,0,0,0,90,92,1,0,0,0,91,93,5,17,0,0,92,91,1,0,0,0,92,
-	93,1,0,0,0,93,94,1,0,0,0,94,95,5,16,0,0,95,7,1,0,0,0,96,98,5,17,0,0,97,
-	96,1,0,0,0,97,98,1,0,0,0,98,100,1,0,0,0,99,101,5,19,0,0,100,99,1,0,0,0,
-	101,102,1,0,0,0,102,100,1,0,0,0,102,103,1,0,0,0,103,105,1,0,0,0,104,106,
-	5,17,0,0,105,104,1,0,0,0,105,106,1,0,0,0,106,108,1,0,0,0,107,109,3,10,5,
-	0,108,107,1,0,0,0,108,109,1,0,0,0,109,111,1,0,0,0,110,97,1,0,0,0,110,111,
-	1,0,0,0,111,113,1,0,0,0,112,114,5,17,0,0,113,112,1,0,0,0,113,114,1,0,0,
-	0,114,115,1,0,0,0,115,116,5,15,0,0,116,9,1,0,0,0,117,122,3,12,6,0,118,122,
-	3,14,7,0,119,122,3,20,10,0,120,122,3,24,12,0,121,117,1,0,0,0,121,118,1,
-	0,0,0,121,119,1,0,0,0,121,120,1,0,0,0,122,11,1,0,0,0,123,124,5,10,0,0,124,
-	125,5,8,0,0,125,126,5,17,0,0,126,129,5,1,0,0,127,128,5,17,0,0,128,130,3,
-	24,12,0,129,127,1,0,0,0,129,130,1,0,0,0,130,13,1,0,0,0,131,132,5,10,0,0,
-	132,133,5,9,0,0,133,134,5,17,0,0,134,137,3,16,8,0,135,136,5,17,0,0,136,
-	138,3,24,12,0,137,135,1,0,0,0,137,138,1,0,0,0,138,15,1,0,0,0,139,150,3,
-	18,9,0,140,142,5,17,0,0,141,140,1,0,0,0,141,142,1,0,0,0,142,143,1,0,0,0,
-	143,145,5,13,0,0,144,146,5,17,0,0,145,144,1,0,0,0,145,146,1,0,0,0,146,147,
-	1,0,0,0,147,149,3,18,9,0,148,141,1,0,0,0,149,152,1,0,0,0,150,148,1,0,0,
-	0,150,151,1,0,0,0,151,17,1,0,0,0,152,150,1,0,0,0,153,155,5,8,0,0,154,156,
-	5,12,0,0,155,154,1,0,0,0,155,156,1,0,0,0,156,159,1,0,0,0,157,159,5,5,0,
-	0,158,153,1,0,0,0,158,157,1,0,0,0,159,19,1,0,0,0,160,161,5,11,0,0,161,162,
-	5,2,0,0,162,163,5,17,0,0,163,166,3,22,11,0,164,165,5,17,0,0,165,167,3,24,
-	12,0,166,164,1,0,0,0,166,167,1,0,0,0,167,21,1,0,0,0,168,169,5,4,0,0,169,
-	170,5,17,0,0,170,173,5,6,0,0,171,173,5,7,0,0,172,168,1,0,0,0,172,171,1,
-	0,0,0,173,23,1,0,0,0,174,184,3,26,13,0,175,177,5,17,0,0,176,175,1,0,0,0,
-	176,177,1,0,0,0,177,180,1,0,0,0,178,181,3,30,15,0,179,181,3,32,16,0,180,
-	178,1,0,0,0,180,179,1,0,0,0,181,183,1,0,0,0,182,176,1,0,0,0,183,186,1,0,
-	0,0,184,182,1,0,0,0,184,185,1,0,0,0,185,25,1,0,0,0,186,184,1,0,0,0,187,
-	197,5,18,0,0,188,197,5,8,0,0,189,197,5,9,0,0,190,197,5,19,0,0,191,197,5,
-	20,0,0,192,197,5,6,0,0,193,197,5,22,0,0,194,197,5,23,0,0,195,197,3,28,14,
-	0,196,187,1,0,0,0,196,188,1,0,0,0,196,189,1,0,0,0,196,190,1,0,0,0,196,191,
-	1,0,0,0,196,192,1,0,0,0,196,193,1,0,0,0,196,194,1,0,0,0,196,195,1,0,0,0,
-	197,27,1,0,0,0,198,199,7,0,0,0,199,29,1,0,0,0,200,204,3,26,13,0,201,204,
-	5,10,0,0,202,204,5,11,0,0,203,200,1,0,0,0,203,201,1,0,0,0,203,202,1,0,0,
-	0,204,31,1,0,0,0,205,206,5,21,0,0,206,208,7,1,0,0,207,209,5,17,0,0,208,
-	207,1,0,0,0,208,209,1,0,0,0,209,211,1,0,0,0,210,212,3,34,17,0,211,210,1,
-	0,0,0,211,212,1,0,0,0,212,213,1,0,0,0,213,214,5,23,0,0,214,33,1,0,0,0,215,
-	216,5,22,0,0,216,217,3,34,17,0,217,218,5,23,0,0,218,225,1,0,0,0,219,221,
-	3,36,18,0,220,219,1,0,0,0,221,222,1,0,0,0,222,220,1,0,0,0,222,223,1,0,0,
-	0,223,225,1,0,0,0,224,215,1,0,0,0,224,220,1,0,0,0,225,35,1,0,0,0,226,235,
-	5,18,0,0,227,235,5,8,0,0,228,235,5,9,0,0,229,235,5,19,0,0,230,235,5,20,
-	0,0,231,235,5,6,0,0,232,235,5,16,0,0,233,235,3,28,14,0,234,226,1,0,0,0,
-	234,227,1,0,0,0,234,228,1,0,0,0,234,229,1,0,0,0,234,230,1,0,0,0,234,231,
-	1,0,0,0,234,232,1,0,0,0,234,233,1,0,0,0,235,37,1,0,0,0,38,41,45,50,60,68,
-	72,75,78,83,86,89,92,97,102,105,108,110,113,121,129,137,141,145,150,155,
-	158,166,172,176,180,184,196,203,208,211,222,224,234];
+	7,17,2,18,7,18,2,19,7,19,2,20,7,20,1,0,5,0,44,8,0,10,0,12,0,47,9,0,1,0,
+	3,0,50,8,0,1,0,5,0,53,8,0,10,0,12,0,56,9,0,1,0,1,0,1,1,1,1,1,1,5,1,63,8,
+	1,10,1,12,1,66,9,1,1,1,1,1,1,1,1,1,1,1,3,1,73,8,1,1,2,1,2,3,2,77,8,2,1,
+	2,3,2,80,8,2,1,3,3,3,83,8,3,1,3,4,3,86,8,3,11,3,12,3,87,1,3,3,3,91,8,3,
+	1,3,3,3,94,8,3,1,3,3,3,97,8,3,1,3,1,3,1,4,3,4,102,8,4,1,4,4,4,105,8,4,11,
+	4,12,4,106,1,4,3,4,110,8,4,1,4,3,4,113,8,4,3,4,115,8,4,1,4,3,4,118,8,4,
+	1,4,1,4,1,5,1,5,1,5,1,5,3,5,126,8,5,1,6,1,6,1,6,1,6,1,6,1,6,3,6,134,8,6,
+	1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,8,3,8,144,8,8,1,9,1,9,1,10,1,10,3,10,150,
+	8,10,1,10,1,10,3,10,154,8,10,1,10,5,10,157,8,10,10,10,12,10,160,9,10,1,
+	11,1,11,3,11,164,8,11,1,11,3,11,167,8,11,1,12,1,12,1,12,1,12,1,12,1,12,
+	3,12,175,8,12,1,13,1,13,1,13,1,13,3,13,181,8,13,1,14,1,14,3,14,185,8,14,
+	1,14,1,14,3,14,189,8,14,5,14,191,8,14,10,14,12,14,194,9,14,1,15,1,15,1,
+	15,1,15,1,15,1,15,1,15,1,15,1,15,3,15,205,8,15,1,16,1,16,1,17,1,17,1,17,
+	3,17,212,8,17,1,18,1,18,1,18,3,18,217,8,18,1,18,3,18,220,8,18,1,18,1,18,
+	1,19,1,19,1,19,1,19,1,19,4,19,229,8,19,11,19,12,19,230,3,19,233,8,19,1,
+	20,1,20,1,20,1,20,1,20,1,20,1,20,1,20,3,20,243,8,20,1,20,0,0,21,0,2,4,6,
+	8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,0,2,2,0,1,2,4,5,1,0,8,
+	9,277,0,45,1,0,0,0,2,72,1,0,0,0,4,74,1,0,0,0,6,82,1,0,0,0,8,114,1,0,0,0,
+	10,125,1,0,0,0,12,127,1,0,0,0,14,135,1,0,0,0,16,137,1,0,0,0,18,145,1,0,
+	0,0,20,147,1,0,0,0,22,166,1,0,0,0,24,168,1,0,0,0,26,180,1,0,0,0,28,182,
+	1,0,0,0,30,204,1,0,0,0,32,206,1,0,0,0,34,211,1,0,0,0,36,213,1,0,0,0,38,
+	232,1,0,0,0,40,242,1,0,0,0,42,44,5,16,0,0,43,42,1,0,0,0,44,47,1,0,0,0,45,
+	43,1,0,0,0,45,46,1,0,0,0,46,49,1,0,0,0,47,45,1,0,0,0,48,50,3,2,1,0,49,48,
+	1,0,0,0,49,50,1,0,0,0,50,54,1,0,0,0,51,53,5,16,0,0,52,51,1,0,0,0,53,56,
+	1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,55,57,1,0,0,0,56,54,1,0,0,0,57,58,5,
+	0,0,1,58,1,1,0,0,0,59,60,3,4,2,0,60,64,5,16,0,0,61,63,3,6,3,0,62,61,1,0,
+	0,0,63,66,1,0,0,0,64,62,1,0,0,0,64,65,1,0,0,0,65,67,1,0,0,0,66,64,1,0,0,
+	0,67,68,3,8,4,0,68,73,1,0,0,0,69,70,3,4,2,0,70,71,3,8,4,0,71,73,1,0,0,0,
+	72,59,1,0,0,0,72,69,1,0,0,0,73,3,1,0,0,0,74,76,5,14,0,0,75,77,5,17,0,0,
+	76,75,1,0,0,0,76,77,1,0,0,0,77,79,1,0,0,0,78,80,3,10,5,0,79,78,1,0,0,0,
+	79,80,1,0,0,0,80,5,1,0,0,0,81,83,5,17,0,0,82,81,1,0,0,0,82,83,1,0,0,0,83,
+	85,1,0,0,0,84,86,5,19,0,0,85,84,1,0,0,0,86,87,1,0,0,0,87,85,1,0,0,0,87,
+	88,1,0,0,0,88,90,1,0,0,0,89,91,5,17,0,0,90,89,1,0,0,0,90,91,1,0,0,0,91,
+	93,1,0,0,0,92,94,3,10,5,0,93,92,1,0,0,0,93,94,1,0,0,0,94,96,1,0,0,0,95,
+	97,5,17,0,0,96,95,1,0,0,0,96,97,1,0,0,0,97,98,1,0,0,0,98,99,5,16,0,0,99,
+	7,1,0,0,0,100,102,5,17,0,0,101,100,1,0,0,0,101,102,1,0,0,0,102,104,1,0,
+	0,0,103,105,5,19,0,0,104,103,1,0,0,0,105,106,1,0,0,0,106,104,1,0,0,0,106,
+	107,1,0,0,0,107,109,1,0,0,0,108,110,5,17,0,0,109,108,1,0,0,0,109,110,1,
+	0,0,0,110,112,1,0,0,0,111,113,3,10,5,0,112,111,1,0,0,0,112,113,1,0,0,0,
+	113,115,1,0,0,0,114,101,1,0,0,0,114,115,1,0,0,0,115,117,1,0,0,0,116,118,
+	5,17,0,0,117,116,1,0,0,0,117,118,1,0,0,0,118,119,1,0,0,0,119,120,5,15,0,
+	0,120,9,1,0,0,0,121,126,3,12,6,0,122,126,3,16,8,0,123,126,3,24,12,0,124,
+	126,3,28,14,0,125,121,1,0,0,0,125,122,1,0,0,0,125,123,1,0,0,0,125,124,1,
+	0,0,0,126,11,1,0,0,0,127,128,5,10,0,0,128,129,3,14,7,0,129,130,5,17,0,0,
+	130,133,5,1,0,0,131,132,5,17,0,0,132,134,3,28,14,0,133,131,1,0,0,0,133,
+	134,1,0,0,0,134,13,1,0,0,0,135,136,5,8,0,0,136,15,1,0,0,0,137,138,5,10,
+	0,0,138,139,3,18,9,0,139,140,5,17,0,0,140,143,3,20,10,0,141,142,5,17,0,
+	0,142,144,3,28,14,0,143,141,1,0,0,0,143,144,1,0,0,0,144,17,1,0,0,0,145,
+	146,5,9,0,0,146,19,1,0,0,0,147,158,3,22,11,0,148,150,5,17,0,0,149,148,1,
+	0,0,0,149,150,1,0,0,0,150,151,1,0,0,0,151,153,5,13,0,0,152,154,5,17,0,0,
+	153,152,1,0,0,0,153,154,1,0,0,0,154,155,1,0,0,0,155,157,3,22,11,0,156,149,
+	1,0,0,0,157,160,1,0,0,0,158,156,1,0,0,0,158,159,1,0,0,0,159,21,1,0,0,0,
+	160,158,1,0,0,0,161,163,5,8,0,0,162,164,5,12,0,0,163,162,1,0,0,0,163,164,
+	1,0,0,0,164,167,1,0,0,0,165,167,5,5,0,0,166,161,1,0,0,0,166,165,1,0,0,0,
+	167,23,1,0,0,0,168,169,5,11,0,0,169,170,5,2,0,0,170,171,5,17,0,0,171,174,
+	3,26,13,0,172,173,5,17,0,0,173,175,3,28,14,0,174,172,1,0,0,0,174,175,1,
+	0,0,0,175,25,1,0,0,0,176,177,5,4,0,0,177,178,5,17,0,0,178,181,5,6,0,0,179,
+	181,5,7,0,0,180,176,1,0,0,0,180,179,1,0,0,0,181,27,1,0,0,0,182,192,3,30,
+	15,0,183,185,5,17,0,0,184,183,1,0,0,0,184,185,1,0,0,0,185,188,1,0,0,0,186,
+	189,3,34,17,0,187,189,3,36,18,0,188,186,1,0,0,0,188,187,1,0,0,0,189,191,
+	1,0,0,0,190,184,1,0,0,0,191,194,1,0,0,0,192,190,1,0,0,0,192,193,1,0,0,0,
+	193,29,1,0,0,0,194,192,1,0,0,0,195,205,5,18,0,0,196,205,5,8,0,0,197,205,
+	5,9,0,0,198,205,5,19,0,0,199,205,5,20,0,0,200,205,5,6,0,0,201,205,5,22,
+	0,0,202,205,5,23,0,0,203,205,3,32,16,0,204,195,1,0,0,0,204,196,1,0,0,0,
+	204,197,1,0,0,0,204,198,1,0,0,0,204,199,1,0,0,0,204,200,1,0,0,0,204,201,
+	1,0,0,0,204,202,1,0,0,0,204,203,1,0,0,0,205,31,1,0,0,0,206,207,7,0,0,0,
+	207,33,1,0,0,0,208,212,3,30,15,0,209,212,5,10,0,0,210,212,5,11,0,0,211,
+	208,1,0,0,0,211,209,1,0,0,0,211,210,1,0,0,0,212,35,1,0,0,0,213,214,5,21,
+	0,0,214,216,7,1,0,0,215,217,5,17,0,0,216,215,1,0,0,0,216,217,1,0,0,0,217,
+	219,1,0,0,0,218,220,3,38,19,0,219,218,1,0,0,0,219,220,1,0,0,0,220,221,1,
+	0,0,0,221,222,5,23,0,0,222,37,1,0,0,0,223,224,5,22,0,0,224,225,3,38,19,
+	0,225,226,5,23,0,0,226,233,1,0,0,0,227,229,3,40,20,0,228,227,1,0,0,0,229,
+	230,1,0,0,0,230,228,1,0,0,0,230,231,1,0,0,0,231,233,1,0,0,0,232,223,1,0,
+	0,0,232,228,1,0,0,0,233,39,1,0,0,0,234,243,5,18,0,0,235,243,5,8,0,0,236,
+	243,5,9,0,0,237,243,5,19,0,0,238,243,5,20,0,0,239,243,5,6,0,0,240,243,5,
+	16,0,0,241,243,3,32,16,0,242,234,1,0,0,0,242,235,1,0,0,0,242,236,1,0,0,
+	0,242,237,1,0,0,0,242,238,1,0,0,0,242,239,1,0,0,0,242,240,1,0,0,0,242,241,
+	1,0,0,0,243,41,1,0,0,0,38,45,49,54,64,72,76,79,82,87,90,93,96,101,106,109,
+	112,114,117,125,133,143,149,153,158,163,166,174,180,184,188,192,204,211,
+	216,219,230,232,242];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -1595,8 +1655,8 @@ export class Type_commentContext extends ParserRuleContext {
 	public ARONDBASE(): TerminalNode {
 		return this.getToken(AiDocParser.ARONDBASE, 0);
 	}
-	public PASCAL_CASE_IDENTIFIER(): TerminalNode {
-		return this.getToken(AiDocParser.PASCAL_CASE_IDENTIFIER, 0);
+	public type_name(): Type_nameContext {
+		return this.getTypedRuleContext(Type_nameContext, 0) as Type_nameContext;
 	}
 	public SPACE_list(): TerminalNode[] {
 	    	return this.getTokens(AiDocParser.SPACE);
@@ -1626,6 +1686,30 @@ export class Type_commentContext extends ParserRuleContext {
 }
 
 
+export class Type_nameContext extends ParserRuleContext {
+	constructor(parser?: AiDocParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public PASCAL_CASE_IDENTIFIER(): TerminalNode {
+		return this.getToken(AiDocParser.PASCAL_CASE_IDENTIFIER, 0);
+	}
+    public get ruleIndex(): number {
+    	return AiDocParser.RULE_type_name;
+	}
+	public enterRule(listener: AiDocParserListener): void {
+	    if(listener.enterType_name) {
+	 		listener.enterType_name(this);
+		}
+	}
+	public exitRule(listener: AiDocParserListener): void {
+	    if(listener.exitType_name) {
+	 		listener.exitType_name(this);
+		}
+	}
+}
+
+
 export class Property_commentContext extends ParserRuleContext {
 	constructor(parser?: AiDocParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
@@ -1634,8 +1718,8 @@ export class Property_commentContext extends ParserRuleContext {
 	public ARONDBASE(): TerminalNode {
 		return this.getToken(AiDocParser.ARONDBASE, 0);
 	}
-	public CAMEL_CASE_IDENTIFIER(): TerminalNode {
-		return this.getToken(AiDocParser.CAMEL_CASE_IDENTIFIER, 0);
+	public property_name(): Property_nameContext {
+		return this.getTypedRuleContext(Property_nameContext, 0) as Property_nameContext;
 	}
 	public SPACE_list(): TerminalNode[] {
 	    	return this.getTokens(AiDocParser.SPACE);
@@ -1660,6 +1744,30 @@ export class Property_commentContext extends ParserRuleContext {
 	public exitRule(listener: AiDocParserListener): void {
 	    if(listener.exitProperty_comment) {
 	 		listener.exitProperty_comment(this);
+		}
+	}
+}
+
+
+export class Property_nameContext extends ParserRuleContext {
+	constructor(parser?: AiDocParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public CAMEL_CASE_IDENTIFIER(): TerminalNode {
+		return this.getToken(AiDocParser.CAMEL_CASE_IDENTIFIER, 0);
+	}
+    public get ruleIndex(): number {
+    	return AiDocParser.RULE_property_name;
+	}
+	public enterRule(listener: AiDocParserListener): void {
+	    if(listener.enterProperty_name) {
+	 		listener.enterProperty_name(this);
+		}
+	}
+	public exitRule(listener: AiDocParserListener): void {
+	    if(listener.exitProperty_name) {
+	 		listener.exitProperty_name(this);
 		}
 	}
 }
@@ -1709,26 +1817,51 @@ export class Property_typeContext extends ParserRuleContext {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
+    public get ruleIndex(): number {
+    	return AiDocParser.RULE_property_type;
+	}
+	public copyFrom(ctx: Property_typeContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class UnknownPropertyTypeContext extends Property_typeContext {
+	constructor(parser: AiDocParser, ctx: Property_typeContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public UNKNOWN(): TerminalNode {
+		return this.getToken(AiDocParser.UNKNOWN, 0);
+	}
+	public enterRule(listener: AiDocParserListener): void {
+	    if(listener.enterUnknownPropertyType) {
+	 		listener.enterUnknownPropertyType(this);
+		}
+	}
+	public exitRule(listener: AiDocParserListener): void {
+	    if(listener.exitUnknownPropertyType) {
+	 		listener.exitUnknownPropertyType(this);
+		}
+	}
+}
+export class KnownPropertyTypeContext extends Property_typeContext {
+	constructor(parser: AiDocParser, ctx: Property_typeContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
 	public PASCAL_CASE_IDENTIFIER(): TerminalNode {
 		return this.getToken(AiDocParser.PASCAL_CASE_IDENTIFIER, 0);
 	}
 	public OPTIONAL(): TerminalNode {
 		return this.getToken(AiDocParser.OPTIONAL, 0);
 	}
-	public UNKNOWN(): TerminalNode {
-		return this.getToken(AiDocParser.UNKNOWN, 0);
-	}
-    public get ruleIndex(): number {
-    	return AiDocParser.RULE_property_type;
-	}
 	public enterRule(listener: AiDocParserListener): void {
-	    if(listener.enterProperty_type) {
-	 		listener.enterProperty_type(this);
+	    if(listener.enterKnownPropertyType) {
+	 		listener.enterKnownPropertyType(this);
 		}
 	}
 	public exitRule(listener: AiDocParserListener): void {
-	    if(listener.exitProperty_type) {
-	 		listener.exitProperty_type(this);
+	    if(listener.exitKnownPropertyType) {
+	 		listener.exitKnownPropertyType(this);
 		}
 	}
 }
@@ -1778,6 +1911,18 @@ export class Version_valueContext extends ParserRuleContext {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
+    public get ruleIndex(): number {
+    	return AiDocParser.RULE_version_value;
+	}
+	public copyFrom(ctx: Version_valueContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class DraftVersionContext extends Version_valueContext {
+	constructor(parser: AiDocParser, ctx: Version_valueContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
 	public DRAFT(): TerminalNode {
 		return this.getToken(AiDocParser.DRAFT, 0);
 	}
@@ -1787,20 +1932,33 @@ export class Version_valueContext extends ParserRuleContext {
 	public HASH_CODE(): TerminalNode {
 		return this.getToken(AiDocParser.HASH_CODE, 0);
 	}
-	public SEMVER(): TerminalNode {
-		return this.getToken(AiDocParser.SEMVER, 0);
-	}
-    public get ruleIndex(): number {
-    	return AiDocParser.RULE_version_value;
-	}
 	public enterRule(listener: AiDocParserListener): void {
-	    if(listener.enterVersion_value) {
-	 		listener.enterVersion_value(this);
+	    if(listener.enterDraftVersion) {
+	 		listener.enterDraftVersion(this);
 		}
 	}
 	public exitRule(listener: AiDocParserListener): void {
-	    if(listener.exitVersion_value) {
-	 		listener.exitVersion_value(this);
+	    if(listener.exitDraftVersion) {
+	 		listener.exitDraftVersion(this);
+		}
+	}
+}
+export class FinalVersionContext extends Version_valueContext {
+	constructor(parser: AiDocParser, ctx: Version_valueContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public SEMVER(): TerminalNode {
+		return this.getToken(AiDocParser.SEMVER, 0);
+	}
+	public enterRule(listener: AiDocParserListener): void {
+	    if(listener.enterFinalVersion) {
+	 		listener.enterFinalVersion(this);
+		}
+	}
+	public exitRule(listener: AiDocParserListener): void {
+	    if(listener.exitFinalVersion) {
+	 		listener.exitFinalVersion(this);
 		}
 	}
 }

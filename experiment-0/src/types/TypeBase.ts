@@ -4,6 +4,12 @@ import Context from "../analyzer/Context";
 
 export default abstract class TypeBase implements IType {
 
+    abstract get typename(): string;
+
+    toString(): string {
+        return this.typename;
+    }
+
     equals(other: IType): boolean {
         return other==this;
     }
@@ -11,5 +17,6 @@ export default abstract class TypeBase implements IType {
     newContext(parent: Context): Context {
         throw new UnsupportedOperationError();
     }
-    
+
+
 }

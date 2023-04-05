@@ -10,11 +10,15 @@ import { Comment_lineContext } from "./AiDocParser";
 import { Comment_endContext } from "./AiDocParser";
 import { CommentContext } from "./AiDocParser";
 import { Type_commentContext } from "./AiDocParser";
+import { Type_nameContext } from "./AiDocParser";
 import { Property_commentContext } from "./AiDocParser";
+import { Property_nameContext } from "./AiDocParser";
 import { Property_typesContext } from "./AiDocParser";
-import { Property_typeContext } from "./AiDocParser";
+import { KnownPropertyTypeContext } from "./AiDocParser";
+import { UnknownPropertyTypeContext } from "./AiDocParser";
 import { Version_commentContext } from "./AiDocParser";
-import { Version_valueContext } from "./AiDocParser";
+import { DraftVersionContext } from "./AiDocParser";
+import { FinalVersionContext } from "./AiDocParser";
 import { Text_commentContext } from "./AiDocParser";
 import { Text_startContext } from "./AiDocParser";
 import { KeywordContext } from "./AiDocParser";
@@ -100,6 +104,16 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 */
 	exitType_comment?: (ctx: Type_commentContext) => void;
 	/**
+	 * Enter a parse tree produced by `AiDocParser.type_name`.
+	 * @param ctx the parse tree
+	 */
+	enterType_name?: (ctx: Type_nameContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiDocParser.type_name`.
+	 * @param ctx the parse tree
+	 */
+	exitType_name?: (ctx: Type_nameContext) => void;
+	/**
 	 * Enter a parse tree produced by `AiDocParser.property_comment`.
 	 * @param ctx the parse tree
 	 */
@@ -109,6 +123,16 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitProperty_comment?: (ctx: Property_commentContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiDocParser.property_name`.
+	 * @param ctx the parse tree
+	 */
+	enterProperty_name?: (ctx: Property_nameContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiDocParser.property_name`.
+	 * @param ctx the parse tree
+	 */
+	exitProperty_name?: (ctx: Property_nameContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiDocParser.property_types`.
 	 * @param ctx the parse tree
@@ -120,15 +144,29 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 */
 	exitProperty_types?: (ctx: Property_typesContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiDocParser.property_type`.
+	 * Enter a parse tree produced by the `KnownPropertyType`
+	 * labeled alternative in `AiDocParser.property_type`.
 	 * @param ctx the parse tree
 	 */
-	enterProperty_type?: (ctx: Property_typeContext) => void;
+	enterKnownPropertyType?: (ctx: KnownPropertyTypeContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiDocParser.property_type`.
+	 * Exit a parse tree produced by the `KnownPropertyType`
+	 * labeled alternative in `AiDocParser.property_type`.
 	 * @param ctx the parse tree
 	 */
-	exitProperty_type?: (ctx: Property_typeContext) => void;
+	exitKnownPropertyType?: (ctx: KnownPropertyTypeContext) => void;
+	/**
+	 * Enter a parse tree produced by the `UnknownPropertyType`
+	 * labeled alternative in `AiDocParser.property_type`.
+	 * @param ctx the parse tree
+	 */
+	enterUnknownPropertyType?: (ctx: UnknownPropertyTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by the `UnknownPropertyType`
+	 * labeled alternative in `AiDocParser.property_type`.
+	 * @param ctx the parse tree
+	 */
+	exitUnknownPropertyType?: (ctx: UnknownPropertyTypeContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiDocParser.version_comment`.
 	 * @param ctx the parse tree
@@ -140,15 +178,29 @@ export default class AiDocParserListener extends ParseTreeListener {
 	 */
 	exitVersion_comment?: (ctx: Version_commentContext) => void;
 	/**
-	 * Enter a parse tree produced by `AiDocParser.version_value`.
+	 * Enter a parse tree produced by the `DraftVersion`
+	 * labeled alternative in `AiDocParser.version_value`.
 	 * @param ctx the parse tree
 	 */
-	enterVersion_value?: (ctx: Version_valueContext) => void;
+	enterDraftVersion?: (ctx: DraftVersionContext) => void;
 	/**
-	 * Exit a parse tree produced by `AiDocParser.version_value`.
+	 * Exit a parse tree produced by the `DraftVersion`
+	 * labeled alternative in `AiDocParser.version_value`.
 	 * @param ctx the parse tree
 	 */
-	exitVersion_value?: (ctx: Version_valueContext) => void;
+	exitDraftVersion?: (ctx: DraftVersionContext) => void;
+	/**
+	 * Enter a parse tree produced by the `FinalVersion`
+	 * labeled alternative in `AiDocParser.version_value`.
+	 * @param ctx the parse tree
+	 */
+	enterFinalVersion?: (ctx: FinalVersionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `FinalVersion`
+	 * labeled alternative in `AiDocParser.version_value`.
+	 * @param ctx the parse tree
+	 */
+	exitFinalVersion?: (ctx: FinalVersionContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiDocParser.text_comment`.
 	 * @param ctx the parse tree

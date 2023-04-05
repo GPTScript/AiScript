@@ -4,9 +4,29 @@ import {fileExists} from "../utils/FileUtils";
 import CodeFragment from "./CodeFragment";
 import Fragment from "./Fragment";
 import AiDocLexer from "../parser/AiDocLexer";
-import AiDocParser from "../parser/AiDocParser";
+import AiDocParser, {
+    Bounded_commentContext,
+    Comment_endContext,
+    Comment_lineContext, Comment_startContext,
+    CommentContext, DocumentationContext, DraftVersionContext, FinalVersionContext, KnownPropertyTypeContext,
+    Property_commentContext, Property_nameContext,
+    Property_typeContext,
+    Property_typesContext, Text_commentContext,
+    Type_commentContext,
+    Type_nameContext, UnknownPropertyTypeContext, Version_commentContext
+} from "../parser/AiDocParser";
 import Documentation from "../documentation/Documentation";
 import IInterface from "../module/IInterface";
+import TypeIdentifier from "./TypeIdentifier";
+import InterfaceTypeComment from "../documentation/InterfaceTypeComment";
+import Identifier from "./Identifier";
+import PropertyTypeComment from "../documentation/PropertyTypeComment";
+import TextComment from "../documentation/TextComment";
+import VersionComment from "../documentation/VersionComment";
+import IVersion from "../documentation/IVersion";
+import DraftVersion from "../documentation/DraftVersion";
+import FinalVersion from "../documentation/FinalVersion";
+import IComment from "../documentation/IComment";
 
 interface IndexedNode {
     __id?: number;
@@ -17,7 +37,7 @@ export default class InterfaceBuilder extends AiDocParserListener {
 
     static parse_interface(data: string): IInterface | null {
         const doc = InterfaceBuilder.doParse<Documentation>((parser: AiDocParser) => parser.documentation(), data);
-        return null; // Interface.from(doc);
+        return doc ? doc.readInterface() : null;
     }
 
     static doParse<T>(rule: (parser: AiDocParser) => ParseTree, data?: string, stream?: CharStream): T | null {
@@ -116,6 +136,93 @@ export default class InterfaceBuilder extends AiDocParserListener {
             return token;
         } else {
             return null;
+        }
+    }
+
+    exitComment = (ctx: CommentContext) => {
+        this.setNodeValue(ctx, this.getNodeValue(ctx.getChild(0)));
+    }
+
+    exitType_name = (ctx: Type_nameContext) => {
+        this.setNodeValue(ctx, new TypeIdentifier(ctx.PASCAL_CASE_IDENTIFIER().getText()));
+    }
+
+    exitType_comment = (ctx: Type_commentContext) => {
+        const id = this.getNodeValue<TypeIdentifier>(ctx.type_name());
+        this.setNodeValue(ctx, new InterfaceTypeComment(id));
+    }
+
+    exitKnownPropertyType = (ctx: KnownPropertyTypeContext) => {
+        this.setNodeValue(ctx, new TypeIdentifier(ctx.PASCAL_CASE_IDENTIFIER().getText(), ctx.OPTIONAL() != null));
+    }
+
+    exitUnknownPropertyType = (ctx: UnknownPropertyTypeContext) => {
+        this.setNodeValue(ctx, new TypeIdentifier(ctx.getText()));
+    }
+
+    exitProperty_types = (ctx: Property_typesContext) => {
+        const types = ctx.property_type_list().map(child => this.getNodeValue<TypeIdentifier>(child));
+        this.setNodeValue(ctx, types);
+    }
+
+    exitProperty_name = (ctx: Property_nameContext) => {
+        this.setNodeValue(ctx, new Identifier(ctx.CAMEL_CASE_IDENTIFIER().getText()));
+    }
+
+    exitProperty_comment = (ctx: Property_commentContext) => {
+        const id = this.getNodeValue<Identifier>(ctx.property_name());
+        const types = this.getNodeValue<TypeIdentifier[]>(ctx.property_types());
+        this.setNodeValue(ctx, new PropertyTypeComment(id, types));
+    }
+
+    exitText_comment = (ctx: Text_commentContext) => {
+        this.setNodeValue(ctx, new TextComment(ctx.getText()));
+    }
+
+    exitDraftVersion = (ctx: DraftVersionContext) => {
+        this.setNodeValue(ctx, new DraftVersion(ctx.HASH_CODE().getText()));
+    }
+
+    exitFinalVersion = (ctx: FinalVersionContext) => {
+        this.setNodeValue(ctx, new FinalVersion(ctx.SEMVER().getText()));
+    }
+
+    exitVersion_comment = (ctx: Version_commentContext) => {
+        const version = this.getNodeValue<IVersion>(ctx.version_value());
+        this.setNodeValue(ctx, new VersionComment(version));
+    }
+
+    exitComment_start = (ctx: Comment_startContext) => {
+        const comment = ctx.comment();
+        if(comment)
+            this.setNodeValue(ctx, this.getNodeValue(comment));
+    }
+
+    exitComment_line = (ctx: Comment_lineContext) => {
+        const comment = ctx.comment();
+        if(comment)
+            this.setNodeValue(ctx, this.getNodeValue(comment));
+    }
+
+    exitComment_end = (ctx: Comment_endContext) => {
+        const comment = ctx.comment();
+        if(comment)
+            this.setNodeValue(ctx, this.getNodeValue(comment));
+    }
+
+    exitBounded_comment = (ctx: Bounded_commentContext) => {
+        const comments = ctx.children.map(child => this.getNodeValue<IComment>(child))
+            .filter(c => c != null);
+        if(comments.length > 0)
+            this.setNodeValue(ctx, comments);
+    }
+
+    exitDocumentation = (ctx: DocumentationContext) => {
+        const bounded = ctx.bounded_comment();
+        if(bounded) {
+            const comments = this.getNodeValue<IComment[]>(bounded);
+            if(comments)
+                this.setNodeValue(ctx, new Documentation(comments));
         }
     }
 

@@ -16,6 +16,10 @@ export default class FunctionType extends TypeBase {
         this.returnType = returnType;
     }
 
+    get typename(): string {
+        return this.toString(); // TODO
+    }
+
     equals(other: IType): boolean {
         return other instanceof FunctionType
             && this.returnType.equals(other.returnType)

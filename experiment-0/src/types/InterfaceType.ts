@@ -13,6 +13,10 @@ export default class InterfaceType extends TypeBase {
         this.interface_ = interface_;
     }
 
+    get typename(): string {
+        return this.interface_.name;
+    }
+
     equals(other: IType): boolean {
         throw new NotImplementedError();
     }
