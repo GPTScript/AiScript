@@ -5,3 +5,11 @@ Person.create = function(opts) {
     return p
 }
 var p = Person.create({ name: "Jack" })
+
+var People = {}
+People.create = function(opts) {
+    var p = {}
+    p.name = opts.name
+    return p
+}
+var p2 = People.create({ name: "Jack" })
