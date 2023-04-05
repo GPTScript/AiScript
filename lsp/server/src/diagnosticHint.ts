@@ -32,8 +32,8 @@ export class InferredInterfaceHint implements Hint {
 	}
 
 	executeCommand(connection: Connection, command: string, document: TextDocument, range: Range): void {
-		const text = "// Hello\n"; // this.intf.generateDeclarationComment();
-		// we assume the assign factory statement 'Entity.create = function()...' has lhs and cuntion on the same line
+		const text = this.intf.generateDeclarationComment();
+		// we assume the assign factory statement 'Entity.create = function()...' has lhs and 'function' on the same line
 		connection.workspace.applyEdit( {
 			documentChanges: [
 				TextDocumentEdit.create(
