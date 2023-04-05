@@ -187,8 +187,8 @@ export default class AiParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public statement(allow_return: boolean): StatementContext {
-		let localctx: StatementContext = new StatementContext(this, this._ctx, this.state, allow_return);
+	public statement(allow_local: boolean): StatementContext {
+		let localctx: StatementContext = new StatementContext(this, this._ctx, this.state, allow_local);
 		this.enterRule(localctx, 4, AiParser.RULE_statement);
 		try {
 			this.state = 59;
@@ -205,8 +205,8 @@ export default class AiParser extends Parser {
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 57;
-				if (!( localctx.allow_return )) {
-					throw this.createFailedPredicateException(" $allow_return ");
+				if (!( localctx.allow_local )) {
+					throw this.createFailedPredicateException(" $allow_local ");
 				}
 				this.state = 58;
 				this.return_statement();
@@ -1027,7 +1027,7 @@ export default class AiParser extends Parser {
 	private statement_sempred(localctx: StatementContext, predIndex: number): boolean {
 		switch (predIndex) {
 		case 0:
-			return  localctx.allow_return ;
+			return  localctx.allow_local ;
 		}
 		return true;
 	}
@@ -1152,11 +1152,11 @@ export class Top_level_statementContext extends ParserRuleContext {
 
 
 export class StatementContext extends ParserRuleContext {
-	public allow_return: boolean;
-	constructor(parser: AiParser, parent: ParserRuleContext, invokingState: number, allow_return: boolean) {
+	public allow_local: boolean;
+	constructor(parser: AiParser, parent: ParserRuleContext, invokingState: number, allow_local: boolean) {
 		super(parent, invokingState);
     	this.parser = parser;
-        this.allow_return = allow_return;
+        this.allow_local = allow_local;
 	}
 	public assign_statement(): Assign_statementContext {
 		return this.getTypedRuleContext(Assign_statementContext, 0) as Assign_statementContext;
