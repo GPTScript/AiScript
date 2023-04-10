@@ -4,9 +4,9 @@ import IInterface from "../../src/module/IInterface";
 import StringType from "../../src/types/StringType";
 import ProblemListener from "../../src/problem/ProblemListener";
 import * as assert from "assert";
-import {InferredInterface} from "../../src";
-import TypeIdentifier from "../../src/builder/TypeIdentifier";
+import InferredInterface from "../../src/module/InferredInterface";
 import DraftInterface from "../../src/module/DraftInterface";
+import NumberType from "../../src/types/NumberType";
 
 it('infers Parent member types',  () => {
     const listener = new ProblemListener();
@@ -18,10 +18,13 @@ it('infers Parent member types',  () => {
     const person: IInterface = analyser.interfaces.values().next().value;
     assert.equal(person.name, "Person");
     const fields = person.instanceFields;
-    assert.equal(fields.length, 1);
+    assert.equal(fields.length, 2);
     const name = fields[0];
     assert.equal(name.id.value, "name");
     assert.equal(name.type, StringType.instance);
+    const age = fields[1];
+    assert.equal(age.id.value, "age");
+    assert.equal(age.type, NumberType.instance);
 });
 
 it("registers interface comment", () => {

@@ -1,5 +1,6 @@
 import LiteralBase from "./LiteralBase";
 import StringType from "../types/StringType";
+
 export default class StringLiteral extends LiteralBase<string> {
 
     constructor(text: string) {

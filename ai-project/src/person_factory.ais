@@ -10,6 +10,7 @@ var People = {}
 People.create = function(opts) {
     var p = {}
     p.name = opts.name
+    p.age = opts.age
     return p
 }
-var p2 = People.create({ name: "Jack" })
+var p2 = People.create({ name: "Jack", age: 50 })

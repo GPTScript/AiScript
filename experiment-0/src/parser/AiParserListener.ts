@@ -20,6 +20,7 @@ import { Type_idContext } from "./AiParser";
 import { ExpressionContext } from "./AiParser";
 import { Literal_expressionContext } from "./AiParser";
 import { String_literalContext } from "./AiParser";
+import { Number_literalContext } from "./AiParser";
 import { Instance_expressionContext } from "./AiParser";
 import { Member_expressionContext } from "./AiParser";
 import { Function_call_expressionContext } from "./AiParser";
@@ -217,6 +218,16 @@ export default class AiParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitString_literal?: (ctx: String_literalContext) => void;
+	/**
+	 * Enter a parse tree produced by `AiParser.number_literal`.
+	 * @param ctx the parse tree
+	 */
+	enterNumber_literal?: (ctx: Number_literalContext) => void;
+	/**
+	 * Exit a parse tree produced by `AiParser.number_literal`.
+	 * @param ctx the parse tree
+	 */
+	exitNumber_literal?: (ctx: Number_literalContext) => void;
 	/**
 	 * Enter a parse tree produced by `AiParser.instance_expression`.
 	 * @param ctx the parse tree

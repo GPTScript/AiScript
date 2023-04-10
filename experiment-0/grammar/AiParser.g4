@@ -63,10 +63,16 @@ expression:
 literal_expression:
     object_literal
     | string_literal
+    | number_literal
     ;
 
 string_literal:
     STRING_LITERAL
+    ;
+
+number_literal:
+    INTEGER_LITERAL
+    | DECIMAL_LITERAL
     ;
 
 instance_expression:

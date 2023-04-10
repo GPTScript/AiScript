@@ -19,7 +19,7 @@ import AiParser, {
     Instance_expressionContext,
     Literal_expressionContext,
     Member_expressionContext,
-    Member_selectorContext, ModuleContext, Object_entryContext,
+    Member_selectorContext, ModuleContext, Number_literalContext, Object_entryContext,
     Object_literalContext,
     Parameter_listContext,
     Return_statementContext,
@@ -62,6 +62,7 @@ import FunctionSelector from "../expression/FunctionSelector";
 import FunctionCallExpression from "../expression/FunctionCallExpression";
 import StringLiteral from "../literal/StringLiteral";
 import AiModule from "../module/AiModule";
+import NumberLiteral from "../literal/NumberLiteral";
 
 interface IndexedNode {
     __id?: number;
@@ -225,6 +226,10 @@ export default class ModuleBuilder extends AiParserListener {
         const key = this.getNodeValue<VariableIdentifier>(ctx.variable_id());
         const value = this.getNodeValue<IExpression>(ctx.expression());
         this.setNodeValue(ctx, new KeyValuePair(key, value));
+    }
+
+    exitNumber_literal = (ctx: Number_literalContext) => {
+        this.setNodeValue(ctx, new NumberLiteral(ctx.getText()));
     }
 
     exitString_literal = (ctx: String_literalContext) => {

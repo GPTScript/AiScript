@@ -40,7 +40,7 @@ export default class ObjectType extends NativeType {
         const field = this.fields.find(f => f.id.value == id.value);
         if(field && field.type.equals(type))
             return this;
-        const fields = [].concat(this.fields.filter(f => f == field));
+        const fields = [].concat(this.fields.filter(f => f != field));
         fields.push(new ObjectField(id, type));
         return new ObjectType(fields);
     }

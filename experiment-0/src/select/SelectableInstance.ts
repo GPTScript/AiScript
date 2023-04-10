@@ -29,17 +29,19 @@ export default class SelectableInstance extends SelectableBase {
     getMemberListener(context: Context, memberId: VariableIdentifier): ITypeListener {
         const named = context.getMember(this.variableId);
         if (named instanceof NamedInstance) {
-            const parentType = named.type;
-            if(parentType instanceof ObjectType) {
-                const listener = named.getListener(context);
-                return (type: IType) => {
+            const listener = named.getListener(context);
+            return (type: IType) => {
+                const named = context.getMember(this.variableId);
+                const parentType = named.type;
+                if (parentType instanceof ObjectType) {
                     const current = parentType.getFieldType(memberId);
-                    if(current.equals(type))
-                        return false;
-                    return listener(parentType.withFieldType(memberId, type));
+                    if (!current.equals(type))
+                        return listener(parentType.withFieldType(memberId, type))
                 }
+                return false;
             }
         }
-        throw new NotImplementedError();
+        else
+            throw new NotImplementedError();
     }
 }
