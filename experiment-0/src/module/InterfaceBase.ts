@@ -8,6 +8,7 @@ import IType from "../types/IType";
 import CodeFragment from "../builder/CodeFragment";
 import INamed from "../analyzer/INamed";
 import ObjectType from "../types/ObjectType";
+import Context from "../analyzer/Context";
 
 export default abstract class InterfaceBase extends CodeFragment implements IInterface {
 
@@ -87,5 +88,7 @@ export default abstract class InterfaceBase extends CodeFragment implements IInt
             this.staticFields.length +
             this.instanceFields.length) == 0;
     }
+
+    abstract checkDuplicate(context: Context, other: IInterface): IInterface;
 
 }

@@ -5,6 +5,7 @@ import VariableIdentifier from "../builder/VariableIdentifier";
 import FunctionDefinition from "../expression/FunctionDefinition";
 import IType from "../types/IType";
 import INamed from "../analyzer/INamed";
+import Context from "../analyzer/Context";
 
 export default interface IInterface {
 
@@ -28,4 +29,6 @@ export default interface IInterface {
     get instanceFields(): ObjectField[];
 
     isEmpty(): boolean;
+
+    checkDuplicate(context: Context, other: IInterface): IInterface;
 }

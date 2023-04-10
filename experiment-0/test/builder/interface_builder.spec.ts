@@ -1,7 +1,5 @@
 import assert from "assert";
 import InterfaceBuilder from "../../src/builder/InterfaceBuilder";
-import {InferredInterface} from "../../src";
-import TypeIdentifier from "../../src/builder/TypeIdentifier";
 
 it('parses empty comment',  () => {
     const intf = InterfaceBuilder.parse_interface("samples/aidoc/empty_comment.js");

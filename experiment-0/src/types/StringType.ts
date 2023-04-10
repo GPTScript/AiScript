@@ -9,7 +9,7 @@ export default class StringType extends NativeType {
     }
 
     get typename(): string {
-        return "string";
+        return "String";
     }
 
 }

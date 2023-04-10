@@ -9,14 +9,8 @@ import {
 	ProposedFeatures,
 	InitializeParams,
 	DidChangeConfigurationNotification,
-	CompletionItem,
-	CompletionItemKind,
-	TextDocumentPositionParams,
 	TextDocumentSyncKind,
 	InitializeResult,
-	CodeAction,
-	CodeActionKind,
-	Command,
 	Range,
 	Position
 } from 'vscode-languageserver/node.js';

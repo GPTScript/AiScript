@@ -1,8 +1,20 @@
 import InterfaceBase from "./InterfaceBase";
-import HashCode from "hashcode.ts";
 import TypeSet from "../types/TypeSet";
+import Hashcode from "../utils/Hashcode";
+import Context from "../analyzer/Context";
+import IInterface from "./IInterface";
 
 export default class InferredInterface extends InterfaceBase {
+
+    checkDuplicate(context: Context, other: IInterface): IInterface {
+        if(other instanceof InferredInterface) {
+            context.problemListener.reportError(other.id.fragment, "Type '" + other.id.value + "' is already declared", other.fragment);
+            return this;
+        } else {
+            // TODO check field compatibility
+            return other;
+        }
+    }
 
     generateDeclarationComment(): string {
         let lines = [
@@ -28,7 +40,7 @@ export default class InferredInterface extends InterfaceBase {
     }
 
     private generateVersionComment(): string {
-        return " * $version draft " + this.hashCode().toString(16);
+        return " * $version draft " + Hashcode.toString(this.hashCode());
     }
 
     private hashCode(): number {
@@ -40,7 +52,7 @@ export default class InferredInterface extends InterfaceBase {
             } else
                 values.push(field.type.typename);
         })
-        return HashCode.array(values as []);
+        return Hashcode.array(values as []);
     }
 
 }

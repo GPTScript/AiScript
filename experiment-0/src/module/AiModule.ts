@@ -1,6 +1,5 @@
 import IStatement from "../statement/IStatement";
 import {Token} from "antlr4";
-import TypeIdentifier from "../builder/TypeIdentifier";
 import IInterface from "./IInterface";
 
 export default class AiModule {

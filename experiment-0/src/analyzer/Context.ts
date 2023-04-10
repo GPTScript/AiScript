@@ -13,6 +13,9 @@ import IExpression from "../expression/IExpression";
 import NamedFunction from "./NamedFunction";
 import NamedInstance from "./NamedInstance";
 import UnknownType from "../types/UnknownType";
+import InferredInterface from "../module/InferredInterface";
+import DraftInterface from "../module/DraftInterface";
+import DeclaredInterface from "../module/DeclaredInterface";
 
 export default abstract class Context {
 
@@ -168,15 +171,11 @@ class ModuleContext extends LocalContext {
     }
 
     registerInterface(typeId: TypeIdentifier, interface_: IInterface) {
-        if(!this.module.interfaces.has(typeId.value))
-            this.module.interfaces.set(typeId.value, interface_);
-        else {
-            const existing = this.module.interfaces.get(typeId.value);
-            if(existing instanceof FinalInterface)
-                this.problemListener.reportError(typeId.fragment, "Type '" + typeId.value + "' is already declared", existing.fragment);
-            else
-                throw new NotImplementedError("Checking compatible draft interface is not implemented yet!");
-        }
+        let existing = this.module.interfaces.get(typeId.value);
+        if(existing)
+            existing = existing.checkDuplicate(this, interface_);
+        interface_ = existing ? existing : interface_;
+        this.module.interfaces.set(typeId.value, interface_);
     }
 
     getRegisteredInterface(typeId: TypeIdentifier): IInterface | null {
