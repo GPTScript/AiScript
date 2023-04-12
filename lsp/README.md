@@ -27,7 +27,7 @@ It also includes an End-to-End test.
 
 ## Running the Sample
 
-- Comment out the 'antlr4' dependency in package.json
+- Comment out the 'aiscript' dependency in server/package.json
 - Run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
 - Run `npm link aiscript` then uncomment the dependency in package.json
 - Open VS Code on this folder.
