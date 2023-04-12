@@ -27,7 +27,9 @@ It also includes an End-to-End test.
 
 ## Running the Sample
 
+- Comment out the 'antlr4' dependency in package.json
 - Run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
+- Run `npm link aiscript` then uncomment the dependency in package.json
 - Open VS Code on this folder.
 - Press Ctrl+Shift+B to start compiling the client and server in [watch mode](https://code.visualstudio.com/docs/editor/tasks#:~:text=The%20first%20entry%20executes,the%20HelloWorld.js%20file.).
 - Switch to the Run and Debug View in the Sidebar (Ctrl+Shift+D).

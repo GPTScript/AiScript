@@ -20,7 +20,8 @@ Assuming you have recent versions of git, node and npm, building is as simple as
 In order for the library to be used in other packages, it must also be published locally, as follows:
  - npm link
 
-if the grammar changes, the lexer/perser needs to be regenerated
+if the grammar changes, the lexer/parser needs to be regenerated, this is achieved by:
+ - ./generate_parser.sh
 
 The inference algorithm is as follows:
  - parse the code, this produces an abstract syntax tree (under the _parser_ folder)
