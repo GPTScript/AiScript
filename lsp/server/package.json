@@ -2,7 +2,7 @@
 	"name": "lsp-aiscript-server",
 	"description": "LSP server for AiScript in node.",
 	"version": "1.0.0",
-	"author": "MicEric Vergnaud",
+	"author": "Eric Vergnaud",
 	"license": "MIT",
 	"type": "module",
 	"engines": {
