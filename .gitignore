@@ -1,3 +1,11 @@
+# Agent session files
+LOCAL.md
+agents/
+agents/TASKS.md
+agents/REVIEW.md
+agents/HANDOFF.md
+agents/issues.d/
+
 # Logs
 logs
 *.log
@@ -104,9 +112,6 @@ dist
 .tern-port
 experiment-0/grammar/gen
 
-# Agent session files
-agents/TASKS.md
-agents/REVIEW.md
-agents/HANDOFF.md
-agents/tmp/
-agents/issues.d/
+tmp/
+.claude
+CLAUDE.md
