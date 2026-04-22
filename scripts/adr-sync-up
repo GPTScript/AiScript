@@ -1,0 +1,126 @@
+#!/bin/sh
+set -e
+set -u
+
+# Push local ADR file changes back to the corresponding GitHub issue.
+
+g_adr_dir="docs"
+
+fn_usage() {
+    echo "Usage: adr-sync-up <file> [--dry-run]"
+    echo ""
+    echo "Push a local ADR file back to its GitHub issue."
+    echo "Extracts the issue number from the filename."
+    echo ""
+    echo "Options:"
+    echo "  --dry-run     Show what would be updated without writing"
+    echo "  --help        Show this help"
+}
+
+fn_extract_number() {
+    a_file="$1"
+    b_basename="$(basename "$a_file" .md)"
+    # filename format: label-NNN-description
+    # extract NNN (the first 3+ digit group after the first dash)
+    printf '%s' "$b_basename" | sed 's/^[a-z-]*-\([0-9]*\)-.*/\1/' | sed 's/^0*//'
+}
+
+fn_extract_label() {
+    a_file="$1"
+    b_basename="$(basename "$a_file" .md)"
+    printf '%s' "$b_basename" | sed 's/^\([a-z-]*\)-[0-9].*/\1/'
+}
+
+fn_strip_comments_section() {
+    # Remove the trailing ## Comments section (added by sync-down)
+    a_content="$1"
+    printf '%s' "$a_content" | sed '/^---$/,$ {
+        /^---$/d
+        /^## Comments/,$ d
+    }'
+}
+
+fn_sync_up() {
+    a_file="$1"
+    a_dry_run="$2"
+
+    if ! test -f "$a_file"; then
+        echo "Error: file not found: $a_file" >&2
+        exit 1
+    fi
+
+    b_number="$(fn_extract_number "$a_file")"
+    if test -z "$b_number"; then
+        echo "Error: could not extract issue number from filename: $a_file" >&2
+        exit 1
+    fi
+
+    b_label="$(fn_extract_label "$a_file")"
+
+    b_content="$(cat "$a_file")"
+
+    # Strip the heading line (first line starting with #)
+    b_title="$(printf '%s' "$b_content" | head -1 | sed 's/^# *//')"
+    b_body="$(printf '%s' "$b_content" | tail -n +2 | sed '1{/^$/d;}')"
+
+    # Strip the ## Comments section if present
+    b_body_clean="$(printf '%s' "$b_body" | awk '
+        /^---$/ { found_hr=1 }
+        found_hr && /^## Comments/ { exit }
+        { print }
+    ')"
+
+    if test "$a_dry_run" = "yes"; then
+        echo "SYNC: $a_file -> issue #$b_number"
+        echo "  title: $b_title"
+        echo "  label: $b_label"
+        echo "  body: $(printf '%s' "$b_body_clean" | wc -c | tr -d ' ') bytes"
+        return
+    fi
+
+    gh issue edit "$b_number" --title "$b_title" --body "$b_body_clean"
+    echo "updated: issue #$b_number from $a_file"
+
+    # sync label if not "general"
+    if test "$b_label" != "general" && test -n "$b_label"; then
+        b_current_labels="$(gh issue view "$b_number" --json labels --jq '[.labels[].name] | join(",")')"
+        if ! printf '%s' "$b_current_labels" | grep -q "$b_label"; then
+            gh issue edit "$b_number" --add-label "$b_label"
+            echo "  added label: $b_label"
+        fi
+    fi
+}
+
+# main
+g_file=""
+g_dry_run="no"
+
+while test $# -gt 0; do
+    case "$1" in
+        --dry-run)
+            g_dry_run="yes"
+            shift
+            ;;
+        --help)
+            fn_usage
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            fn_usage >&2
+            exit 1
+            ;;
+        *)
+            g_file="$1"
+            shift
+            ;;
+    esac
+done
+
+if test -z "$g_file"; then
+    echo "Error: file argument required" >&2
+    fn_usage >&2
+    exit 1
+fi
+
+fn_sync_up "$g_file" "$g_dry_run"

@@ -1,0 +1,107 @@
+#!/bin/sh
+set -e
+set -u
+
+# Create a new ADR: opens a GitHub issue and creates the local file.
+
+g_adr_dir="docs"
+g_default_label="general"
+
+fn_usage() {
+    echo "Usage: adr-new --title <title> --label <label> [--body <body>]"
+    echo ""
+    echo "Create a new ADR as both a GitHub issue and local file."
+    echo ""
+    echo "Options:"
+    echo "  --title    ADR title (required)"
+    echo "  --label    Category label: syntax, std, tooling, js-style, general (required)"
+    echo "  --body     Body text (optional, opens editor if omitted)"
+    echo "  --help     Show this help"
+}
+
+fn_slugify() {
+    a_title="$1"
+    printf '%s' "$a_title" |
+        tr '[:upper:]' '[:lower:]' |
+        sed 's/[^a-z0-9]/-/g' |
+        sed 's/--*/-/g' |
+        sed 's/^-//' |
+        sed 's/-$//'
+}
+
+fn_pad_number() {
+    a_num="$1"
+    printf '%03d' "$a_num"
+}
+
+# main
+g_title=""
+g_label=""
+g_body=""
+
+while test $# -gt 0; do
+    case "$1" in
+        --title)
+            g_title="$2"
+            shift 2
+            ;;
+        --label)
+            g_label="$2"
+            shift 2
+            ;;
+        --body)
+            g_body="$2"
+            shift 2
+            ;;
+        --help)
+            fn_usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            fn_usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+if test -z "$g_title"; then
+    echo "Error: --title is required" >&2
+    fn_usage >&2
+    exit 1
+fi
+
+if test -z "$g_label"; then
+    echo "Error: --label is required" >&2
+    fn_usage >&2
+    exit 1
+fi
+
+mkdir -p "$g_adr_dir"
+
+# Create the GitHub issue
+b_gh_args="--title"
+if test "$g_label" != "general"; then
+    if test -n "$g_body"; then
+        b_url="$(gh issue create --title "$g_title" --label "$g_label" --body "$g_body")"
+    else
+        b_url="$(gh issue create --title "$g_title" --label "$g_label" --body "")"
+    fi
+else
+    if test -n "$g_body"; then
+        b_url="$(gh issue create --title "$g_title" --body "$g_body")"
+    else
+        b_url="$(gh issue create --title "$g_title" --body "")"
+    fi
+fi
+
+b_number="$(printf '%s' "$b_url" | grep -o '[0-9]*$')"
+echo "created: issue #$b_number ($b_url)"
+
+# Create the local file
+b_padded="$(fn_pad_number "$b_number")"
+b_slug="$(fn_slugify "$g_title")"
+b_file="${g_adr_dir}/${g_label}-${b_padded}-${b_slug}.md"
+
+printf '# %s\n\n%s\n' "$g_title" "$g_body" > "$b_file"
+echo "created: $b_file"

@@ -1,0 +1,179 @@
+#!/bin/sh
+set -e
+set -u
+
+# Pull GitHub issues into local ADR files under docs/
+
+g_adr_dir="docs"
+g_default_label="general"
+
+fn_usage() {
+    echo "Usage: adr-sync-down [--issue N] [--dry-run]"
+    echo ""
+    echo "Pull GitHub issues into local ADR markdown files."
+    echo ""
+    echo "Options:"
+    echo "  --issue N     Sync only issue number N"
+    echo "  --dry-run     Show what would be created/updated without writing"
+    echo "  --help        Show this help"
+}
+
+fn_slugify() {
+    a_title="$1"
+    printf '%s' "$a_title" |
+        tr '[:upper:]' '[:lower:]' |
+        sed 's/[^a-z0-9]/-/g' |
+        sed 's/--*/-/g' |
+        sed 's/^-//' |
+        sed 's/-$//'
+}
+
+fn_pad_number() {
+    a_num="$1"
+    printf '%03d' "$a_num"
+}
+
+fn_issue_to_file() {
+    a_number="$1"
+    a_title="$2"
+    a_label="$3"
+
+    b_padded="$(fn_pad_number "$a_number")"
+    b_slug="$(fn_slugify "$a_title")"
+
+    if test -z "$a_label"; then
+        a_label="$g_default_label"
+    fi
+
+    printf '%s/%s-%s-%s.md' "$g_adr_dir" "$a_label" "$b_padded" "$b_slug"
+}
+
+fn_find_existing() {
+    a_number="$1"
+    b_padded="$(fn_pad_number "$a_number")"
+    # match any file with -NNN- in the name
+    b_match=""
+    for b_file in "$g_adr_dir"/*-"${b_padded}"-*.md; do
+        if test -f "$b_file"; then
+            b_match="$b_file"
+            break
+        fi
+    done
+    printf '%s' "$b_match"
+}
+
+fn_render_adr() {
+    a_number="$1"
+    a_title="$2"
+    a_body="$3"
+    a_comments="$4"
+    a_state="$5"
+
+    printf '# %s\n\n' "$a_title"
+    printf '%s' "$a_body"
+
+    if test -n "$a_comments" && test "$a_comments" != "[]"; then
+        printf '\n\n---\n\n## Comments\n\n'
+        printf '%s' "$a_comments" | jq -r '.[] | "### " + .author.login + " (" + .createdAt[:10] + ")\n\n" + .body + "\n"'
+    fi
+}
+
+fn_sync_one() {
+    a_number="$1"
+    a_dry_run="$2"
+
+    b_json="$(gh issue view "$a_number" --json number,title,body,labels,state,comments)"
+
+    b_title="$(printf '%s' "$b_json" | jq -r '.title')"
+    b_body="$(printf '%s' "$b_json" | jq -r '.body // ""')"
+    b_state="$(printf '%s' "$b_json" | jq -r '.state')"
+    b_label="$(printf '%s' "$b_json" | jq -r '(.labels // []) | map(.name) | first // ""')"
+    b_comments="$(printf '%s' "$b_json" | jq -c '.comments // []')"
+
+    b_target="$(fn_issue_to_file "$a_number" "$b_title" "$b_label")"
+    b_existing="$(fn_find_existing "$a_number")"
+
+    if test -n "$b_existing" && test "$b_existing" != "$b_target"; then
+        if test "$a_dry_run" = "yes"; then
+            echo "RENAME: $b_existing -> $b_target"
+        else
+            mv "$b_existing" "$b_target"
+            echo "renamed: $b_existing -> $b_target"
+        fi
+    fi
+
+    b_content="$(fn_render_adr "$a_number" "$b_title" "$b_body" "$b_comments" "$b_state")"
+
+    if test "$a_dry_run" = "yes"; then
+        if test -f "$b_target"; then
+            echo "UPDATE: $b_target"
+        else
+            echo "CREATE: $b_target"
+        fi
+    else
+        printf '%s\n' "$b_content" > "$b_target"
+        if test -n "$b_existing" && test "$b_existing" = "$b_target"; then
+            echo "updated: $b_target"
+        else
+            echo "created: $b_target"
+        fi
+    fi
+}
+
+fn_sync_all() {
+    a_dry_run="$1"
+
+    b_issues="$(gh issue list --limit 200 --state all --json number,title,labels,state)"
+    b_count="$(printf '%s' "$b_issues" | jq 'length')"
+
+    echo "Found $b_count issues"
+    echo ""
+
+    b_i=0
+    while test "$b_i" -lt "$b_count"; do
+        b_number="$(printf '%s' "$b_issues" | jq -r ".[$b_i].number")"
+        b_state="$(printf '%s' "$b_issues" | jq -r ".[$b_i].state")"
+
+        if test "$b_state" = "CLOSED"; then
+            b_i=$((b_i + 1))
+            continue
+        fi
+
+        fn_sync_one "$b_number" "$a_dry_run"
+        b_i=$((b_i + 1))
+    done
+}
+
+# main
+g_issue=""
+g_dry_run="no"
+
+while test $# -gt 0; do
+    case "$1" in
+        --issue)
+            g_issue="$2"
+            shift 2
+            ;;
+        --dry-run)
+            g_dry_run="yes"
+            shift
+            ;;
+        --help)
+            fn_usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            fn_usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+mkdir -p "$g_adr_dir"
+
+if test -n "$g_issue"; then
+    fn_sync_one "$g_issue" "$g_dry_run"
+else
+    fn_sync_all "$g_dry_run"
+fi

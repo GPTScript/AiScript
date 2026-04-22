@@ -1,0 +1,68 @@
+#!/bin/sh
+set -e
+set -u
+
+# List local ADR files with their issue number, label, and title.
+
+g_adr_dir="docs"
+
+fn_usage() {
+    echo "Usage: adr-list [--label <label>]"
+    echo ""
+    echo "List local ADR files."
+    echo ""
+    echo "Options:"
+    echo "  --label <label>   Filter by category label"
+    echo "  --help            Show this help"
+}
+
+# main
+g_label_filter=""
+
+while test $# -gt 0; do
+    case "$1" in
+        --label)
+            g_label_filter="$2"
+            shift 2
+            ;;
+        --help)
+            fn_usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            fn_usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+if ! test -d "$g_adr_dir"; then
+    echo "No ADR directory found at $g_adr_dir" >&2
+    exit 1
+fi
+
+printf 'LABEL\tNUM\tTITLE\n'
+
+for b_file in "$g_adr_dir"/*.md; do
+    if ! test -f "$b_file"; then
+        continue
+    fi
+
+    b_basename="$(basename "$b_file" .md)"
+
+    b_label="$(printf '%s' "$b_basename" | sed 's/^\([a-z-]*\)-[0-9].*/\1/')"
+    b_number="$(printf '%s' "$b_basename" | sed 's/^[a-z-]*-\([0-9]*\)-.*/\1/' | sed 's/^0*//')"
+    b_slug="$(printf '%s' "$b_basename" | sed 's/^[a-z-]*-[0-9]*-//')"
+
+    # skip files that don't match the pattern
+    if test -z "$b_number"; then
+        continue
+    fi
+
+    if test -n "$g_label_filter" && test "$b_label" != "$g_label_filter"; then
+        continue
+    fi
+
+    printf '%s\t%s\t%s\n' "$b_label" "$b_number" "$b_slug"
+done | sort -t'	' -k1,1 -k2,2n
