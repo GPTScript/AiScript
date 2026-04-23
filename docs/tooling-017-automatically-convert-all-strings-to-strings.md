@@ -1,3 +1,10 @@
+---
+name: Auto-convert to backtick strings
+description: All strings become backtick templates except require() paths, object keys, and "use strict" (double quotes)
+type: tooling
+issue: 17
+---
+
 # automatically convert all strings to ` strings
 
 ## Rule

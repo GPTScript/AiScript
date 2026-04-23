@@ -1,3 +1,10 @@
+---
+name: Autocorrect template expressions
+description: Extract function calls and nested templates from template literals into named variables
+type: tooling
+issue: 19
+---
+
 # Autocorrect: No invocations or nesting in string templates
 
 This can be enforced by syntax and automatically corrected by tooling:

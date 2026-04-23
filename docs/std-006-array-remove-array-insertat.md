@@ -1,3 +1,10 @@
+---
+name: Array utilities
+description: Array._removeItem(val), Array._remove(index), Array._insertAt(index, item) — readable splice wrappers
+type: std
+issue: 6
+---
+
 # Array#remove && Array#insertAt
 
 ## Array#_removeItem

@@ -1,3 +1,10 @@
+---
+name: Promise._sleep
+description: Async delay utility for tests, rate-limiting, and CLI — Promise._sleep(ms)
+type: std
+issue: 23
+---
+
 # Promise._sleep(ms)
 
 - **`Promise._sleep(n)`**

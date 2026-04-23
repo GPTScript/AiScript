@@ -1,3 +1,10 @@
+---
+name: Promise._parallel
+description: Run up to N async tasks concurrently, return results in order — Promise._parallel(limit, arr, fn)
+type: std
+issue: 9
+---
+
 # Promise._parallel: run async functions in parallel
 
 - [`Promise._sleep(n)`](https://github.com/GPTScript/AiScript/issues/23)

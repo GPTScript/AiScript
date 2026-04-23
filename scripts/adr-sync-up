@@ -59,6 +59,18 @@ fn_sync_up() {
 
     b_content="$(cat "$a_file")"
 
+    # Strip frontmatter if present
+    b_first_line="$(printf '%s' "$b_content" | head -1 | tr -d '\r')"
+    if test "$b_first_line" = "---"; then
+        b_content="$(printf '%s' "$b_content" | awk '
+            { gsub(/\r$/, "") }
+            NR==1 && /^---$/ { in_fm=1; next }
+            in_fm && /^---$/ { in_fm=0; next }
+            in_fm { next }
+            { print }
+        ' | sed '1{/^$/d;}')"
+    fi
+
     # Strip the heading line (first line starting with #)
     b_title="$(printf '%s' "$b_content" | head -1 | sed 's/^# *//')"
     b_body="$(printf '%s' "$b_content" | tail -n +2 | sed '1{/^$/d;}')"

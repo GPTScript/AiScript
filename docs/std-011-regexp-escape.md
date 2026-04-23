@@ -1,3 +1,10 @@
+---
+name: RegExp._escape
+description: Escape regex special characters for safe pattern construction — RegExp._escape(str)
+type: std
+issue: 11
+---
+
 # RegExp._escape
 
 Implementation

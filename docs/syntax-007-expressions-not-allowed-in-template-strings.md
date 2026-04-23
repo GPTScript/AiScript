@@ -1,3 +1,10 @@
+---
+name: No expressions in template strings
+description: Template literals allow only variable/property access — no function calls, math, or nested templates
+type: syntax
+issue: 7
+---
+
 # expressions not allowed in template strings
 
 Allowed:

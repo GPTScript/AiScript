@@ -1,3 +1,10 @@
+---
+name: No await chaining
+description: Each await must be its own statement — no chaining sync property access after an awaited call
+type: syntax
+issue: 29
+---
+
 # Not allowed to await non-async chain
 
 Each await chain MUST be on its own line.

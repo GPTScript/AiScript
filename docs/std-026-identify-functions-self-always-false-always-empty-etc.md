@@ -1,3 +1,10 @@
+---
+name: Identity functions
+description: Function._noop, Boolean._false/_true, Object._self, Object._null — functional programming primitives
+type: std
+issue: 26
+---
+
 # Identify functions - self, always false, always empty, etc
 
 - `Function._noop` does nothing (return is not defined)

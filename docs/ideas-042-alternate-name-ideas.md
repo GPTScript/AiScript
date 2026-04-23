@@ -1,3 +1,10 @@
+---
+name: Alternate Name Ideas
+description: Brainstorming language names — not actionable for skill
+type: ideas
+issue: 42
+---
+
 # Alternate Name Ideas
 
 Better Ideas

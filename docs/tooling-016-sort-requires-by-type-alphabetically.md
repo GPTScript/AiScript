@@ -1,3 +1,10 @@
+---
+name: Sort imports by category
+description: Group imports by type (exports, env, built-in, 1st-party, 3rd-party) then alphabetically within each
+type: tooling
+issue: 16
+---
+
 # sort requires by type, alphabetically
 
 Goal: create an eslint or other plugin that will automatically sort requires alphabetically.

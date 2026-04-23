@@ -1,3 +1,10 @@
+---
+name: Single boolean per if
+description: Break complex conditions into named variables — if statements take only one simple boolean expression
+type: syntax
+issue: 31
+---
+
 # if statements only allow SINGLE boolean expressions
 
 This rule is taken from Zig.

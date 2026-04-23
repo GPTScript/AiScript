@@ -1,3 +1,10 @@
+---
+name: Package structure
+description: Packages use mypkg.js at root with lib/ subdirectory, proper exports for Node and browser
+type: syntax
+issue: 12
+---
+
 # Package structure
 
 How to structure an npm package for publishing for node and/or browsers (including webpack, etc), in the simplest way possible:

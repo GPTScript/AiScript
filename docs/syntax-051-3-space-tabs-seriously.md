@@ -1,4 +1,13 @@
+---
+name: Tabs displayed as 3 spaces
+description: Use tab characters for indentation, displayed as 3-space width — use literal spaces only when tabs can't be used
+type: syntax
+issue: 51
+---
+
 # 3-space tabs - seriously
+
+AjScript uses the **tab character** for indentation, displayed at 3-space width. Use literal spaces only when tabs can't be or otherwise aren't used (e.g. in markdown, YAML, or contexts that don't support tabs).
 
 One of the goals of AiScript is to be easier for LLMs to learn, and to be distinct from JavaScript.
 

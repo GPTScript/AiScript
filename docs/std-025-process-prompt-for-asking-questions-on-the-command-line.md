@@ -1,3 +1,10 @@
+---
+name: process._prompt
+description: CLI user input with autocomplete, character masking, and choice lists
+type: std
+issue: 25
+---
+
 # process._prompt for asking questions on the command line
 
 I'm not quite sure this is _the_ implementation, but probably something close to this.

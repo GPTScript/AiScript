@@ -1,3 +1,10 @@
+---
+name: Math._randomInt
+description: Generate random integers — Math._randomInt(min, max) preferred over single-arg form
+type: std
+issue: 21
+---
+
 # Math._randomInt(max)
 
 This is just one of those functions that ought to be there. My primary use case is for testing. Creating an `` `Test Account ${n}` ``.

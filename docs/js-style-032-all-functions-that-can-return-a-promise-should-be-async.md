@@ -1,3 +1,10 @@
+---
+name: Promise-returning functions must be async
+description: Mark all functions async if they can return a promise — guarantees rejection instead of sync throw
+type: js-style
+issue: 32
+---
+
 # All functions that can return a Promise should be async
 
 As a general rule, anything that can return a promise should be marked as `async`.

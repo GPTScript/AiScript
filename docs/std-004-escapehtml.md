@@ -1,3 +1,10 @@
+---
+name: escapeHtml
+description: Escape &, ", ', <, > in lexicographic order to prevent double-escaping
+type: std
+issue: 4
+---
+
 # escapeHtml
 
 ```js

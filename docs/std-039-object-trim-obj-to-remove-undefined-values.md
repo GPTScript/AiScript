@@ -1,3 +1,10 @@
+---
+name: Object._trim
+description: Return new object with all undefined properties removed — useful for APIs and serialization
+type: std
+issue: 39
+---
+
 # `Object._trim(obj)` to remove `undefined` values
 
 ```js

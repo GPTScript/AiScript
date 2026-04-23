@@ -1,3 +1,10 @@
+---
+name: Promise._map
+description: Run async functions one at a time, return ordered results array — Promise._map(arr, fn)
+type: std
+issue: 14
+---
+
 # [std] Promise._map: run async functions sequentially and store results
 
 - [`Promise._sleep(n)`](https://github.com/coolaj86/AJScript/issues/23)

@@ -1,4 +1,13 @@
+---
+name: main, init, and side effects
+description: All side effects must live in main() or init() — top-level code must be statically analyzable
+type: syntax
+issue: 13
+---
+
 # Package main, init, macros, and side-effects
+
+See also: #28 Axiom 2 (less magic in code, more magic in tooling).
 
 It should be possible for tooling to completely understand all static aspects of any program written in AjScript - meaning that anything that can be understood at parse time _should_ be understood at parse time.
 

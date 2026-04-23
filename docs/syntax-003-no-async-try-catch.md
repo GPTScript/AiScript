@@ -1,3 +1,10 @@
+---
+name: No async try/catch
+description: Use .catch() for async errors, try/catch only for short sync parsing blocks
+type: syntax
+issue: 3
+---
+
 # NO async try/catch
 
 # Sync
@@ -35,3 +42,5 @@ let data = await doStuff().catch(function (e) {
   return {};
 });
 ```
+
+See also: #28 Axioms 5 (let errors bubble — correct or classify, don't catch) and 10 (don't trade one pyramid of doom for another).

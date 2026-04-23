@@ -1,3 +1,10 @@
+---
+name: Underscore delimiters for large numbers
+description: Numbers over 9000 must use underscore separators in groups of three (10_000, not 10000)
+type: syntax
+issue: 22
+---
+
 # Require the underscore delimiter for numbers over 9000 
 
 ## Bad Examples

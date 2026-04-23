@@ -1,3 +1,10 @@
+---
+name: No ternary expressions
+description: No ternary operator — use if statements and named variables for conditional logic
+type: syntax
+issue: 37
+---
+
 # No ternary shorthand expressions
 
 This rule comes from pretty much all decent languages (Go, Zig, Python).

@@ -1,3 +1,10 @@
+---
+name: Promise._forEach
+description: Run async tasks sequentially without collecting results — Promise._forEach(arr, fn)
+type: std
+issue: 10
+---
+
 # Promise._forEach: run async tasks in sequence
 
 This is about the simplest implementation of this, and it works.

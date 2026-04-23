@@ -1,3 +1,10 @@
+---
+name: ISL-R Design Pattern
+description: Organize by component (Interaction, Shape, Logic, Routing) not by category (models, views, controllers)
+type: js-style
+issue: 33
+---
+
 # The ISL-R Design Pattern (MVC is dead, long live MVC)
 
 Re:

@@ -1,3 +1,10 @@
+---
+name: Promise._queue
+description: Continuous task queue with fixed concurrency limit — push tasks as earlier ones complete
+type: std
+issue: 47
+---
+
 # Promise._queue: keep an ongoing queue of a fixed size
 
 - [`Promise._sleep(n)`](https://github.com/GPTScript/AiScript/issues/23)

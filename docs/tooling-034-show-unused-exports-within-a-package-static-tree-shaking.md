@@ -1,3 +1,10 @@
+---
+name: Unused export warnings
+description: Warn on exported functions never imported anywhere in the package — static tree-shaking for apps
+type: tooling
+issue: 34
+---
+
 # Show unused exports, within a package (static tree-shaking)
 
 When we're creating a library, all exports are assumed to be valid - it's more important that they're provided than that they're used.

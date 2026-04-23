@@ -1,3 +1,10 @@
+---
+name: Crypto._randomString
+description: Generate random strings with custom alphabet dictionaries (base32, base58, base62, base64)
+type: std
+issue: 18
+---
+
 # Crypto._randomString() + Crypto._randomDictBaseX
 
 In theory, you should just use `Crypto.randomUUID()` or `Crypto.randomBytes(16).toString('base64')`, but due to nuance differences in desires, people end up re-implementing a `randomString()` function.

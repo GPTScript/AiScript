@@ -1,3 +1,10 @@
+---
+name: ES modules only
+description: Use import/export syntax, not CommonJS require() — supported everywhere now
+type: syntax
+issue: 50
+---
+
 # `import` and `export default`, NO `require`
 
 The target for AiScript is Evergreen Browsers, Node, Bun, and Deno.

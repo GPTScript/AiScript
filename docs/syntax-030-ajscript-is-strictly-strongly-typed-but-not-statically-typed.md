@@ -1,3 +1,10 @@
+---
+name: Strict and strong typing
+description: No type coercion — variables keep their type; use var shadowing to change types, not reassignment
+type: syntax
+issue: 30
+---
+
 # AjScript is Strictly & Strongly Typed (but not Statically) Typed
 
 No type coercion and no type changes.

@@ -62,12 +62,33 @@ fn_find_existing() {
     printf '%s' "$b_match"
 }
 
+fn_read_frontmatter() {
+    a_file="$1"
+    if ! test -f "$a_file"; then
+        return
+    fi
+    b_first_line="$(head -1 "$a_file" | tr -d '\r')"
+    if test "$b_first_line" != "---"; then
+        return
+    fi
+    # extract everything from first --- to closing ---, inclusive
+    awk '{ gsub(/\r$/, "") }
+         NR==1 && /^---$/ { print; next }
+         /^---$/ { print; exit }
+         { print }' "$a_file"
+}
+
 fn_render_adr() {
     a_number="$1"
     a_title="$2"
     a_body="$3"
     a_comments="$4"
     a_state="$5"
+    a_frontmatter="$6"
+
+    if test -n "$a_frontmatter"; then
+        printf '%s\n\n' "$a_frontmatter"
+    fi
 
     printf '# %s\n\n' "$a_title"
     printf '%s' "$a_body"
@@ -93,6 +114,14 @@ fn_sync_one() {
     b_target="$(fn_issue_to_file "$a_number" "$b_title" "$b_label")"
     b_existing="$(fn_find_existing "$a_number")"
 
+    # preserve local frontmatter from whichever file exists
+    b_frontmatter=""
+    if test -n "$b_existing" && test -f "$b_existing"; then
+        b_frontmatter="$(fn_read_frontmatter "$b_existing")"
+    elif test -f "$b_target"; then
+        b_frontmatter="$(fn_read_frontmatter "$b_target")"
+    fi
+
     if test -n "$b_existing" && test "$b_existing" != "$b_target"; then
         if test "$a_dry_run" = "yes"; then
             echo "RENAME: $b_existing -> $b_target"
@@ -102,7 +131,7 @@ fn_sync_one() {
         fi
     fi
 
-    b_content="$(fn_render_adr "$a_number" "$b_title" "$b_body" "$b_comments" "$b_state")"
+    b_content="$(fn_render_adr "$a_number" "$b_title" "$b_body" "$b_comments" "$b_state" "$b_frontmatter")"
 
     if test "$a_dry_run" = "yes"; then
         if test -f "$b_target"; then

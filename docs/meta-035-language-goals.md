@@ -1,4 +1,13 @@
+---
+name: Language Goals
+description: Static analysis, write-time tooling, real-time LSP, end-to-end typing — as a strict JavaScript subset
+type: meta
+issue: 35
+---
+
 # Language Goals
+
+See also: #28 Axiom 0 (limit usefulness — RISC principle, fewer features, fewer edge cases).
 
 Rather than a Union of languages, AjScript is meant to be an Intersection of languages.
 

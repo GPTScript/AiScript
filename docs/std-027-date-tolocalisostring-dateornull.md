@@ -1,3 +1,10 @@
+---
+name: Date._toLocalISOString
+description: Format dates as ISO strings with local time and timezone offset instead of UTC
+type: std
+issue: 27
+---
+
 # Date._toLocalISOString(dateOrNull)
 
 We have `toISOString()`, but often it's more useful to show the local (offset) time in the ISO string rather than the UTC time.

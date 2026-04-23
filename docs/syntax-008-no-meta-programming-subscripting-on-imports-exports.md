@@ -1,3 +1,10 @@
+---
+name: No dynamic imports/exports
+description: All imports and exports must be explicit by name — no Object.assign, dynamic keys, or runtime subscripting
+type: syntax
+issue: 8
+---
+
 # No meta programming / subscripting on imports / exports
 
 ## Rationale

@@ -1,0 +1,161 @@
+#!/bin/sh
+set -e
+set -u
+
+# Regenerate docs/MEMORY.md (agent-actionable) and docs/README.md (reference/ideas/tooling).
+
+g_adr_dir="docs"
+g_memory="docs/MEMORY.md"
+g_readme="docs/README.md"
+
+# Issues that go to README.md instead of MEMORY.md.
+# Tooling (how the formatter works, not code rules), ideas, tracking, undecided.
+g_readme_issues="16 17 19 24 34 38 42 43 45 48 49 52 58 59"
+
+fn_usage() {
+    echo "Usage: adr-index [--dry-run]"
+    echo ""
+    echo "Regenerate $g_memory and $g_readme from ADR file frontmatter."
+    echo ""
+    echo "Options:"
+    echo "  --dry-run     Print to stdout without writing"
+    echo "  --help        Show this help"
+}
+
+fn_read_field() {
+    a_file="$1"
+    a_field="$2"
+    b_first_line="$(head -1 "$a_file" | tr -d '\r')"
+    if test "$b_first_line" != "---"; then
+        return
+    fi
+    awk -v field="$a_field" '
+        { gsub(/\r$/, "") }
+        NR==1 && /^---$/ { in_fm=1; next }
+        in_fm && /^---$/ { exit }
+        in_fm {
+            split($0, kv, ": *")
+            if (kv[1] == field) {
+                sub("^" field ": *", "", $0)
+                print
+                exit
+            }
+        }
+    ' "$a_file"
+}
+
+fn_is_readme_issue() {
+    a_num="$1"
+    for b_ri in $g_readme_issues; do
+        if test "$a_num" = "$b_ri"; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+fn_format_entry() {
+    a_number="$1"
+    a_basename="$2"
+    a_name="$3"
+    a_desc="$4"
+    printf -- '- [#%s](%s) — %s: %s\n' "$a_number" "$a_basename.md" "$a_name" "$a_desc"
+}
+
+fn_generate() {
+    a_target="$1"
+
+    if test "$a_target" = "memory"; then
+        printf '# AjScript ADR Index\n\n'
+        printf 'Actionable rules for writing AjScript. Load an ADR when you need its examples.\n\n'
+    else
+        printf '# AjScript Reference ADRs\n\n'
+        printf 'Tooling, ideas, tracking, and undecided proposals. Not directly actionable for writing code.\n\n'
+    fi
+
+    b_prev_label=""
+    for b_file in "$g_adr_dir"/*.md; do
+        if ! test -f "$b_file"; then
+            continue
+        fi
+
+        b_basename="$(basename "$b_file" .md)"
+
+        b_number="$(printf '%s' "$b_basename" | sed 's/^[a-z-]*-\([0-9]*\)-.*/\1/' | sed 's/^0*//')"
+        if test -z "$b_number"; then
+            continue
+        fi
+        case "$b_number" in
+            *[!0-9]*) continue ;;
+        esac
+
+        # route to correct target
+        if test "$a_target" = "memory"; then
+            if fn_is_readme_issue "$b_number"; then
+                continue
+            fi
+        else
+            if ! fn_is_readme_issue "$b_number"; then
+                continue
+            fi
+        fi
+
+        b_label="$(printf '%s' "$b_basename" | sed 's/^\([a-z-]*\)-[0-9].*/\1/')"
+
+        b_desc="$(fn_read_field "$b_file" "description")"
+        if test -z "$b_desc"; then
+            b_desc="$(grep '^# ' "$b_file" | head -1 | sed 's/^# *//')"
+        fi
+
+        b_name="$(fn_read_field "$b_file" "name")"
+        if test -z "$b_name"; then
+            b_name="$b_desc"
+        fi
+
+        if test "$b_label" != "$b_prev_label"; then
+            if test -n "$b_prev_label"; then
+                printf '\n'
+            fi
+            printf '## %s\n\n' "$b_label"
+            b_prev_label="$b_label"
+        fi
+
+        fn_format_entry "$b_number" "$b_basename" "$b_name" "$b_desc"
+    done
+}
+
+# main
+g_dry_run="no"
+
+while test $# -gt 0; do
+    case "$1" in
+        --dry-run)
+            g_dry_run="yes"
+            shift
+            ;;
+        --help)
+            fn_usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            fn_usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+b_memory_content="$(fn_generate memory)"
+b_readme_content="$(fn_generate readme)"
+
+if test "$g_dry_run" = "yes"; then
+    printf '=== %s ===\n' "$g_memory"
+    printf '%s\n' "$b_memory_content"
+    printf '\n=== %s ===\n' "$g_readme"
+    printf '%s\n' "$b_readme_content"
+else
+    printf '%s\n' "$b_memory_content" > "$g_memory"
+    echo "updated: $g_memory"
+    printf '%s\n' "$b_readme_content" > "$g_readme"
+    echo "updated: $g_readme"
+fi

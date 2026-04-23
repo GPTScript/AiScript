@@ -1,3 +1,10 @@
+---
+name: One operation per line
+description: Each statement performs one distinct operation — no chaining side effects or stacking assignments
+type: syntax
+issue: 15
+---
+
 # One operation per line, more or less
 
 This is for readability.
